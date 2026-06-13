@@ -10,6 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+<!-- html2canvas library for saving invoice as image -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <style>
 :root {
   --bg: #090D11;
@@ -574,7 +577,7 @@ input:focus, select:focus, textarea:focus {
 
 .search-result-item {
   padding: 12px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -711,8 +714,8 @@ table.premium-table tr:hover td {
   border: 1px solid var(--line);
   background: transparent;
   color: var(--muted);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -726,7 +729,7 @@ table.premium-table tr:hover td {
 
 .pill-filter.active {
   background: var(--accent);
-  color: var(--bg);
+  color: var(--accent-ink);
   border-color: var(--accent);
 }
 
@@ -1093,7 +1096,7 @@ table.inv-a4-table td {
 
       <div class="row2">
         <div class="card">
-          <h3>📅 अलिकडची बिले (Recent Invoices)</h3>
+          <h3>📅 अलिकдची बिले (Recent Invoices)</h3>
           <div style="overflow-x: auto;">
             <table class="premium-table">
               <thead>
@@ -1137,6 +1140,19 @@ table.inv-a4-table td {
 
     <!-- TAB 2: CREATE BILL (BILLING TERMINAL) -->
     <section id="tab-billing" style="display:none;">
+      
+      <!-- Edit Bill Alert Banner (Visually outstanding when editing an old invoice) -->
+      <div id="editing-bill-banner" style="display:none; background:rgba(245, 158, 11, 0.12); border:1.5px solid var(--accent); padding:16px; border-radius:var(--radius); margin-bottom:20px; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:20px;">✏️</span>
+          <div>
+            <strong id="editing-bill-title" style="color:var(--accent); font-size:15px;">बिल दुरुस्त (Edit) केले जात आहे</strong>
+            <div style="font-size:12px; color:var(--muted); margin-top:2px;">बदल केल्यावर खालील बटणावर क्लिक करून जतन करा. स्टॉक आणि खात्याचा हिशोब आपो自动 दुरुस्त होईल.</div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-bad" onclick="cancelEditingBill()">❌ दुरुस्ती रद्द करा (Cancel)</button>
+      </div>
+
       <div class="billing-grid">
         
         <!-- Left block: Customer info and items selection -->
@@ -1261,7 +1277,7 @@ table.inv-a4-table td {
                 </select>
               </div>
 
-              <button class="btn btn-good btn-block" style="width: 100%; margin-top: 15px; padding: 14px;" onclick="finalizeAndGenerateInvoice()">
+              <button id="btn-finalize-bill" class="btn btn-good btn-block" style="width: 100%; margin-top: 15px; padding: 14px;" onclick="finalizeAndGenerateInvoice()">
                 🖨️ पक्के बिल जनरेट करा (Save & Print)
               </button>
             </div>
@@ -1323,15 +1339,11 @@ table.inv-a4-table td {
             </div>
             <div>
               <label class="field-label">श्रेणी (Category)</label>
-              <select id="inv-category">
-                <option value="Cement">सिमेंट (Cement)</option>
-                <option value="Steel">स्टील व लोखंड (Steel/Iron)</option>
-                <option value="Plumbing">प्लंबिंग फिटिंग्ज (Plumbing)</option>
-                <option value="Paints">रंग काम (Paints & Brushes)</option>
-                <option value="Tools">मशिनरी व अवजारे (Tools)</option>
-                <option value="Fasteners">नट-बोल्ट खिळे (Fasteners)</option>
-                <option value="Electrical">इलेक्ट्रिकल (Electrical)</option>
-              </select>
+              <div style="display:flex; gap:4px;">
+                <select id="inv-category" style="flex:1;"></select>
+                <button class="btn btn-ghost" onclick="addNewCategoryPrompt()" style="padding:0 10px; min-height:44px; width:40px;" title="नवीन श्रेणी जोडा">+</button>
+                <button class="btn btn-ghost" onclick="deleteCurrentCategory()" style="padding:0 10px; min-height:44px; width:40px; color:var(--bad);" title="निवडलेली श्रेणी हटवा">-</button>
+              </div>
             </div>
           </div>
 
@@ -1346,14 +1358,11 @@ table.inv-a4-table td {
             </div>
             <div>
               <label class="field-label">परिमाण युनिट (Unit)</label>
-              <select id="inv-unit">
-                <option value="Nos">नग (Nos)</option>
-                <option value="Bags">पोती (Bags)</option>
-                <option value="Kg">किलो (Kg)</option>
-                <option value="Box">बॉक्सेस (Box)</option>
-                <option value="Meters">मीटर (Meters)</option>
-                <option value="Brass">ब्रास (Brass)</option>
-              </select>
+              <div style="display:flex; gap:4px;">
+                <select id="inv-unit" style="flex:1;"></select>
+                <button class="btn btn-ghost" onclick="addNewUnitPrompt()" style="padding:0 10px; min-height:44px; width:40px;" title="नवीन युनिट जोडा">+</button>
+                <button class="btn btn-ghost" onclick="deleteCurrentUnit()" style="padding:0 10px; min-height:44px; width:40px; color:var(--bad);" title="निवडलेले युनिट हटवा">-</button>
+              </div>
             </div>
           </div>
 
@@ -1402,14 +1411,7 @@ table.inv-a4-table td {
       <div class="controls-panel">
         <input id="inv-search" placeholder="🔍 स्टॉक मधून शोधा (नाव किंवा श्रेणी)..." oninput="renderInventoryTable()">
         <select id="inv-filter-category" onchange="renderInventoryTable()">
-          <option value="all">सर्व श्रेण्या (All Categories)</option>
-          <option value="Cement">सिमेंट (Cement)</option>
-          <option value="Steel">स्टील व लोखंड (Steel/Iron)</option>
-          <option value="Plumbing">प्लंबिंग फिटिंग्ज (Plumbing)</option>
-          <option value="Paints">रंग काम (Paints & Brushes)</option>
-          <option value="Tools">मशिनरी व अवजारे (Tools)</option>
-          <option value="Fasteners">नट-बोल्ट खिळे (Fasteners)</option>
-          <option value="Electrical">इलेक्ट्रिकल (Electrical)</option>
+          <!-- Populated dynamically via JS -->
         </select>
       </div>
 
@@ -1570,7 +1572,7 @@ table.inv-a4-table td {
         <div class="card">
           <h3>☁️ गुगल ड्राईव्ह ऑटो क्लाउड सिंक (Google Apps Script)</h3>
           <p style="font-size:13px; color:var(--muted); line-height:1.6;">
-            तुमचा मौल्यवान डेटा थेट तुमच्या गुगल ड्राईव्हवर सुरक्षित साठवून ठेवण्यासाठी खालील गुगल स्क्रिप्ट लिंकचा वापर करा.
+            तुमचा मौल्यवान डेटा थेट तुमच्या गुगल ड्राईव्हवर सुरक्षित साठवून ठेवण्यासाठी खालील गुगल脚本 लिंकचा वापर करा.
           </p>
 
           <div style="margin-top:14px;">
@@ -1581,7 +1583,7 @@ table.inv-a4-table td {
 
           <div style="margin-top:16px; display:flex; gap:8px;">
             <button class="btn btn-info" onclick="forcePullFromCloud()">🔄 फोर्स डाऊनलोड (Pull from Cloud)</button>
-            <button class="btn btn-ghost" onclick="forcePushToCloud()">📤 फोर्स अपलोड (Push to Cloud)</button>
+            <button class="btn btn-ghost" onclick="forcePushToCloud()">📤 FORCE PUSH (Cloud var Pathva)</button>
           </div>
         </div>
       </div>
@@ -1647,14 +1649,15 @@ function doGet(e) {
     <button class="modal-close-btn no-print" onclick="closeGlobalPrintModal()">×</button>
     
     <!-- Controls inside modal for formatting selection -->
-    <div style="display:flex; gap:10px; justify-content: flex-end; margin-bottom:15px; border-bottom: 1px solid #eee; padding-bottom:10px;" class="no-print">
+    <div style="display:flex; gap:10px; justify-content: flex-end; margin-bottom:15px; border-bottom: 1px solid #eee; padding-bottom:10px; flex-wrap: wrap;" class="no-print">
       <button class="btn btn-sm btn-accent" onclick="renderInvoiceFormatInModal('A4')">📄 A4 लेआउट</button>
       <button class="btn btn-sm btn-info" onclick="renderInvoiceFormatInModal('Thermal')">🖨️ 80mm थर्मल पावती</button>
-      <button class="btn btn-sm btn-good" onclick="window.print()">🖨️ प्रिंट काढा / PDF सेव्ह करा</button>
+      <button class="btn btn-sm btn-good" onclick="downloadInvoiceAsImage()">🖼️ इमेज सेव्ह करा (Save PNG)</button>
+      <button class="btn btn-sm btn-info" style="background:#5B21B6; color:#F5F3FF" onclick="window.print()">🖨️ प्रिंट काढा / PDF बनवा</button>
     </div>
 
     <!-- Active dynamic area -->
-    <div id="print-dynamic-canvas-area"></div>
+    <div id="print-dynamic-canvas-area" style="background:#FFFFFF; padding:10px;"></div>
     
   </div>
 </div>
@@ -1708,7 +1711,9 @@ let state = {
     upiId: "vishwasteel@okaxis",
     terms: "१. विकलेला माल परत घेतला जाणार नाही.\n२. सर्व वाद पुणे न्यायालयाच्या कार्यकक्षेत येईल.",
     cloudUrl: "",
-    logo: ""
+    logo: "",
+    customCategories: ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"],
+    customUnits: ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"]
   }
 };
 
@@ -1718,6 +1723,7 @@ let currentSelectedInventoryItem = null;
 let currentInvoiceLayoutSelection = "A4";
 let currentPrintInvoiceId = null;
 let currentPaymentModalCustId = null;
+let editingBillId = null; // New global tracker for active invoice editing session
 
 // Default Prepopulated Hardware items if DB is totally empty
 const DEFAULT_HARDWARE_INVENTORY = [
@@ -1737,9 +1743,153 @@ const DEFAULT_CUSTOMERS_LIST = [
 // On document initialized
 window.onload = function() {
   loadLocalDatabase();
+  populateCategoryDropdowns();
+  populateUnitDropdowns();
   renderAppViews();
   autoFetchCloudDataOnStart();
 };
+
+// Populate Categories inside Dropdowns (Add form and Filter)
+function populateCategoryDropdowns() {
+  let addSelect = document.getElementById('inv-category');
+  let filterSelect = document.getElementById('inv-filter-category');
+  
+  if (!addSelect || !filterSelect) return;
+  
+  let addHtml = '';
+  let filterHtml = '<option value="all">सर्व श्रेण्या (All Categories)</option>';
+  
+  state.settings.customCategories.forEach(cat => {
+    addHtml += `<option value="${cat}">${cat}</option>`;
+    filterHtml += `<option value="${cat}">${cat}</option>`;
+  });
+  
+  addSelect.innerHTML = addHtml;
+  filterSelect.innerHTML = filterHtml;
+}
+
+// Populate Units inside Form Dropdown
+function populateUnitDropdowns() {
+  let unitSelect = document.getElementById('inv-unit');
+  if (!unitSelect) return;
+  
+  let html = '';
+  state.settings.customUnits.forEach(unit => {
+    html += `<option value="${unit}">${unit}</option>`;
+  });
+  
+  unitSelect.innerHTML = html;
+}
+
+// Prompt user to add a custom Category
+function addNewCategoryPrompt() {
+  let newCat = prompt("नवीन श्रेणीचे नाव लिहा (Enter New Category Name):");
+  if (newCat) {
+    newCat = newCat.trim();
+    if (newCat !== "" && !state.settings.customCategories.includes(newCat)) {
+      state.settings.customCategories.push(newCat);
+      saveToLocalDatabase();
+      populateCategoryDropdowns();
+      // Select the newly added category
+      document.getElementById('inv-category').value = newCat;
+      showToast(`नवीन श्रेणी '${newCat}' जोडली गेली!`, "good");
+    } else {
+      showToast("श्रेणी आधीपासूनच अस्तित्वात आहे किंवा अवैध आहे!", "bad");
+    }
+  }
+}
+
+// Delete currently selected Category with safety checks
+function deleteCurrentCategory() {
+  let select = document.getElementById('inv-category');
+  let selectedVal = select.value;
+  if (!selectedVal) {
+    showToast("हटवण्यासाठी प्रथम श्रेणी निवडा!", "bad");
+    return;
+  }
+  
+  if (confirm(`तुम्हाला '${selectedVal}' ही श्रेणी कायमची हटवायची आहे का?`)) {
+    let idx = state.settings.customCategories.indexOf(selectedVal);
+    if (idx >= 0) {
+      state.settings.customCategories.splice(idx, 1);
+      saveToLocalDatabase();
+      populateCategoryDropdowns();
+      showToast(`श्रेणी '${selectedVal}' यशस्वीरीत्या हटवली!`, "good");
+    }
+  }
+}
+
+// Prompt user to add a custom Unit
+function addNewUnitPrompt() {
+  let newUnit = prompt("नवीन परिमाण युनिटचे नाव लिहा (Enter New Unit Name, eg. Coils, Roll, Brass):");
+  if (newUnit) {
+    newUnit = newUnit.trim();
+    if (newUnit !== "" && !state.settings.customUnits.includes(newUnit)) {
+      state.settings.customUnits.push(newUnit);
+      saveToLocalDatabase();
+      populateUnitDropdowns();
+      // Select the newly added unit
+      document.getElementById('inv-unit').value = newUnit;
+      showToast(`नवीन युनिट '${newUnit}' जोडले गेले!`, "good");
+    } else {
+      showToast("युनिट आधीपासूनच अस्तित्वात आहे किंवा अवैध आहे!", "bad");
+    }
+  }
+}
+
+// Delete currently selected Unit with safety checks
+function deleteCurrentUnit() {
+  let select = document.getElementById('inv-unit');
+  let selectedVal = select.value;
+  if (!selectedVal) {
+    showToast("हटवण्यासाठी प्रथम युनिट निवडा!", "bad");
+    return;
+  }
+  
+  if (confirm(`तुम्हाला '${selectedVal}' हे युनिट कायमचे हटवायचे आहे का?`)) {
+    let idx = state.settings.customUnits.indexOf(selectedVal);
+    if (idx >= 0) {
+      state.settings.customUnits.splice(idx, 1);
+      saveToLocalDatabase();
+      populateUnitDropdowns();
+      showToast(`युनिट '${selectedVal}' यशस्वीरीत्या हटवले!`, "good");
+    }
+  }
+}
+
+// Save Invoice / Bill receipt as high resolution Image using html2canvas
+function downloadInvoiceAsImage() {
+  let element = document.getElementById('print-dynamic-canvas-area');
+  if (!element) {
+    showToast("डाउनलोड करण्यासाठी कोणतीही पावती सापडली नाही!", "bad");
+    return;
+  }
+  
+  showToast("इमेज तयार होत आहे, कृपया थांबा...", "info");
+  
+  // Configure html2canvas to render high precision image with white printable background
+  html2canvas(element, {
+    backgroundColor: '#FFFFFF',
+    scale: 2, // High clarity double scaling
+    useCORS: true,
+    allowTaint: true,
+    logging: false
+  }).then(canvas => {
+    try {
+      let link = document.createElement('a');
+      link.download = `Invoice_${currentPrintInvoiceId || 'Bill'}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast("इमेज यशस्वीरित्या गॅलरीमध्ये जतन झाली! 📸", "good");
+    } catch(e) {
+      console.error(e);
+      showToast("इमेज सेव्ह करताना त्रुटी आली!", "bad");
+    }
+  }).catch(err => {
+    console.error(err);
+    showToast("इमेज जनरेशन अयशस्वी!", "bad");
+  });
+}
 
 // Switch Sidebar & Bottom Tab Bar menus simultaneously
 function switchTab(tabId) {
@@ -1766,7 +1916,10 @@ function switchTab(tabId) {
   } else if (tabId === 'invoices') {
     renderInvoices();
   } else if (tabId === 'billing') {
-    resetBillingTerminalForm();
+    // Only reset form on billing tab click if we are NOT actively editing a bill
+    if(!editingBillId) {
+      resetBillingTerminalForm();
+    }
   }
 }
 
@@ -1908,7 +2061,10 @@ function renderDashboardView() {
           <td data-label="एकूण बिल">₹${b.grandTotal.toFixed(2)}</td>
           <td data-label="स्थिती">${statusBadge}</td>
           <td data-label="कृती">
-            <button class="btn btn-sm btn-ghost" onclick="triggerOpenInvoicePrintModal('${b.billId}')">📄 View/Print</button>
+            <div style="display:inline-flex; gap:4px; flex-wrap:wrap;">
+              <button class="btn btn-sm btn-ghost" onclick="triggerOpenInvoicePrintModal('${b.billId}')">📄 View/Print</button>
+              <button class="btn btn-sm btn-accent" style="background:rgba(245,158,11,0.12); color:var(--accent); border:1px solid rgba(245,158,11,0.3);" onclick="startEditingBill('${b.billId}')">✏️ Edit</button>
+            </div>
           </td>
         </tr>
       `;
@@ -1950,10 +2106,19 @@ function loadLocalDatabase() {
     let raw = localStorage.getItem('vishwa_hardware_db_v2');
     if (raw) {
       state = JSON.parse(raw);
+      // Safe upgrade checks for dynamic dropdowns if undefined in old state
+      if (!state.settings.customCategories) {
+        state.settings.customCategories = ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"];
+      }
+      if (!state.settings.customUnits) {
+        state.settings.customUnits = ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"];
+      }
     } else {
       // populate with premium hardware default state on very first load
       state.inventory = DEFAULT_HARDWARE_INVENTORY;
       state.customers = DEFAULT_CUSTOMERS_LIST;
+      state.settings.customCategories = ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"];
+      state.settings.customUnits = ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"];
       localStorage.setItem('vishwa_hardware_db_v2', JSON.stringify(state));
     }
   } catch(e) {
@@ -1983,7 +2148,12 @@ function importBackupDataFile(event) {
       let parsed = JSON.parse(e.target.result);
       if(parsed.inventory && parsed.bills && parsed.customers) {
         state = parsed;
+        if (!state.settings.customCategories) state.settings.customCategories = ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"];
+        if (!state.settings.customUnits) state.settings.customUnits = ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"];
+        
         saveToLocalDatabase();
+        populateCategoryDropdowns();
+        populateUnitDropdowns();
         renderAppViews();
         showToast("डेटा यशस्वीरित्या रिस्टोर झाला आहे!", "good");
       } else {
@@ -2030,7 +2200,12 @@ async function autoFetchCloudDataOnStart() {
     let cloudState = await response.json();
     if(cloudState && (cloudState.bills || cloudState.inventory)) {
       state = cloudState;
+      if (!state.settings.customCategories) state.settings.customCategories = ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"];
+      if (!state.settings.customUnits) state.settings.customUnits = ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"];
+      
       localStorage.setItem('vishwa_hardware_db_v2', JSON.stringify(state));
+      populateCategoryDropdowns();
+      populateUnitDropdowns();
       updateSyncUIIndicator('🟢 क्लाउड सिंक सक्रिय (Cloud Active)', 'var(--good)');
       renderAppViews();
     }
@@ -2105,6 +2280,13 @@ function performFactoryResetApp() {
 function resetBillingTerminalForm() {
   currentBillItems = [];
   currentSelectedInventoryItem = null;
+  editingBillId = null;
+  
+  // Reset banners and button labels
+  let banner = document.getElementById('editing-bill-banner');
+  if (banner) banner.style.display = 'none';
+  document.getElementById('btn-finalize-bill').innerHTML = `🖨️ पक्के बिल जनरेट करा (Save & Print)`;
+
   document.getElementById('bill-phone').value = '';
   document.getElementById('bill-cust-name').value = '';
   document.getElementById('bill-cust-village').value = '';
@@ -2116,6 +2298,50 @@ function resetBillingTerminalForm() {
   document.getElementById('bill-payment-mode').value = 'Cash';
 
   renderCurrentBillItemsTable();
+}
+
+// Active Editor Setup to recover old bill data to active terminal
+function startEditingBill(billId) {
+  let bill = state.bills.find(b => b.billId === billId);
+  if(!bill) {
+    showToast("बिल सापडले नाही!", "bad");
+    return;
+  }
+  
+  editingBillId = billId;
+  
+  // Switch to Billing terminal screen
+  switchTab('billing');
+  
+  // Autofill checkout details
+  document.getElementById('bill-phone').value = bill.customerPhone === 'N/A' ? '' : bill.customerPhone;
+  document.getElementById('bill-cust-name').value = bill.customerName;
+  document.getElementById('bill-cust-village').value = bill.customerAddress === 'N/A' ? '' : bill.customerAddress;
+  document.getElementById('bill-extra-charges').value = bill.extraCharges || 0;
+  document.getElementById('bill-received-amount').value = bill.receivedAmount || 0;
+  document.getElementById('bill-payment-mode').value = bill.paymentMode || 'Cash';
+  
+  // Deep clone selected bill's item list to preserve current editing session safely
+  currentBillItems = JSON.parse(JSON.stringify(bill.items));
+  
+  // Show orange warning editing status bar
+  let banner = document.getElementById('editing-bill-banner');
+  if(banner) {
+    banner.style.display = 'flex';
+    document.getElementById('editing-bill-title').innerText = `✏️ बिल #${billId} दुरुस्त (Edit) केले जात आहे`;
+  }
+  
+  // Toggle checkout button label
+  document.getElementById('btn-finalize-bill').innerHTML = `💾 बदल जतन करा (Update Invoice)`;
+  
+  renderCurrentBillItemsTable();
+  showToast(`बिल #${billId} दुरुस्तीसाठी लोड झाले!`, "info");
+}
+
+// Cancel editing and revert to normal checkout
+function cancelEditingBill() {
+  resetBillingTerminalForm();
+  showToast("दुरुस्ती रद्द केली!", "accent");
 }
 
 // Autocomplete customer info if phone is entered
@@ -2342,7 +2568,7 @@ function calculateBillTotals() {
   document.getElementById('bill-summary-due-balance').innerText = '₹' + due.toFixed(2);
 }
 
-// Finalize Invoicing logic, updates inventory stock & updates customer credit profiles
+// Finalize Invoicing logic (Combines NEW and EDIT update states differentially)
 function finalizeAndGenerateInvoice() {
   let name = document.getElementById('bill-cust-name').value.trim();
   let phone = document.getElementById('bill-phone').value.trim();
@@ -2360,7 +2586,7 @@ function finalizeAndGenerateInvoice() {
     return;
   }
 
-  // Re-calculate
+  // Re-calculate Totals
   let subtotal = 0;
   let taxTotal = 0;
   let discTotal = 0;
@@ -2378,7 +2604,100 @@ function finalizeAndGenerateInvoice() {
   let dueBalance = grandTotal - received;
   if (dueBalance < 0) dueBalance = 0;
 
-  // Stock deduction with validation check (supports decimal stock perfectly)
+  if (editingBillId) {
+    // ----------------------------------------------------
+    // EDIT BILL MODE: DIFFERENTIAL ADJUSTMENT ENGINE
+    // ----------------------------------------------------
+    let oldBillIndex = state.bills.findIndex(b => b.billId === editingBillId);
+    if(oldBillIndex < 0) {
+      showToast("मूळ बिल मिळाले नाही!", "bad");
+      return;
+    }
+    let oldBill = state.bills[oldBillIndex];
+
+    // 1. REVERT: Add back old quantities to inventory stock
+    oldBill.items.forEach(oldItem => {
+      let stockItem = state.inventory.find(i => i.id === oldItem.id);
+      if(stockItem) {
+        stockItem.stock = Number(stockItem.stock) + Number(oldItem.quantity);
+      }
+    });
+
+    // 2. REVERT: Subtract old financial values from customer ledger
+    let oldCustProfile = state.customers.find(c => c.phone === oldBill.customerPhone);
+    if(oldCustProfile) {
+      oldCustProfile.totalLent -= oldBill.grandTotal;
+      oldCustProfile.pendingDue -= oldBill.dueBalance;
+      if(oldCustProfile.totalLent < 0) oldCustProfile.totalLent = 0;
+      if(oldCustProfile.pendingDue < 0) oldCustProfile.pendingDue = 0;
+    }
+
+    // 3. APPLY NEW: Deduct new quantities from inventory stock
+    currentBillItems.forEach(newItem => {
+      let stockItem = state.inventory.find(i => i.id === newItem.id);
+      if(stockItem) {
+        stockItem.stock = Number(stockItem.stock) - Number(newItem.quantity);
+        if(stockItem.stock < 0) stockItem.stock = 0; // Prevent negative stock
+      }
+    });
+
+    // 4. APPLY NEW: Add new financial values to customer profile (or register if phone changed)
+    let newCustProfile = state.customers.find(c => c.phone === phone);
+    if(!newCustProfile && phone) {
+      newCustProfile = {
+        id: 'cust-' + Date.now().toString(36),
+        name: name,
+        phone: phone,
+        address: village || 'N/A',
+        gstin: '',
+        totalLent: 0,
+        pendingDue: 0,
+        lastTxDate: Date.now()
+      };
+      state.customers.push(newCustProfile);
+    }
+    if(newCustProfile) {
+      newCustProfile.totalLent += grandTotal;
+      newCustProfile.pendingDue += dueBalance;
+      newCustProfile.lastTxDate = Date.now();
+    }
+
+    // 5. UPDATE: Overwrite active bill state
+    state.bills[oldBillIndex] = {
+      ...oldBill, // Retain original bill ID & createdAt timestamp
+      customerName: name,
+      customerPhone: phone || 'N/A',
+      customerAddress: village || 'N/A',
+      items: currentBillItems,
+      subtotal: subtotal,
+      taxTotal: taxTotal,
+      discountTotal: discTotal,
+      extraCharges: extra,
+      grandTotal: grandTotal,
+      receivedAmount: received,
+      dueBalance: dueBalance,
+      paymentMode: paymentMode
+    };
+
+    showToast(`बिल #${editingBillId} यशस्वीरित्या दुरुस्त केले!`, "good");
+    
+    let savedBillId = editingBillId;
+    
+    // Clean edit variables
+    editingBillId = null;
+    let banner = document.getElementById('editing-bill-banner');
+    if (banner) banner.style.display = 'none';
+    document.getElementById('btn-finalize-bill').innerHTML = `🖨️ पक्के बिल जनरेट करा (Save & Print)`;
+
+    saveToLocalDatabase();
+    triggerOpenInvoicePrintModal(savedBillId);
+    resetBillingTerminalForm();
+    return;
+  }
+
+  // ----------------------------------------------------
+  // STANDARD BILL CREATION FLOW
+  // ----------------------------------------------------
   currentBillItems.forEach(item => {
     let stockItem = state.inventory.find(i => i.id === item.id);
     if(stockItem) {
@@ -2390,7 +2709,6 @@ function finalizeAndGenerateInvoice() {
   // Client profile lookup or dynamic registration
   let custProfile = state.customers.find(c => c.phone === phone);
   if(!custProfile && phone) {
-    // Register auto
     custProfile = {
       id: 'cust-' + Date.now().toString(36),
       name: name,
@@ -2572,7 +2890,7 @@ function populateStockAdjustmentForm(itemId) {
 }
 
 function deleteProductFromInventory(itemId) {
-  if (confirm("काय तुम्हाला हे उत्पादन आणि त्याचा स्टॉक डेटाबेस मधून काढून टाकायचा आहे?")) {
+  if (confirm("काय तुम्हाला हे उत्पादन आणि त्याचा stock डेटाबेस मधून काढून टाकायचा आहे?")) {
     let idx = state.inventory.findIndex(i => i.id === itemId);
     if(idx >= 0) {
       state.inventory.splice(idx, 1);
@@ -2811,8 +3129,9 @@ function renderInvoices() {
           <td data-label="उधार" style="color:var(--bad)">₹${b.dueBalance.toFixed(2)}</td>
           <td data-label="स्थिती">${statusBadge}</td>
           <td style="text-align: center;">
-            <div style="display:flex; gap:6px; justify-content: center;">
+            <div style="display:flex; gap:6px; justify-content: center; flex-wrap: wrap;">
               <button class="btn btn-sm btn-ghost" onclick="triggerOpenInvoicePrintModal('${b.billId}')">📄 View/Print</button>
+              <button class="btn btn-sm btn-accent" style="background:rgba(245,158,11,0.12); color:var(--accent); border:1px solid rgba(245,158,11,0.3);" onclick="startEditingBill('${b.billId}')">✏️ Edit</button>
               <button class="btn btn-sm btn-bad" style="padding:4px 8px" onclick="deleteGeneratedInvoiceFromHistory('${b.billId}')">🗑️</button>
             </div>
           </td>
