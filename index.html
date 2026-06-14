@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Vishwa Hardware & Steel — Premium Billing Suite</title>
+<title>Dhisle Hardware And Traders — Ultimate Billing & ERP Suite</title>
 
 <!-- premium Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,7 +43,7 @@
   scrollbar-color: var(--line) transparent;
 }
 
-/* Custom Scrollbar for premium vibe */
+/* Custom Scrollbar */
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -77,7 +77,7 @@ body {
 
 /* Sidebar Navigation (Desktop only) */
 aside.sidebar {
-  width: 260px;
+  width: 270px;
   background: var(--bg);
   border-right: 1px solid var(--line);
   padding: 24px 16px;
@@ -171,7 +171,7 @@ nav.nav-menu {
   flex-shrink: 0;
 }
 
-/* Mobile Bottom Navigation (Hidden on Desktop) */
+/* Mobile Bottom Navigation */
 .bottom-nav {
   display: none;
   position: fixed;
@@ -185,7 +185,7 @@ nav.nav-menu {
   align-items: center;
   z-index: 999;
   box-shadow: 0 -4px 25px rgba(0,0,0,0.6);
-  padding-bottom: env(safe-area-inset-bottom); /* Apple safe area bar support */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .bottom-nav-item {
@@ -294,6 +294,7 @@ header.top-header h1 {
 .stat-card.udhar .value { color: var(--bad); }
 .stat-card.active-bills .value { color: var(--info); }
 .stat-card.low-stock .value { color: var(--accent); }
+.stat-card.profit .value { color: #A78BFA; }
 
 /* Common Premium Card Styles */
 .card {
@@ -368,7 +369,7 @@ input:focus, select:focus, textarea:focus {
   gap: 12px;
 }
 
-/* Mobile Responsive Adjustments (CRITICAL EXCELLENCE) */
+/* Mobile Responsive Adjustments */
 @media(max-width: 768px) {
   .row2, .row3, .row4 {
     grid-template-columns: 1fr;
@@ -380,15 +381,15 @@ input:focus, select:focus, textarea:focus {
   }
   
   aside.sidebar {
-    display: none !important; /* Hide Sidebar menu */
+    display: none !important;
   }
   
   .bottom-nav {
-    display: flex !important; /* Show premium bottom bar on phones */
+    display: flex !important;
   }
   
   main.main-content {
-    padding: 16px 12px 90px 12px !important; /* bottom padding space for bottom navbar */
+    padding: 16px 12px 90px 12px !important;
   }
 
   header.top-header {
@@ -408,15 +409,13 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 16px;
   }
 
-  /* IOS input zoom prevention */
   input, select, textarea {
     font-size: 16px !important; 
     padding: 14px 12px;
   }
 
-  /* CSS-Only Table Stack Card conversion trick (Brilliant Mobile UX) */
   table.premium-table thead {
-    display: none !important; /* Hide headers */
+    display: none !important;
   }
 
   table.premium-table, 
@@ -465,7 +464,7 @@ input:focus, select:focus, textarea:focus {
   }
 
   .table-input {
-    width: 120px; /* Wider targets for touch inputs on mobile */
+    width: 120px;
     text-align: right;
   }
 }
@@ -485,7 +484,7 @@ input:focus, select:focus, textarea:focus {
   gap: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  min-height: 44px; /* Touch targets standard */
+  min-height: 44px;
 }
 
 .btn:active {
@@ -702,37 +701,6 @@ table.premium-table tr:hover td {
   min-width: 160px;
 }
 
-.pills-container {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.pill-filter {
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: var(--transition);
-}
-
-.pill-filter:hover {
-  border-color: var(--accent);
-  color: var(--ink);
-}
-
-.pill-filter.active {
-  background: var(--accent);
-  color: var(--accent-ink);
-  border-color: var(--accent);
-}
-
 /* Modal Popup Core */
 .modal-overlay {
   position: fixed;
@@ -799,7 +767,7 @@ table.premium-table tr:hover td {
 /* Custom Notifications (Toasts) */
 #toast-container {
   position: fixed;
-  bottom: 80px; /* Raised above bottom bar for mobile screen */
+  bottom: 80px;
   right: 24px;
   z-index: 1100;
   display: flex;
@@ -984,18 +952,98 @@ table.inv-a4-table td {
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   margin-bottom: 14px;
 }
+
+/* SVG Chart Styles */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-top: 15px;
+}
+
+/* Switch styling for Admin Mode Toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #374151;
+  transition: .4s;
+  border-radius: 24px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px; width: 18px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: var(--accent);
+}
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Timeline elements for Customer Ledger */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid var(--line);
+}
+.timeline-item {
+  position: relative;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -27px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--card);
+}
+.timeline-item.payment::before {
+  background: var(--good);
+}
+.timeline-date {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 700;
+}
+.timeline-desc {
+  font-size: 14px;
+  margin-top: 2px;
+}
 </style>
 </head>
 <body>
 
 <div class="app-container">
   
-  <!-- App Sidebar (Visible on Desktop only) -->
+  <!-- App Sidebar -->
   <aside class="sidebar">
     <div class="brand-area">
-      <div class="brand-logo">V</div>
+      <div class="brand-logo">D</div>
       <div class="brand-meta">
-        <h2 id="sidebarShopName">Vishwa Steel</h2>
+        <h2 id="sidebarShopName">Dhisle Hardware</h2>
         <p>Premium Billing</p>
       </div>
     </div>
@@ -1028,7 +1076,7 @@ table.inv-a4-table td {
     </nav>
   </aside>
 
-  <!-- Mobile Bottom Tab Navigation (Only visible on Mobile viewports) -->
+  <!-- Mobile Bottom Tab Navigation -->
   <div class="bottom-nav no-print">
     <div class="bottom-nav-item active" id="bot-nav-dash" onclick="switchTab('dash')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z"></path></svg>
@@ -1061,11 +1109,19 @@ table.inv-a4-table td {
           <img id="top-header-logo" src="" style="height:48px; width:48px; border-radius:10px; border:1.5px solid var(--accent); object-fit:cover;" alt="Shop Logo Container">
         </div>
         <div>
-          <h1 id="topShopTitle">Vishwa Steel & Hardware Traders</h1>
-          <div style="font-size:12px; color:var(--muted); margin-top:4px;">Premium Dynamic Billing & Stock Suite — v2.5</div>
+          <h1 id="topShopTitle">Dhisle Hardware And Traders</h1>
+          <div style="font-size:12px; color:var(--muted); margin-top:4px;">Ultimate Dynamic ERP Billing & Stock Suite — v3.0 Premium</div>
         </div>
       </div>
-      <div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <!-- Secure Admin Toggle for margins and earnings -->
+        <div style="display:flex; align-items:center; gap:8px; background: rgba(255,255,255,0.02); border:1px solid var(--line); padding:6px 12px; border-radius:12px;">
+          <span style="font-size:11px; font-weight:700; color:var(--muted);">🔑 ADMIN MODE</span>
+          <label class="switch">
+            <input type="checkbox" id="adminModeToggle" onchange="toggleAdminMode(this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
         <div class="cloud-status" id="cloud-connection-status" style="color:var(--accent);">
           <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:currentColor;"></span>
           🟢 offline (स्थानिक साठवणूक)
@@ -1079,6 +1135,10 @@ table.inv-a4-table td {
         <div class="stat-card sales">
           <div class="label">आजची एकूण विक्री</div>
           <div class="value" id="stat-sales">₹0.00</div>
+        </div>
+        <div class="stat-card profit" id="admin-profit-card" style="display:none;">
+          <div class="label">आजचा निव्वळ नफा (Net Profit)</div>
+          <div class="value" id="stat-profit">₹0.00</div>
         </div>
         <div class="stat-card udhar">
           <div class="label">एकूण थकीत उधार</div>
@@ -1095,24 +1155,11 @@ table.inv-a4-table td {
       </div>
 
       <div class="row2">
+        <!-- SVG Interactive Dashboard Graph -->
         <div class="card">
-          <h3>📅 अलिकдची बिले (Recent Invoices)</h3>
-          <div style="overflow-x: auto;">
-            <table class="premium-table">
-              <thead>
-                <tr>
-                  <th>बिल क्र.</th>
-                  <th>ग्राहक</th>
-                  <th>तारीख</th>
-                  <th>एकूण बिल</th>
-                  <th>स्थिती</th>
-                  <th>कृती</th>
-                </tr>
-              </thead>
-              <tbody id="dash-recent-bills">
-                <!-- Javascript dynamically loads here -->
-              </tbody>
-            </table>
+          <h3>📊 ७ दिवसांची विक्री विश्लेषण (7-Day Sales Trend)</h3>
+          <div class="chart-container" id="sales-chart-wrapper">
+            <!-- Dynamic SVG chart will be injected here -->
           </div>
         </div>
 
@@ -1136,18 +1183,39 @@ table.inv-a4-table td {
           </div>
         </div>
       </div>
+
+      <div class="card" style="margin-top:24px;">
+        <h3>📅 अलिकडची बिले (Recent Invoices)</h3>
+        <div style="overflow-x: auto;">
+          <table class="premium-table">
+            <thead>
+              <tr>
+                <th>बिल क्र.</th>
+                <th>ग्राहक</th>
+                <th>तारीख</th>
+                <th>एकूण बिल</th>
+                <th>स्थिती</th>
+                <th>कृती</th>
+              </tr>
+            </thead>
+            <tbody id="dash-recent-bills">
+              <!-- Javascript dynamically loads here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
     <!-- TAB 2: CREATE BILL (BILLING TERMINAL) -->
     <section id="tab-billing" style="display:none;">
       
-      <!-- Edit Bill Alert Banner (Visually outstanding when editing an old invoice) -->
+      <!-- Edit Bill Alert Banner -->
       <div id="editing-bill-banner" style="display:none; background:rgba(245, 158, 11, 0.12); border:1.5px solid var(--accent); padding:16px; border-radius:var(--radius); margin-bottom:20px; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
         <div style="display:flex; align-items:center; gap:10px;">
           <span style="font-size:20px;">✏️</span>
           <div>
             <strong id="editing-bill-title" style="color:var(--accent); font-size:15px;">बिल दुरुस्त (Edit) केले जात आहे</strong>
-            <div style="font-size:12px; color:var(--muted); margin-top:2px;">बदल केल्यावर खालील बटणावर क्लिक करून जतन करा. स्टॉक आणि खात्याचा हिशोब आपो自动 दुरुस्त होईल.</div>
+            <div style="font-size:12px; color:var(--muted); margin-top:2px;">बदल केल्यावर खालील बटणावर क्लिक करून जतन करा. स्टॉक आणि खात्याचा हिशोब दुरुस्त होईल.</div>
           </div>
         </div>
         <button class="btn btn-sm btn-bad" onclick="cancelEditingBill()">❌ दुरुस्ती रद्द करा (Cancel)</button>
@@ -1258,8 +1326,20 @@ table.inv-a4-table td {
               <div style="border-top:1px dashed var(--line); margin: 10px 0;"></div>
 
               <div>
-                <label class="field-label">भरलेली जमा रक्कम (Received Cash/UPI)</label>
+                <label class="field-label">भरलेली जमा रक्कम (Received Amount)</label>
                 <input type="number" id="bill-received-amount" step="any" oninput="calculateBillTotals()" placeholder="रक्कम टाका">
+              </div>
+
+              <!-- Interactive Change Calculator -->
+              <div class="row2" style="margin-top: 5px;">
+                <div>
+                  <label class="field-label" style="margin-top:0;">ग्राहकाने दिलेली कॅश (Tendered)</label>
+                  <input type="number" id="bill-tendered-cash" step="any" placeholder="0" oninput="calculateTenderChange()">
+                </div>
+                <div>
+                  <label class="field-label" style="margin-top:0;">परत देय रक्कम (Change)</label>
+                  <div id="bill-change-return" style="font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:800; color:var(--good); padding:10px 0;">₹0.00</div>
+                </div>
               </div>
 
               <div class="bill-summary-row" style="font-weight: 700; margin-top:8px;">
@@ -1299,6 +1379,7 @@ table.inv-a4-table td {
         </select>
         
         <button class="btn btn-ghost" onclick="clearInvoiceFilters()">🔄 रिसेट</button>
+        <button class="btn btn-info" onclick="exportBillsToCSV()">📤 CSV रिपोर्ट डाउनलोड करा</button>
       </div>
 
       <div class="card">
@@ -1328,7 +1409,6 @@ table.inv-a4-table td {
 
     <!-- TAB 4: INVENTORY / STOCKS -->
     <section id="tab-inventory" style="display:none;">
-      
       <div class="row2">
         <div class="card">
           <h3>➕ नवीन वस्तू जोडा (Add Hardware Item)</h3>
@@ -1401,18 +1481,24 @@ table.inv-a4-table td {
             <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
               <span>एकूण विविध वस्तू:</span><strong id="inv-stats-count" style="color:var(--accent)">0</strong>
             </div>
-            <div style="display:flex; justify-content:space-between;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
               <span>स्टॉकचे अंदाजित विक्री मूल्य:</span><strong id="inv-stats-value" style="color:var(--good)">₹0.00</strong>
+            </div>
+            <div id="admin-asset-profit" style="display:none; justify-content:space-between;">
+              <span>एकूण खरेदी मूल्य (Asset Cost):</span><strong id="inv-stats-purchase-value" style="color:#A78BFA">₹0.00</strong>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Action logs and CSV controls -->
       <div class="controls-panel">
         <input id="inv-search" placeholder="🔍 स्टॉक मधून शोधा (नाव किंवा श्रेणी)..." oninput="renderInventoryTable()">
         <select id="inv-filter-category" onchange="renderInventoryTable()">
           <!-- Populated dynamically via JS -->
         </select>
+        <button class="btn btn-info" onclick="exportInventoryToCSV()">📤 स्टॉक रिपोर्ट (CSV)</button>
+        <button class="btn btn-ghost" onclick="triggerStockLogsModal()">🕰️ स्टॉक बदल इतिहास (Logs)</button>
       </div>
 
       <div class="card">
@@ -1441,7 +1527,6 @@ table.inv-a4-table td {
 
     <!-- TAB 5: CUSTOMERS & UDHAR (LEDGER) -->
     <section id="tab-customers" style="display:none;">
-      
       <div class="row2">
         <div class="card">
           <h3>👤 नवीन ग्राहक नोंदणी करा</h3>
@@ -1489,6 +1574,7 @@ table.inv-a4-table td {
 
       <div class="controls-panel">
         <input id="cust-search" placeholder="🔍 ग्राहक नाव, गाव किंवा phone नंबर वरून शोधा..." oninput="renderCustomersTable()">
+        <button class="btn btn-info" onclick="exportCustomersToCSV()">📤 ग्राहक रिपोर्ट (CSV)</button>
       </div>
 
       <div class="card">
@@ -1522,13 +1608,13 @@ table.inv-a4-table td {
           
           <div>
             <label class="field-label">दुकान / व्यवसायाचे नाव (Shop Name)</label>
-            <input id="set-shop-name" placeholder="उदा. Vishwa Steel & Hardware">
+            <input id="set-shop-name" placeholder="Dhisle Hardware And Traders">
           </div>
           
           <div class="row2" style="margin-top:10px;">
             <div>
               <label class="field-label">मोबाईल / फोन नंबर</label>
-              <input id="set-phone" placeholder="9876543210">
+              <input id="set-phone" placeholder="935987866">
             </div>
             <div>
               <label class="field-label">GSTIN (कर क्रमांक)</label>
@@ -1538,7 +1624,7 @@ table.inv-a4-table td {
 
           <div style="margin-top:10px;">
             <label class="field-label">पत्ता (Address)</label>
-            <textarea id="set-address" rows="3" placeholder="उदा. शिवाजी चौक, मेन रोड, पुणे."></textarea>
+            <textarea id="set-address" rows="3" placeholder="Ch.Shivaji Maharaj Chowk, Shirur rode, Raimoh, Maharashtra 414205"></textarea>
           </div>
 
           <div class="row2" style="margin-top:10px;">
@@ -1546,7 +1632,7 @@ table.inv-a4-table td {
               <label class="field-label">दुकानचा लोगो (Upload Shop Logo)</label>
               <div style="display:flex; gap:10px; align-items:center;">
                 <label class="btn btn-info btn-sm" style="margin:0; cursor:pointer;">
-                  🖼️ लोगो निवडा (Upload Logo)
+                  🖼️ लोगो निवडा
                   <input type="file" id="set-logo-upload" accept="image/*" onchange="uploadShopLogo(event)" style="display:none;">
                 </label>
                 <button class="btn btn-bad btn-sm" id="btn-remove-logo" onclick="removeShopLogo()" style="display:none;">🗑️ लोगो हटवा</button>
@@ -1557,7 +1643,7 @@ table.inv-a4-table td {
             </div>
             <div>
               <label class="field-label">UPI ID (QR कोड जनरेशन साठी)</label>
-              <input id="set-upi-id" placeholder="yourname@okaxis">
+              <input id="set-upi-id" placeholder="dhislehardware@okaxis">
             </div>
           </div>
 
@@ -1611,33 +1697,6 @@ table.inv-a4-table td {
           <button class="btn btn-bad" style="margin-top:15px;" onclick="performFactoryResetApp()">🗑️ सर्व डेटा नष्ट करा</button>
         </div>
       </div>
-
-      <div class="card">
-        <h3>📝 क्लाउड ऑटो सिंक मार्गदर्शक (How to Setup Cloud Backup)</h3>
-        <div class="help-step">
-          <strong>पायरी १:</strong> <a href="https://script.google.com/" target="_blank" style="color:var(--accent); font-weight:700;">Google Apps Script</a> उघडा आणि नवीन प्रोजेक्ट तयार करा.
-        </div>
-        <div class="help-step">
-          <strong>पायरी २:</strong> खालील कोड कॉपी करून तेथे पेस्ट करा:
-          <pre style="background:var(--bg); padding:10px; border-radius:6px; color:var(--good); overflow-x:auto; font-size:11px; margin-top:8px;">
-function doPost(e) {
-  var p = JSON.parse(e.postData.contents);
-  var props = PropertiesService.getScriptProperties();
-  if (p.action === 'save') {
-    props.setProperty('vishwa_hardware_data', JSON.stringify(p.state));
-    return ContentService.createTextOutput("Saved Successfully");
-  }
-}
-function doGet(e) {
-  var props = PropertiesService.getScriptProperties();
-  var d = props.getProperty('vishwa_hardware_data') || '{}';
-  return ContentService.createTextOutput(d).setMimeType(ContentService.MimeType.JSON);
-}</pre>
-        </div>
-        <div class="help-step">
-          <strong>पायरी ३:</strong> प्रोजेक्टला <b>Deploy -> New Deployment</b> करा. Gear आयकॉन वरून <b>Web App</b> निवडून 'Who has access' मध्ये <b>"Anyone"</b> करा. मिळालेली Web App URL वरील सेटिंग मध्ये पेस्ट करा.
-        </div>
-      </div>
     </section>
 
   </main>
@@ -1648,7 +1707,6 @@ function doGet(e) {
   <div class="modal-content invoice-print-container">
     <button class="modal-close-btn no-print" onclick="closeGlobalPrintModal()">×</button>
     
-    <!-- Controls inside modal for formatting selection -->
     <div style="display:flex; gap:10px; justify-content: flex-end; margin-bottom:15px; border-bottom: 1px solid #eee; padding-bottom:10px; flex-wrap: wrap;" class="no-print">
       <button class="btn btn-sm btn-accent" onclick="renderInvoiceFormatInModal('A4')">📄 A4 लेआउट</button>
       <button class="btn btn-sm btn-info" onclick="renderInvoiceFormatInModal('Thermal')">🖨️ 80mm थर्मल पावती</button>
@@ -1658,7 +1716,6 @@ function doGet(e) {
 
     <!-- Active dynamic area -->
     <div id="print-dynamic-canvas-area" style="background:#FFFFFF; padding:10px;"></div>
-    
   </div>
 </div>
 
@@ -1693,6 +1750,51 @@ function doGet(e) {
   </div>
 </div>
 
+<!-- CLIENT LEDGER STATEMENT TIMELINE MODAL -->
+<div class="modal-overlay" id="ledgerStatementModal" style="display:none;">
+  <div class="modal-content" style="max-width:650px;">
+    <button class="modal-close-btn" onclick="closeLedgerStatementModal()">×</button>
+    <h3 style="color:var(--accent)">📋 खाते उतारा (Customer Statement Ledger)</h3>
+    <p style="font-size:13px; color:var(--muted)">ग्राहक: <strong id="ledger-stmt-cust-name" style="color:var(--ink)"></strong> | मोबाईल: <span id="ledger-stmt-cust-phone"></span></p>
+    
+    <div style="max-height: 450px; overflow-y: auto; margin: 20px 0; padding-right:10px;">
+      <div id="ledger-timeline-container" class="timeline">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+    
+    <div style="text-align: right; border-top:1px solid var(--line); padding-top:15px;" class="no-print">
+      <button class="btn btn-ghost" onclick="printLedgerStatement()">🖨️ खाते उतारा प्रिंट करा</button>
+    </div>
+  </div>
+</div>
+
+<!-- STOCK MOVEMENT LOGS MODAL -->
+<div class="modal-overlay" id="stockLogsModal" style="display:none;">
+  <div class="modal-content" style="max-width:750px;">
+    <button class="modal-close-btn" onclick="closeStockLogsModal()">×</button>
+    <h3 style="color:var(--accent)">🕰️ स्टॉक बदल इतिहास (Inventory Logs)</h3>
+    <p style="font-size:13px; color:var(--muted)">मालाच्या साठ्यातील आवक-जावक हालचालींचे विवरण</p>
+    
+    <div style="max-height: 450px; overflow-y: auto; margin-top: 15px;">
+      <table class="premium-table">
+        <thead>
+          <tr>
+            <th>तारीख वेळ</th>
+            <th>मालाचे नाव</th>
+            <th>प्रकार (Action)</th>
+            <th>बदल मात्रा (Qty Changed)</th>
+            <th>उर्वरित शिल्लक (New Balance)</th>
+          </tr>
+        </thead>
+        <tbody id="stock-logs-tbody">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST CONTAINER FOR NOTIFICATIONS -->
 <div id="toast-container"></div>
 
@@ -1703,12 +1805,13 @@ let state = {
   bills: [],
   inventory: [],
   customers: [],
+  stockLogs: [], // Log database for audits
   settings: {
-    shopName: "Vishwa Steel & Hardware Traders",
-    phone: "9876543210",
+    shopName: "Dhisle Hardware And Traders",
+    phone: "935987866",
     gstin: "27AAAAA1111A1Z1",
-    address: "शिवाजी चौक, नियर एस.टी. डेपो, पुणे.",
-    upiId: "vishwasteel@okaxis",
+    address: "Ch.Shivaji Maharaj Chowk, Shirur rode, Raimoh, Maharashtra 414205",
+    upiId: "dhislehardware@okaxis",
     terms: "१. विकलेला माल परत घेतला जाणार नाही.\n२. सर्व वाद पुणे न्यायालयाच्या कार्यकक्षेत येईल.",
     cloudUrl: "",
     logo: "",
@@ -1717,15 +1820,18 @@ let state = {
   }
 };
 
+// Admin mode configuration
+let isAdminModeActive = false;
+
 // Billing Terminal Cache State
 let currentBillItems = [];
 let currentSelectedInventoryItem = null;
 let currentInvoiceLayoutSelection = "A4";
 let currentPrintInvoiceId = null;
 let currentPaymentModalCustId = null;
-let editingBillId = null; // New global tracker for active invoice editing session
+let editingBillId = null;
 
-// Default Prepopulated Hardware items if DB is totally empty
+// Default Prepopulated Hardware items if DB is empty
 const DEFAULT_HARDWARE_INVENTORY = [
   { id: 'item-1', name: 'Ambuja Cement Bag 50kg', category: 'Cement', purchasePrice: 310, sellingPrice: 380, unit: 'Bags', stock: 150, threshold: 20, gst: 18 },
   { id: 'item-2', name: 'Supreme PVC Pipe 4inch (6m)', category: 'Plumbing', purchasePrice: 320, sellingPrice: 450, unit: 'Nos', stock: 80, threshold: 15, gst: 18 },
@@ -1749,16 +1855,23 @@ window.onload = function() {
   autoFetchCloudDataOnStart();
 };
 
-// Populate Categories inside Dropdowns (Add form and Filter)
+function toggleAdminMode(checked) {
+  isAdminModeActive = checked;
+  document.getElementById('admin-profit-card').style.display = checked ? 'block' : 'none';
+  document.getElementById('admin-asset-profit').style.display = checked ? 'flex' : 'none';
+  renderDashboardView();
+  renderInventoryTable();
+  showToast(checked ? "ऍडमिन मोड सक्रिय (Profit Visible)" : "ऍडमिन मोड निष्क्रिय (Profit Hidden)", "info");
+}
+
+// Populate Categories inside Dropdowns
 function populateCategoryDropdowns() {
   let addSelect = document.getElementById('inv-category');
   let filterSelect = document.getElementById('inv-filter-category');
-  
   if (!addSelect || !filterSelect) return;
   
   let addHtml = '';
   let filterHtml = '<option value="all">सर्व श्रेण्या (All Categories)</option>';
-  
   state.settings.customCategories.forEach(cat => {
     addHtml += `<option value="${cat}">${cat}</option>`;
     filterHtml += `<option value="${cat}">${cat}</option>`;
@@ -1777,7 +1890,6 @@ function populateUnitDropdowns() {
   state.settings.customUnits.forEach(unit => {
     html += `<option value="${unit}">${unit}</option>`;
   });
-  
   unitSelect.innerHTML = html;
 }
 
@@ -1790,7 +1902,6 @@ function addNewCategoryPrompt() {
       state.settings.customCategories.push(newCat);
       saveToLocalDatabase();
       populateCategoryDropdowns();
-      // Select the newly added category
       document.getElementById('inv-category').value = newCat;
       showToast(`नवीन श्रेणी '${newCat}' जोडली गेली!`, "good");
     } else {
@@ -1799,7 +1910,7 @@ function addNewCategoryPrompt() {
   }
 }
 
-// Delete currently selected Category with safety checks
+// Delete currently selected Category
 function deleteCurrentCategory() {
   let select = document.getElementById('inv-category');
   let selectedVal = select.value;
@@ -1807,7 +1918,6 @@ function deleteCurrentCategory() {
     showToast("हटवण्यासाठी प्रथम श्रेणी निवडा!", "bad");
     return;
   }
-  
   if (confirm(`तुम्हाला '${selectedVal}' ही श्रेणी कायमची हटवायची आहे का?`)) {
     let idx = state.settings.customCategories.indexOf(selectedVal);
     if (idx >= 0) {
@@ -1821,14 +1931,13 @@ function deleteCurrentCategory() {
 
 // Prompt user to add a custom Unit
 function addNewUnitPrompt() {
-  let newUnit = prompt("नवीन परिमाण युनिटचे नाव लिहा (Enter New Unit Name, eg. Coils, Roll, Brass):");
+  let newUnit = prompt("नवीन परिमाण युनिटचे नाव लिहा (Enter New Unit Name, eg. Roll, Brass):");
   if (newUnit) {
     newUnit = newUnit.trim();
     if (newUnit !== "" && !state.settings.customUnits.includes(newUnit)) {
       state.settings.customUnits.push(newUnit);
       saveToLocalDatabase();
       populateUnitDropdowns();
-      // Select the newly added unit
       document.getElementById('inv-unit').value = newUnit;
       showToast(`नवीन युनिट '${newUnit}' जोडले गेले!`, "good");
     } else {
@@ -1837,7 +1946,7 @@ function addNewUnitPrompt() {
   }
 }
 
-// Delete currently selected Unit with safety checks
+// Delete currently selected Unit
 function deleteCurrentUnit() {
   let select = document.getElementById('inv-unit');
   let selectedVal = select.value;
@@ -1845,7 +1954,6 @@ function deleteCurrentUnit() {
     showToast("हटवण्यासाठी प्रथम युनिट निवडा!", "bad");
     return;
   }
-  
   if (confirm(`तुम्हाला '${selectedVal}' हे युनिट कायमचे हटवायचे आहे का?`)) {
     let idx = state.settings.customUnits.indexOf(selectedVal);
     if (idx >= 0) {
@@ -1857,20 +1965,17 @@ function deleteCurrentUnit() {
   }
 }
 
-// Save Invoice / Bill receipt as high resolution Image using html2canvas
+// Save Invoice as image
 function downloadInvoiceAsImage() {
   let element = document.getElementById('print-dynamic-canvas-area');
   if (!element) {
     showToast("डाउनलोड करण्यासाठी कोणतीही पावती सापडली नाही!", "bad");
     return;
   }
-  
   showToast("इमेज तयार होत आहे, कृपया थांबा...", "info");
-  
-  // Configure html2canvas to render high precision image with white printable background
   html2canvas(element, {
     backgroundColor: '#FFFFFF',
-    scale: 2, // High clarity double scaling
+    scale: 2,
     useCORS: true,
     allowTaint: true,
     logging: false
@@ -1891,22 +1996,17 @@ function downloadInvoiceAsImage() {
   });
 }
 
-// Switch Sidebar & Bottom Tab Bar menus simultaneously
+// Switch Sidebar & Bottom Tab Bar menus
 function switchTab(tabId) {
   const tabs = ['dash', 'billing', 'invoices', 'inventory', 'customers', 'settings'];
   tabs.forEach(t => {
     document.getElementById(`tab-${t}`).style.display = t === tabId ? 'block' : 'none';
-    
-    // Sidebar Navigation active classes
     let sidebarNav = document.getElementById(`nav-${t}`);
     if (sidebarNav) sidebarNav.classList.toggle('active', t === tabId);
-
-    // Mobile Bottom Tab Navigation active classes
     let bottomNav = document.getElementById(`bot-nav-${t}`);
     if (bottomNav) bottomNav.classList.toggle('active', t === tabId);
   });
   
-  // Custom View specific resets/renders
   if (tabId === 'dash') {
     renderDashboardView();
   } else if (tabId === 'inventory') {
@@ -1916,7 +2016,6 @@ function switchTab(tabId) {
   } else if (tabId === 'invoices') {
     renderInvoices();
   } else if (tabId === 'billing') {
-    // Only reset form on billing tab click if we are NOT actively editing a bill
     if(!editingBillId) {
       resetBillingTerminalForm();
     }
@@ -1925,11 +2024,9 @@ function switchTab(tabId) {
 
 // Render dynamic elements for main view
 function renderAppViews() {
-  // Update Header / Settings UI fields
   document.getElementById('topShopTitle').innerText = state.settings.shopName;
   document.getElementById('sidebarShopName').innerText = state.settings.shopName;
   
-  // Settings tab values
   document.getElementById('set-shop-name').value = state.settings.shopName;
   document.getElementById('set-phone').value = state.settings.phone;
   document.getElementById('set-gstin').value = state.settings.gstin;
@@ -1938,7 +2035,6 @@ function renderAppViews() {
   document.getElementById('set-terms').value = state.settings.terms;
   document.getElementById('set-script-url').value = state.settings.cloudUrl || '';
 
-  // Handle Logo Upload settings rendering & previews
   let logoPreview = document.getElementById('set-logo-preview');
   let logoPreviewContainer = document.getElementById('logo-preview-container');
   let btnRemoveLogo = document.getElementById('btn-remove-logo');
@@ -1953,8 +2049,7 @@ function renderAppViews() {
     btnRemoveLogo.style.display = 'none';
   }
 
-  // Render Logo inside Sidebar
-  let firstLetter = state.settings.shopName ? state.settings.shopName.trim().charAt(0).toUpperCase() : 'V';
+  let firstLetter = state.settings.shopName ? state.settings.shopName.trim().charAt(0).toUpperCase() : 'D';
   let brandLogoEl = document.querySelector('.brand-logo');
   if (brandLogoEl) {
     if (state.settings.logo) {
@@ -1964,7 +2059,6 @@ function renderAppViews() {
     }
   }
 
-  // Render Logo inside Main Top Header
   let headerLogoContainer = document.getElementById('top-header-logo-container');
   let headerLogoImg = document.getElementById('top-header-logo');
   if (headerLogoContainer && headerLogoImg) {
@@ -1980,7 +2074,6 @@ function renderAppViews() {
   renderDashboardView();
 }
 
-// Upload shop logo image
 function uploadShopLogo(event) {
   let file = event.target.files[0];
   if (!file) return;
@@ -2000,7 +2093,6 @@ function uploadShopLogo(event) {
   reader.readAsDataURL(file);
 }
 
-// Remove shop logo
 function removeShopLogo() {
   if (confirm("तुम्हाला लोगो खरंच काढून टाकायचा आहे का?")) {
     state.settings.logo = '';
@@ -2010,10 +2102,57 @@ function removeShopLogo() {
   }
 }
 
-// Dashboard statistics
+// Log Inventory Movements
+function logStockMovement(itemId, itemName, actionType, qtyChanged, currentBalance) {
+  state.stockLogs.unshift({
+    timestamp: Date.now(),
+    itemId: itemId,
+    itemName: itemName,
+    action: actionType,
+    qtyChanged: qtyChanged,
+    newBalance: currentBalance
+  });
+  if (state.stockLogs.length > 200) state.stockLogs.pop(); // Cap history to 200 items
+}
+
+// Trigger Stock Logs Modal
+function triggerStockLogsModal() {
+  let tbody = document.getElementById('stock-logs-tbody');
+  let html = '';
+  if (state.stockLogs.length === 0) {
+    html = `<tr><td colspan="5" style="text-align:center; color:var(--muted)">कोणतीही हालचाल नोंदलेली नाही.</td></tr>`;
+  } else {
+    state.stockLogs.forEach(log => {
+      let dateStr = new Date(log.timestamp).toLocaleString('en-IN');
+      let actBadge = '';
+      if (log.action.includes("Sale") || log.action.includes("Deduction")) {
+        actBadge = `<span class="badge badge-unpaid">${log.action}</span>`;
+      } else {
+        actBadge = `<span class="badge badge-paid">${log.action}</span>`;
+      }
+      html += `
+        <tr>
+          <td>${dateStr}</td>
+          <td><b>${escapeHtml(log.itemName)}</b></td>
+          <td>${actBadge}</td>
+          <td>${log.qtyChanged > 0 ? '+' : ''}${log.qtyChanged}</td>
+          <td>${log.newBalance}</td>
+        </tr>
+      `;
+    });
+  }
+  tbody.innerHTML = html;
+  document.getElementById('stockLogsModal').style.display = 'flex';
+}
+
+function closeStockLogsModal() {
+  document.getElementById('stockLogsModal').style.display = 'none';
+}
+
+// Render dynamic elements for main view
 function renderDashboardView() {
-  // Stats Calculation
   let todaySales = 0;
+  let todayProfit = 0;
   let totalPendingUdhar = 0;
   
   let todayStr = new Date().toDateString();
@@ -2021,6 +2160,19 @@ function renderDashboardView() {
     let billDateStr = new Date(b.createdAt).toDateString();
     if(billDateStr === todayStr) {
       todaySales += b.grandTotal;
+      
+      // Calculate today's Profit accurately based on purchased rates in bill items
+      let profit = 0;
+      b.items.forEach(item => {
+        let originalItem = state.inventory.find(i => i.id === item.id);
+        let purcPrice = originalItem ? originalItem.purchasePrice : 0;
+        let baseCost = item.sellingPrice * item.quantity;
+        let disc = baseCost * (item.discountPercent / 100);
+        let actualItemEarnings = baseCost - disc;
+        let actualItemCost = purcPrice * item.quantity;
+        profit += (actualItemEarnings - actualItemCost);
+      });
+      todayProfit += profit;
     }
   });
 
@@ -2031,6 +2183,7 @@ function renderDashboardView() {
   let lowStockCount = state.inventory.filter(item => item.stock <= item.threshold).length;
 
   document.getElementById('stat-sales').innerText = '₹' + todaySales.toFixed(2);
+  document.getElementById('stat-profit').innerText = '₹' + todayProfit.toFixed(2);
   document.getElementById('stat-udhar').innerText = '₹' + totalPendingUdhar.toFixed(2);
   document.getElementById('stat-bills').innerText = state.bills.length;
   document.getElementById('stat-low-stock').innerText = lowStockCount;
@@ -2052,7 +2205,6 @@ function renderDashboardView() {
         statusBadge = `<span class="badge badge-unpaid">Udhar</span>`;
       }
 
-      // Adding data-label attributes for mobile card layout
       htmlBills += `
         <tr>
           <td data-label="बिल क्र."><b style="color:var(--accent)">#${b.billId}</b></td>
@@ -2062,7 +2214,7 @@ function renderDashboardView() {
           <td data-label="स्थिती">${statusBadge}</td>
           <td data-label="कृती">
             <div style="display:inline-flex; gap:4px; flex-wrap:wrap;">
-              <button class="btn btn-sm btn-ghost" onclick="triggerOpenInvoicePrintModal('${b.billId}')">📄 View/Print</button>
+              <button class="btn btn-sm btn-ghost" onclick="triggerOpenInvoicePrintModal('${b.billId}')">📄 View</button>
               <button class="btn btn-sm btn-accent" style="background:rgba(245,158,11,0.12); color:var(--accent); border:1px solid rgba(245,158,11,0.3);" onclick="startEditingBill('${b.billId}')">✏️ Edit</button>
             </div>
           </td>
@@ -2093,20 +2245,117 @@ function renderDashboardView() {
     });
   }
   document.getElementById('dash-low-stock-list').innerHTML = htmlLowStock;
+
+  // Build/Render the dynamic Weekly Sales SVG Chart
+  renderSalesTrendChart();
+}
+
+// 7-Day SVG Bar Chart Renderer (Independent, lightweight & customizable)
+function renderSalesTrendChart() {
+  const chartWrapper = document.getElementById('sales-chart-wrapper');
+  if(!chartWrapper) return;
+
+  // Generate last 7 days dates keys
+  let daysData = [];
+  for(let i=6; i>=0; i--) {
+    let d = new Date();
+    d.setDate(d.getDate() - i);
+    daysData.push({
+      dateStr: d.toDateString(),
+      dayLabel: d.toLocaleDateString('en-IN', {weekday: 'short'}),
+      salesTotal: 0
+    });
+  }
+
+  // Populate sales amount
+  state.bills.forEach(b => {
+    let billDayStr = new Date(b.createdAt).toDateString();
+    let dayObj = daysData.find(day => day.dateStr === billDayStr);
+    if(dayObj) {
+      dayObj.salesTotal += b.grandTotal;
+    }
+  });
+
+  // Calculate high value for scale bounds
+  let maxSales = Math.max(...daysData.map(d => d.salesTotal));
+  if(maxSales === 0) maxSales = 1000; // prevent division by zero
+
+  // SVG parameters
+  let width = 500;
+  let height = 150;
+  let paddingLeft = 40;
+  let paddingBottom = 20;
+  let chartW = width - paddingLeft;
+  let chartH = height - paddingBottom;
+  let barWidth = 35;
+  let gap = (chartW - (barWidth * 7)) / 8;
+
+  let barsMarkup = '';
+  let labelsMarkup = '';
+  
+  daysData.forEach((day, index) => {
+    let x = paddingLeft + gap + index * (barWidth + gap);
+    let barHeight = (day.salesTotal / maxSales) * (chartH - 20);
+    let y = chartH - barHeight;
+
+    // Build Premium SVG bars with gradients and tooltips
+    barsMarkup += `
+      <g>
+        <rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" fill="url(#salesGrad)" rx="4" ry="4" style="transition: all 0.3s ease;">
+          <title>Sales on ${day.dayLabel}: ₹${day.salesTotal.toFixed(2)}</title>
+        </rect>
+        <text x="${x + barWidth/2}" y="${y - 6}" fill="var(--accent)" font-size="9" text-anchor="middle" font-weight="700">₹${Math.round(day.salesTotal)}</text>
+      </g>
+    `;
+
+    labelsMarkup += `
+      <text x="${x + barWidth/2}" y="${height - 4}" fill="var(--muted)" font-size="10" text-anchor="middle">${day.dayLabel}</text>
+    `;
+  });
+
+  chartWrapper.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="overflow: visible;">
+      <defs>
+        <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--accent)" />
+          <stop offset="100%" stop-color="#D97706" />
+        </linearGradient>
+      </defs>
+      <!-- Draw horizontal gridline helpers -->
+      <line x1="${paddingLeft}" y1="10" x2="${width}" y2="10" stroke="var(--line)" stroke-dasharray="4" />
+      <line x1="${paddingLeft}" y1="${chartH/2}" x2="${width}" y2="${chartH/2}" stroke="var(--line)" stroke-dasharray="4" />
+      <line x1="${paddingLeft}" y1="${chartH}" x2="${width}" y2="${chartH}" stroke="var(--line)" />
+      
+      <!-- Axis indicator -->
+      <text x="${paddingLeft - 8}" y="14" fill="var(--muted)" font-size="8" text-anchor="end">Max</text>
+      <text x="${paddingLeft - 8}" y="${chartH}" fill="var(--muted)" font-size="8" text-anchor="end">0</text>
+      
+      ${barsMarkup}
+      ${labelsMarkup}
+    </svg>
+  `;
 }
 
 // Save & Load Database locally
 function saveToLocalDatabase() {
-  localStorage.setItem('vishwa_hardware_db_v2', JSON.stringify(state));
+  localStorage.setItem('dhisle_hardware_db_v3', JSON.stringify(state));
   pushCloudAutoSync();
 }
 
 function loadLocalDatabase() {
   try {
-    let raw = localStorage.getItem('vishwa_hardware_db_v2');
+    // Migration helper: load old vishwa database if new dhisle state doesn't exist yet
+    let raw = localStorage.getItem('dhisle_hardware_db_v3') || localStorage.getItem('vishwa_hardware_db_v2');
     if (raw) {
       state = JSON.parse(raw);
-      // Safe upgrade checks for dynamic dropdowns if undefined in old state
+      // Force update business settings
+      if (state.settings) {
+        state.settings.shopName = "Dhisle Hardware And Traders";
+        state.settings.phone = "935987866";
+        state.settings.address = "Ch.Shivaji Maharaj Chowk, Shirur rode, Raimoh, Maharashtra 414205";
+        state.settings.upiId = "dhislehardware@okaxis";
+      }
+      if (!state.stockLogs) state.stockLogs = [];
       if (!state.settings.customCategories) {
         state.settings.customCategories = ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"];
       }
@@ -2114,12 +2363,12 @@ function loadLocalDatabase() {
         state.settings.customUnits = ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"];
       }
     } else {
-      // populate with premium hardware default state on very first load
       state.inventory = DEFAULT_HARDWARE_INVENTORY;
       state.customers = DEFAULT_CUSTOMERS_LIST;
+      state.stockLogs = [];
       state.settings.customCategories = ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"];
       state.settings.customUnits = ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"];
-      localStorage.setItem('vishwa_hardware_db_v2', JSON.stringify(state));
+      localStorage.setItem('dhisle_hardware_db_v3', JSON.stringify(state));
     }
   } catch(e) {
     console.error("Local database loading error: ", e);
@@ -2132,7 +2381,7 @@ function exportBackupDataFile() {
   let url = URL.createObjectURL(blob);
   let a = document.createElement('a');
   a.href = url;
-  a.download = `hardware-billing-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.download = `dhisle-hardware-billing-v3-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
   showToast("बॅकअप फाईल यशस्वीरीत्या डाऊनलोड झाली!", "good");
@@ -2148,6 +2397,7 @@ function importBackupDataFile(event) {
       let parsed = JSON.parse(e.target.result);
       if(parsed.inventory && parsed.bills && parsed.customers) {
         state = parsed;
+        if (!state.stockLogs) state.stockLogs = [];
         if (!state.settings.customCategories) state.settings.customCategories = ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"];
         if (!state.settings.customUnits) state.settings.customUnits = ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"];
         
@@ -2164,7 +2414,7 @@ function importBackupDataFile(event) {
     }
   };
   reader.readAsText(file);
-  event.target.value = ''; // Reset file input
+  event.target.value = '';
 }
 
 // Custom Toast notification builder
@@ -2180,7 +2430,7 @@ function showToast(message, type = "accent") {
   }, 3500);
 }
 
-// Cloud Synchronisation Functions (Google Script)
+// Cloud Synchronisation
 function saveCloudScriptUrl() {
   let url = document.getElementById('set-script-url').value.trim();
   state.settings.cloudUrl = url;
@@ -2200,10 +2450,11 @@ async function autoFetchCloudDataOnStart() {
     let cloudState = await response.json();
     if(cloudState && (cloudState.bills || cloudState.inventory)) {
       state = cloudState;
+      if (!state.stockLogs) state.stockLogs = [];
       if (!state.settings.customCategories) state.settings.customCategories = ["Cement", "Steel", "Plumbing", "Paints", "Tools", "Fasteners", "Electrical"];
       if (!state.settings.customUnits) state.settings.customUnits = ["Nos", "Bags", "Kg", "Box", "Meters", "Brass"];
       
-      localStorage.setItem('vishwa_hardware_db_v2', JSON.stringify(state));
+      localStorage.setItem('dhisle_hardware_db_v3', JSON.stringify(state));
       populateCategoryDropdowns();
       populateUnitDropdowns();
       updateSyncUIIndicator('🟢 क्लाउड सिंक सक्रिय (Cloud Active)', 'var(--good)');
@@ -2267,7 +2518,7 @@ function saveShopSettings() {
 
 function performFactoryResetApp() {
   if(confirm("❌ सावधान! काय आपण खरच पूर्ण ॲप रिसेट करू इच्छिता? संपूर्ण बिल आणि स्टॉक नष्ट होईल.")) {
-    localStorage.removeItem('vishwa_hardware_db_v2');
+    localStorage.removeItem('dhisle_hardware_db_v3');
     location.reload();
   }
 }
@@ -2282,7 +2533,6 @@ function resetBillingTerminalForm() {
   currentSelectedInventoryItem = null;
   editingBillId = null;
   
-  // Reset banners and button labels
   let banner = document.getElementById('editing-bill-banner');
   if (banner) banner.style.display = 'none';
   document.getElementById('btn-finalize-bill').innerHTML = `🖨️ पक्के बिल जनरेट करा (Save & Print)`;
@@ -2294,26 +2544,52 @@ function resetBillingTerminalForm() {
   document.getElementById('bill-selected-item-name').value = '';
   document.getElementById('cust-autocomplete-badge').style.display = 'none';
   document.getElementById('bill-received-amount').value = '';
+  document.getElementById('bill-tendered-cash').value = '';
+  document.getElementById('bill-change-return').innerText = '₹0.00';
   document.getElementById('bill-extra-charges').value = '0';
   document.getElementById('bill-payment-mode').value = 'Cash';
 
   renderCurrentBillItemsTable();
 }
 
-// Active Editor Setup to recover old bill data to active terminal
+function calculateTenderChange() {
+  let subtotal = 0;
+  let taxTotal = 0;
+  let discTotal = 0;
+  currentBillItems.forEach(item => {
+    let base = item.sellingPrice * item.quantity;
+    let disc = base * (item.discountPercent / 100);
+    let afterDisc = base - disc;
+    let tax = afterDisc * (item.gstPercent / 100);
+    subtotal += base;
+    discTotal += disc;
+    taxTotal += tax;
+  });
+  let extra = Number(document.getElementById('bill-extra-charges').value || 0);
+  let grandTotal = (subtotal - discTotal) + taxTotal + extra;
+
+  let tendered = Number(document.getElementById('bill-tendered-cash').value || 0);
+  let change = tendered - grandTotal;
+  let changeEl = document.getElementById('bill-change-return');
+  if (change > 0) {
+    changeEl.innerText = `₹${change.toFixed(2)}`;
+    changeEl.style.color = "var(--good)";
+  } else {
+    changeEl.innerText = `₹0.00`;
+    changeEl.style.color = "var(--muted)";
+  }
+}
+
+// Edit Mode Activation
 function startEditingBill(billId) {
   let bill = state.bills.find(b => b.billId === billId);
   if(!bill) {
     showToast("बिल सापडले नाही!", "bad");
     return;
   }
-  
   editingBillId = billId;
-  
-  // Switch to Billing terminal screen
   switchTab('billing');
   
-  // Autofill checkout details
   document.getElementById('bill-phone').value = bill.customerPhone === 'N/A' ? '' : bill.customerPhone;
   document.getElementById('bill-cust-name').value = bill.customerName;
   document.getElementById('bill-cust-village').value = bill.customerAddress === 'N/A' ? '' : bill.customerAddress;
@@ -2321,30 +2597,24 @@ function startEditingBill(billId) {
   document.getElementById('bill-received-amount').value = bill.receivedAmount || 0;
   document.getElementById('bill-payment-mode').value = bill.paymentMode || 'Cash';
   
-  // Deep clone selected bill's item list to preserve current editing session safely
   currentBillItems = JSON.parse(JSON.stringify(bill.items));
   
-  // Show orange warning editing status bar
   let banner = document.getElementById('editing-bill-banner');
   if(banner) {
     banner.style.display = 'flex';
     document.getElementById('editing-bill-title').innerText = `✏️ बिल #${billId} दुरुस्त (Edit) केले जात आहे`;
   }
-  
-  // Toggle checkout button label
   document.getElementById('btn-finalize-bill').innerHTML = `💾 बदल जतन करा (Update Invoice)`;
   
   renderCurrentBillItemsTable();
   showToast(`बिल #${billId} दुरुस्तीसाठी लोड झाले!`, "info");
 }
 
-// Cancel editing and revert to normal checkout
 function cancelEditingBill() {
   resetBillingTerminalForm();
   showToast("दुरुस्ती रद्द केली!", "accent");
 }
 
-// Autocomplete customer info if phone is entered
 function autocompleteCustomerByPhone() {
   let ph = document.getElementById('bill-phone').value.trim();
   let badge = document.getElementById('cust-autocomplete-badge');
@@ -2364,11 +2634,9 @@ function autocompleteCustomerByPhone() {
   }
 }
 
-// Handle real-time product search inside billing dropdown
 function handleItemSearch(event) {
   let q = event.target.value.toLowerCase().trim();
   let panel = document.getElementById('billing-search-panel');
-  
   let matches = state.inventory.filter(item => 
     item.name.toLowerCase().includes(q) || item.category.toLowerCase().includes(q)
   );
@@ -2387,7 +2655,6 @@ function handleItemSearch(event) {
         stockClass = 'low';
         stockText = 'कमी शिल्लक';
       }
-
       html += `
         <div class="search-result-item" onclick="selectItemForBilling('${item.id}')">
           <div>
@@ -2404,7 +2671,6 @@ function handleItemSearch(event) {
   }
 }
 
-// Dropdown click handler
 function selectItemForBilling(itemId) {
   let item = state.inventory.find(i => i.id === itemId);
   if(item) {
@@ -2415,7 +2681,6 @@ function selectItemForBilling(itemId) {
   }
 }
 
-// Close searchable selector list when clicked outside
 document.addEventListener('click', function(e) {
   let searchWrapper = document.querySelector('.search-dropdown-wrapper');
   if (searchWrapper && !searchWrapper.contains(e.target)) {
@@ -2423,21 +2688,17 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Add selected item to current billing list
 function addItemToCurrentBill() {
   if(!currentSelectedInventoryItem) {
     showToast("कृपया प्रथम कोणतीही वस्तू निवडा!", "bad");
     return;
   }
-
-  // Check if item already exists in the billing queue
   let exists = currentBillItems.find(i => i.id === currentSelectedInventoryItem.id);
   if (exists) {
     showToast("वस्तू आधीच जोडलेली आहे, मात्रा वाढवा!", "accent");
     return;
   }
 
-  // Inject into active array
   currentBillItems.push({
     id: currentSelectedInventoryItem.id,
     name: currentSelectedInventoryItem.name,
@@ -2456,7 +2717,6 @@ function addItemToCurrentBill() {
   showToast("वस्तू यशस्वीरीत्या जोडली!", "good");
 }
 
-// Render dynamic invoice lists inside table (Focus-locking layout)
 function renderCurrentBillItemsTable() {
   let tbody = document.getElementById('current-bill-items-body');
   if(currentBillItems.length === 0) {
@@ -2501,22 +2761,15 @@ function renderCurrentBillItemsTable() {
   calculateBillTotals();
 }
 
-// Live focus-retaining updater (Does NOT rebuild whole table HTML on typing!)
 function updateBillItemValue(index, field, value) {
-  // Update state array
   currentBillItems[index][field] = Number(value) || 0;
-  
-  // Directly calculate row's latest float total
   let updatedRowTotal = calculateSingleItemTotalValue(currentBillItems[index]);
-  
-  // Directly inject updated row subtotal into DOM without re-rendering adjacent input fields
   let rowTotalEl = document.getElementById(`row-total-${index}`);
   if (rowTotalEl) {
     rowTotalEl.innerText = `₹${updatedRowTotal.toFixed(2)}`;
   }
-  
-  // Recalculate bill sum cards dynamically
   calculateBillTotals();
+  calculateTenderChange();
 }
 
 function removeBillItemQueue(index) {
@@ -2525,17 +2778,13 @@ function removeBillItemQueue(index) {
 }
 
 function calculateSingleItemTotalValue(item) {
-  // Base cost = Price * Qty (works perfectly for float values)
   let baseCost = item.sellingPrice * item.quantity;
-  // Apply discount
   let disc = baseCost * (item.discountPercent / 100);
   let afterDisc = baseCost - disc;
-  // Calculate tax GST portion
   let tax = afterDisc * (item.gstPercent / 100);
   return afterDisc + tax;
 }
 
-// Master billing calculator
 function calculateBillTotals() {
   let subtotal = 0;
   let taxTotal = 0;
@@ -2558,9 +2807,8 @@ function calculateBillTotals() {
 
   let received = Number(document.getElementById('bill-received-amount').value || 0);
   let due = grandTotal - received;
-  if(due < 0) due = 0; // prevent negative balance
+  if(due < 0) due = 0;
 
-  // Show UI Totals
   document.getElementById('bill-summary-subtotal').innerText = '₹' + subtotal.toFixed(2);
   document.getElementById('bill-summary-tax').innerText = '₹' + taxTotal.toFixed(2);
   document.getElementById('bill-summary-discount').innerText = '₹' + discTotal.toFixed(2);
@@ -2568,7 +2816,6 @@ function calculateBillTotals() {
   document.getElementById('bill-summary-due-balance').innerText = '₹' + due.toFixed(2);
 }
 
-// Finalize Invoicing logic (Combines NEW and EDIT update states differentially)
 function finalizeAndGenerateInvoice() {
   let name = document.getElementById('bill-cust-name').value.trim();
   let phone = document.getElementById('bill-phone').value.trim();
@@ -2586,7 +2833,6 @@ function finalizeAndGenerateInvoice() {
     return;
   }
 
-  // Re-calculate Totals
   let subtotal = 0;
   let taxTotal = 0;
   let discTotal = 0;
@@ -2605,43 +2851,33 @@ function finalizeAndGenerateInvoice() {
   if (dueBalance < 0) dueBalance = 0;
 
   if (editingBillId) {
-    // ----------------------------------------------------
-    // EDIT BILL MODE: DIFFERENTIAL ADJUSTMENT ENGINE
-    // ----------------------------------------------------
+    // 1. Revert Old values safely
     let oldBillIndex = state.bills.findIndex(b => b.billId === editingBillId);
-    if(oldBillIndex < 0) {
-      showToast("मूळ बिल मिळाले नाही!", "bad");
-      return;
-    }
     let oldBill = state.bills[oldBillIndex];
-
-    // 1. REVERT: Add back old quantities to inventory stock
     oldBill.items.forEach(oldItem => {
       let stockItem = state.inventory.find(i => i.id === oldItem.id);
       if(stockItem) {
         stockItem.stock = Number(stockItem.stock) + Number(oldItem.quantity);
+        logStockMovement(stockItem.id, stockItem.name, "Edit Revert Restock", oldItem.quantity, stockItem.stock);
       }
     });
 
-    // 2. REVERT: Subtract old financial values from customer ledger
     let oldCustProfile = state.customers.find(c => c.phone === oldBill.customerPhone);
     if(oldCustProfile) {
       oldCustProfile.totalLent -= oldBill.grandTotal;
       oldCustProfile.pendingDue -= oldBill.dueBalance;
-      if(oldCustProfile.totalLent < 0) oldCustProfile.totalLent = 0;
-      if(oldCustProfile.pendingDue < 0) oldCustProfile.pendingDue = 0;
     }
 
-    // 3. APPLY NEW: Deduct new quantities from inventory stock
+    // 2. Apply New values
     currentBillItems.forEach(newItem => {
       let stockItem = state.inventory.find(i => i.id === newItem.id);
       if(stockItem) {
         stockItem.stock = Number(stockItem.stock) - Number(newItem.quantity);
-        if(stockItem.stock < 0) stockItem.stock = 0; // Prevent negative stock
+        if(stockItem.stock < 0) stockItem.stock = 0;
+        logStockMovement(stockItem.id, stockItem.name, "Edit Deduction Sale", -newItem.quantity, stockItem.stock);
       }
     });
 
-    // 4. APPLY NEW: Add new financial values to customer profile (or register if phone changed)
     let newCustProfile = state.customers.find(c => c.phone === phone);
     if(!newCustProfile && phone) {
       newCustProfile = {
@@ -2662,9 +2898,8 @@ function finalizeAndGenerateInvoice() {
       newCustProfile.lastTxDate = Date.now();
     }
 
-    // 5. UPDATE: Overwrite active bill state
     state.bills[oldBillIndex] = {
-      ...oldBill, // Retain original bill ID & createdAt timestamp
+      ...oldBill,
       customerName: name,
       customerPhone: phone || 'N/A',
       customerAddress: village || 'N/A',
@@ -2680,33 +2915,24 @@ function finalizeAndGenerateInvoice() {
     };
 
     showToast(`बिल #${editingBillId} यशस्वीरित्या दुरुस्त केले!`, "good");
-    
     let savedBillId = editingBillId;
-    
-    // Clean edit variables
     editingBillId = null;
-    let banner = document.getElementById('editing-bill-banner');
-    if (banner) banner.style.display = 'none';
-    document.getElementById('btn-finalize-bill').innerHTML = `🖨️ पक्के बिल जनरेट करा (Save & Print)`;
-
     saveToLocalDatabase();
     triggerOpenInvoicePrintModal(savedBillId);
     resetBillingTerminalForm();
     return;
   }
 
-  // ----------------------------------------------------
-  // STANDARD BILL CREATION FLOW
-  // ----------------------------------------------------
+  // STANDARD FLOW
   currentBillItems.forEach(item => {
     let stockItem = state.inventory.find(i => i.id === item.id);
     if(stockItem) {
-      stockItem.stock = stockItem.stock - item.quantity; // Deduction (supports floats)
-      if(stockItem.stock < 0) stockItem.stock = 0; // Safe floor
+      stockItem.stock = stockItem.stock - item.quantity;
+      if(stockItem.stock < 0) stockItem.stock = 0;
+      logStockMovement(stockItem.id, stockItem.name, "Sales Deduction", -item.quantity, stockItem.stock);
     }
   });
 
-  // Client profile lookup or dynamic registration
   let custProfile = state.customers.find(c => c.phone === phone);
   if(!custProfile && phone) {
     custProfile = {
@@ -2728,7 +2954,6 @@ function finalizeAndGenerateInvoice() {
     custProfile.lastTxDate = Date.now();
   }
 
-  // Create Bill Object
   let newBillId = 'INV-' + (1001 + state.bills.length);
   let billObj = {
     billId: newBillId,
@@ -2749,13 +2974,8 @@ function finalizeAndGenerateInvoice() {
 
   state.bills.push(billObj);
   saveToLocalDatabase();
-
   showToast(`यशोस्वीरीत्या बिल #${newBillId} तयार झाले!`, "good");
-  
-  // Instantly trigger printing modal popup
   triggerOpenInvoicePrintModal(newBillId);
-  
-  // Refresh and switch
   resetBillingTerminalForm();
 }
 
@@ -2782,27 +3002,31 @@ function addOrUpdateInventoryItem() {
   }
 
   if (selectedInventoryEditingId) {
-    // Update existing
     let idx = state.inventory.findIndex(i => i.id === selectedInventoryEditingId);
     if(idx >= 0) {
+      let prevStock = state.inventory[idx].stock;
+      let diff = stock - prevStock;
       state.inventory[idx] = {
         id: selectedInventoryEditingId,
         name, category, purchasePrice, sellingPrice, unit, stock, threshold, gst
       };
+      if(diff !== 0) {
+        logStockMovement(selectedInventoryEditingId, name, "Manual Audit Change", diff, stock);
+      }
       showToast("उत्पादन तपशील यशस्वीरीत्या सुधारले!", "good");
     }
     selectedInventoryEditingId = null;
   } else {
-    // Add new
+    let newId = 'item-' + Date.now().toString(36);
     let newItem = {
-      id: 'item-' + Date.now().toString(36),
+      id: newId,
       name, category, purchasePrice, sellingPrice, unit, stock, threshold, gst
     };
     state.inventory.push(newItem);
+    logStockMovement(newId, name, "New Item Initial Stock", stock, stock);
     showToast("नवीन उत्पादन यशस्वीरीत्या स्टॉक मध्ये जोडले!", "good");
   }
 
-  // Clear Form fields
   document.getElementById('inv-name').value = '';
   document.getElementById('inv-purchase-price').value = '';
   document.getElementById('inv-selling-price').value = '';
@@ -2826,11 +3050,14 @@ function renderInventoryTable() {
 
   // Calculate live statistics
   let totalStockVal = 0;
+  let totalPurchaseVal = 0;
   state.inventory.forEach(i => {
     totalStockVal += (i.stock * i.sellingPrice);
+    totalPurchaseVal += (i.stock * i.purchasePrice);
   });
   document.getElementById('inv-stats-count').innerText = state.inventory.length;
   document.getElementById('inv-stats-value').innerText = '₹' + totalStockVal.toFixed(2);
+  document.getElementById('inv-stats-purchase-value').innerText = '₹' + totalPurchaseVal.toFixed(2);
 
   let html = '';
   if (filtered.length === 0) {
@@ -2848,12 +3075,15 @@ function renderInventoryTable() {
         statusText = 'लो स्टॉक';
       }
 
+      // Hide or show purchase prices based on Admin Mode Toggle
+      let purcPriceText = isAdminModeActive ? `₹${item.purchasePrice.toFixed(2)}` : '🔒 Restricted';
+
       html += `
         <tr>
           <td data-label="नाव"><b>${escapeHtml(item.name)}</b></td>
           <td data-label="श्रेणी">${item.category}</td>
-          <td data-label="खरेदी दर">₹${item.purchasePrice.toFixed(2)}</td>
-          <td data-label="विक्री दर">₹${item.sellingPrice.toFixed(2)}</td>
+          <td data-label="खरेदी दर" style="font-family:'JetBrains Mono',monospace;">${purcPriceText}</td>
+          <td data-label="विक्री दर" style="font-family:'JetBrains Mono',monospace;">₹${item.sellingPrice.toFixed(2)}</td>
           <td data-label="GST">${item.gst}%</td>
           <td data-label="स्टॉक (Qty)"><b style="color:var(--accent)">${item.stock} ${item.unit}</b></td>
           <td data-label="स्थिती"><span class="badge ${statusClass}">${statusText}</span></td>
@@ -2883,7 +3113,6 @@ function populateStockAdjustmentForm(itemId) {
     document.getElementById('inv-threshold').value = item.threshold;
     document.getElementById('inv-gst').value = item.gst;
     
-    // Focus scrolling
     document.getElementById('inv-name').scrollIntoView({ behavior: 'smooth' });
     showToast("उत्पादन संपादन करण्यासाठी लोड झाले!", "info");
   }
@@ -2893,6 +3122,8 @@ function deleteProductFromInventory(itemId) {
   if (confirm("काय तुम्हाला हे उत्पादन आणि त्याचा stock डेटाबेस मधून काढून टाकायचा आहे?")) {
     let idx = state.inventory.findIndex(i => i.id === itemId);
     if(idx >= 0) {
+      let item = state.inventory[idx];
+      logStockMovement(itemId, item.name, "Product Permanent Removal", -item.stock, 0);
       state.inventory.splice(idx, 1);
       saveToLocalDatabase();
       renderInventoryTable();
@@ -2903,7 +3134,7 @@ function deleteProductFromInventory(itemId) {
 
 
 /* ========================================================
-   CUSTOMERS DIRECTORY & CREDIT LEDGER LOGIC
+   CUSTOMERS DIRECTORY & STATEMENT LEDGER ENGINE
    ======================================================== */
 
 function addNewCustomerProfile() {
@@ -2917,7 +3148,6 @@ function addNewCustomerProfile() {
     return;
   }
 
-  // Duplicate Check
   let exists = state.customers.find(c => c.phone === phone);
   if(exists) {
     showToast("हा मोबाईल नंबर आधीपासूनच जोडलेला आहे!", "bad");
@@ -2939,7 +3169,6 @@ function addNewCustomerProfile() {
   saveToLocalDatabase();
   renderCustomersTable();
   
-  // Reset
   document.getElementById('cust-fullname').value = '';
   document.getElementById('cust-phone').value = '';
   document.getElementById('cust-address').value = '';
@@ -2980,7 +3209,8 @@ function renderCustomersTable() {
           <td data-label="थकीत उधार" style="${textClass}">₹${c.pendingDue.toFixed(2)}</td>
           <td data-label="शेवटचा व्यवहार">📅 ${dateStr}</td>
           <td style="text-align: center;">
-            <div style="display:flex; gap:6px; justify-content: center;">
+            <div style="display:flex; gap:6px; justify-content: center; flex-wrap:wrap;">
+              <button class="btn btn-sm btn-ghost" onclick="triggerCustomerLedgerStatement('${c.id}')" style="border-color:var(--info); color:var(--info);">📋 खाते उतारा</button>
               ${c.pendingDue > 0 ? `<button class="btn btn-sm btn-good" onclick="triggerManualPaymentModal('${c.id}')">💵 वसूल जमा</button>` : ''}
               <button class="btn btn-sm btn-bad" style="padding:4px 8px" onclick="deleteCustomerProfile('${c.id}')">🗑️</button>
             </div>
@@ -3010,7 +3240,6 @@ function deleteCustomerProfile(custId) {
   }
 }
 
-// Trigger Manual/Direct Payment Modal popup from customers tab
 function triggerManualPaymentModal(custId) {
   let c = state.customers.find(c => c.id === custId);
   if (c) {
@@ -3046,14 +3275,13 @@ function submitManualPaymentRecord() {
     c.pendingDue = c.pendingDue - amt;
     c.lastTxDate = Date.now();
 
-    // Create a shadow dynamic bill containing payment receipt inside history records (Decimal precision fully supported)
     let newBillId = 'REC-' + (5001 + state.bills.length);
     let paymentReceiptObj = {
       billId: newBillId,
       customerName: c.name,
       customerPhone: c.phone,
       customerAddress: c.address,
-      items: [{ name: `थकीत उधारी जमा - (${mode})`, sellingPrice: amt, quantity: 1.0, gstPercent: 0, discountPercent: 0, unit: 'Nos' }],
+      items: [{ id: 'manual-receipt', name: `थकीत उधारी वसूल - (${mode})`, sellingPrice: amt, quantity: 1.0, gstPercent: 0, discountPercent: 0, unit: 'Nos' }],
       subtotal: amt,
       taxTotal: 0,
       discountTotal: 0,
@@ -3072,6 +3300,76 @@ function submitManualPaymentRecord() {
     renderCustomersTable();
     showToast(`यशस्वी उधारी जमा नोंद झाली! (पावती #${newBillId})`, "good");
   }
+}
+
+// Interactive Customer Ledger Statement Modal
+let activeStatementCustId = null;
+function triggerCustomerLedgerStatement(custId) {
+  let c = state.customers.find(cust => cust.id === custId);
+  if(!c) return;
+
+  activeStatementCustId = custId;
+  document.getElementById('ledger-stmt-cust-name').innerText = c.name;
+  document.getElementById('ledger-stmt-cust-phone').innerText = c.phone;
+
+  // Filter bills & receipts associated with this customer phone
+  let cHistory = state.bills.filter(b => b.customerPhone === c.phone);
+  
+  // Sort history Chronologically to construct running timeline balance
+  cHistory.sort((a,b) => a.createdAt - b.createdAt);
+
+  let container = document.getElementById('ledger-timeline-container');
+  let timelineHtml = '';
+  let runningDue = 0;
+
+  if (cHistory.length === 0) {
+    timelineHtml = `<div style="text-align:center; color:var(--muted); padding:20px;">या ग्राहकाचा कोणताही मागील व्यवहार रेकॉर्ड आढळला नाही.</div>`;
+  } else {
+    cHistory.forEach(item => {
+      let isPaymentReceipt = item.billId.startsWith('REC');
+      let dateStr = new Date(item.createdAt).toLocaleString('en-IN');
+      
+      if(isPaymentReceipt) {
+        runningDue -= item.grandTotal;
+        if(runningDue < 0) runningDue = 0;
+        timelineHtml += `
+          <div class="timeline-item payment">
+            <div class="timeline-date">${dateStr}</div>
+            <div class="timeline-desc">
+              <span style="color:var(--good); font-weight:700;">💵 उधारी जमा (Received Payment)</span><br>
+              पावती क्रमांक: <b style="color:var(--accent)">#${item.billId}</b> | रक्कम: <b>-₹${item.grandTotal.toFixed(2)}</b> (${item.paymentMode})<br>
+              <small style="color:var(--muted)">चालू थकीत शिल्लक: ₹${runningDue.toFixed(2)}</small>
+            </div>
+          </div>
+        `;
+      } else {
+        runningDue += item.dueBalance;
+        timelineHtml += `
+          <div class="timeline-item">
+            <div class="timeline-date">${dateStr}</div>
+            <div class="timeline-desc">
+              <span style="color:var(--info); font-weight:700;">🧾 वस्तू खरेदी बिल (Goods Invoice)</span><br>
+              बिल क्रमांक: <b style="color:var(--accent)">#${item.billId}</b> | एकूण बिल: <b>₹${item.grandTotal.toFixed(2)}</b><br>
+              नकद जमा: ₹${item.receivedAmount.toFixed(2)} | उधारी शिल्लक: <span style="color:var(--bad)">+₹${item.dueBalance.toFixed(2)}</span><br>
+              <small style="color:var(--muted)">चालू थकीत शिल्लक: ₹${runningDue.toFixed(2)}</small>
+            </div>
+          </div>
+        `;
+      }
+    });
+  }
+
+  container.innerHTML = timelineHtml;
+  document.getElementById('ledgerStatementModal').style.display = 'flex';
+}
+
+function closeLedgerStatementModal() {
+  document.getElementById('ledgerStatementModal').style.display = 'none';
+  activeStatementCustId = null;
+}
+
+function printLedgerStatement() {
+  window.print();
 }
 
 
@@ -3105,10 +3403,8 @@ function renderInvoices() {
   if (filtered.length === 0) {
     html = `<tr><td colspan="9" style="text-align:center; color:var(--muted); padding:30px;">कोणतीही बिले आढळली नाहीत.</td></tr>`;
   } else {
-    // Show newer bills first
     filtered.sort((a,b) => b.createdAt - a.createdAt).forEach(b => {
       let dateStr = new Date(b.createdAt).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'});
-      
       let statusBadge = '';
       if(b.dueBalance <= 0) {
         statusBadge = `<span class="badge badge-paid">पूर्ण जमा</span>`;
@@ -3156,6 +3452,97 @@ function deleteGeneratedInvoiceFromHistory(billId) {
 
 
 /* ========================================================
+   CSV EXPORT GENERATOR ENGINE
+   ======================================================== */
+
+function convertToCSV(headers, rows) {
+  let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include BOM for proper excel formatting
+  csvContent += headers.join(",") + "\r\n";
+  rows.forEach(row => {
+    let processedRow = row.map(v => {
+      let str = String(v).replace(/"/g, '""'); // escape double quotes
+      if (str.includes(",") || str.includes("\n") || str.includes("\r")) {
+        return `"${str}"`;
+      }
+      return str;
+    });
+    csvContent += processedRow.join(",") + "\r\n";
+  });
+  return encodeURI(csvContent);
+}
+
+function exportBillsToCSV() {
+  let headers = ["Bill ID", "Customer Name", "Phone", "Village/Address", "Subtotal", "Tax Total", "Discount", "Extra Charges", "Grand Total", "Received Amount", "Due Balance", "Payment Mode", "Date"];
+  let rows = state.bills.map(b => [
+    b.billId,
+    b.customerName,
+    b.customerPhone,
+    b.customerAddress,
+    b.subtotal.toFixed(2),
+    b.taxTotal.toFixed(2),
+    b.discountTotal.toFixed(2),
+    b.extraCharges,
+    b.grandTotal.toFixed(2),
+    b.receivedAmount.toFixed(2),
+    b.dueBalance.toFixed(2),
+    b.paymentMode,
+    new Date(b.createdAt).toLocaleDateString('en-IN')
+  ]);
+  
+  let encodedUri = convertToCSV(headers, rows);
+  let link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `Dhisle_Hardware_Sales_Report_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function exportInventoryToCSV() {
+  let headers = ["Item Name", "Category", "Purchase Rate", "Selling Rate", "GST %", "Current Stock Qty", "Unit", "Threshold Limit"];
+  let rows = state.inventory.map(item => [
+    item.name,
+    item.category,
+    item.purchasePrice,
+    item.sellingPrice,
+    item.gst,
+    item.stock,
+    item.unit,
+    item.threshold
+  ]);
+  
+  let encodedUri = convertToCSV(headers, rows);
+  let link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `Dhisle_Hardware_Inventory_Report_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function exportCustomersToCSV() {
+  let headers = ["Customer Name", "Phone", "Address", "GSTIN", "Total Purchased", "Pending Due", "Last Transaction Date"];
+  let rows = state.customers.map(c => [
+    c.name,
+    c.phone,
+    c.address,
+    c.gstin || 'N/A',
+    c.totalLent.toFixed(2),
+    c.pendingDue.toFixed(2),
+    new Date(c.lastTxDate).toLocaleDateString('en-IN')
+  ]);
+  
+  let encodedUri = convertToCSV(headers, rows);
+  let link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `Dhisle_Hardware_Customers_Ledger_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+
+/* ========================================================
    PREMIUM BILLING PRINT LAYOUT SYSTEM & UPI DYNAMIC QR
    ======================================================== */
 
@@ -3172,13 +3559,11 @@ function closeGlobalPrintModal() {
 function renderInvoiceFormatInModal(formatType) {
   currentInvoiceLayoutSelection = formatType;
   let canvas = document.getElementById('print-dynamic-canvas-area');
-  
   let bill = state.bills.find(b => b.billId === currentPrintInvoiceId);
   if (!bill) {
     canvas.innerHTML = '<p style="color:red">बिल सापडले नाही!</p>';
     return;
   }
-
   if (formatType === 'A4') {
     canvas.innerHTML = generateA4InvoiceHTML(bill);
   } else {
@@ -3186,7 +3571,6 @@ function renderInvoiceFormatInModal(formatType) {
   }
 }
 
-// Generate premium A4 invoice template (Exact precision rendering)
 function generateA4InvoiceHTML(bill) {
   let shop = state.settings;
   let sub = Number(bill.subtotal || 0);
@@ -3203,38 +3587,48 @@ function generateA4InvoiceHTML(bill) {
     let singleDisc = base * (item.discountPercent / 100);
     let singleTotal = (base - singleDisc) + ((base - singleDisc) * (item.gstPercent / 100));
 
+    // Automated 50-50 splitting into CGST and SGST
+    let gstVal = item.gstPercent;
+    let cgstText = gstVal > 0 ? `${(gstVal/2)}% (CGST)` : '0%';
+    let sgstText = gstVal > 0 ? `${(gstVal/2)}% (SGST)` : '0%';
+
     return `
       <tr>
         <td style="text-align: center;">${index + 1}</td>
         <td><b>${escapeHtml(item.name)}</b></td>
         <td>₹${item.sellingPrice.toFixed(2)}</td>
         <td>${item.quantity} ${item.unit || 'Nos'}</td>
-        <td>${item.gstPercent}%</td>
+        <td>
+          <div style="font-size:11px; color:#555;">CGST: ${cgstText}</div>
+          <div style="font-size:11px; color:#555;">SGST: ${sgstText}</div>
+        </td>
         <td>${item.discountPercent}%</td>
         <td style="text-align: right; font-weight:700;">₹${singleTotal.toFixed(2)}</td>
       </tr>
     `;
   }).join('');
 
-  // Logo rendering block for invoice
   let logoHtml = shop.logo ? 
     `<img src="${shop.logo}" class="inv-shop-logo" style="max-height:56px; max-width:56px; object-fit:cover; border-radius:10px; margin-right:14px;" alt="Shop Logo">` : 
-    `<span class="brand-logo" style="width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg, #F59E0B, #D97706); display:inline-flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-weight:900; font-size:24px; color:#111827; margin-right:14px;">${shop.shopName ? shop.shopName.charAt(0).toUpperCase() : 'V'}</span>`;
+    `<span class="brand-logo" style="width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg, #F59E0B, #D97706); display:inline-flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-weight:900; font-size:24px; color:#111827; margin-right:14px;">${shop.shopName ? shop.shopName.charAt(0).toUpperCase() : 'D'}</span>`;
   
   let headerTitleHtml = `<div style="display:flex; align-items:center;">${logoHtml}<div><h2 style="margin:0; font-family:'Playfair Display',serif; font-size:24px; font-weight:800; color:#111827;">${escapeHtml(shop.shopName)}</h2></div></div>`;
 
-  // Dynamically generate QR Code inside print panel if UPI Id exists
   let upiQrBlock = '';
   if (shop.upiId && due > 0) {
-    let encodedUpiStr = encodeURIComponent(`upi://pay?pa=${shop.upiId}&pn=${encodeURIComponent(shop.shopName)}&am=${grand.toFixed(2)}&cu=INR`);
+    let encodedUpiStr = encodeURIComponent(`upi://pay?pa=${shop.upiId}&pn=${encodeURIComponent(shop.shopName)}&am=${due.toFixed(2)}&cu=INR`);
     let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodedUpiStr}`;
     upiQrBlock = `
       <div class="qr-container no-print" style="border: 1px dashed #CCC; background:#FAFAFA; text-align:center; padding:12px; border-radius:6px; display:inline-block; margin-top:10px;">
-        <span style="font-size:11px; font-weight:700; color:#4B5563; text-transform:uppercase;">Scan UPI to Pay (₹${grand.toFixed(2)})</span><br>
+        <span style="font-size:11px; font-weight:700; color:#4B5563; text-transform:uppercase;">Scan UPI to Pay Balance (₹${due.toFixed(2)})</span><br>
         <img src="${qrUrl}" alt="Scan QR Code to Pay" class="qr-image" style="width:110px; height:110px; margin-top:5px; border:1px solid #ddd;">
       </div>
     `;
   }
+
+  // Display CGST vs SGST split totals perfectly
+  let cgstTotal = tax / 2;
+  let sgstTotal = tax / 2;
 
   return `
     <div class="invoice-a4">
@@ -3279,7 +3673,7 @@ function generateA4InvoiceHTML(bill) {
             <th>साहित्य तपशील (Particulars)</th>
             <th style="width: 14%;">दर (₹)</th>
             <th style="width: 12%;">मात्रा</th>
-            <th style="width: 10%;">GST</th>
+            <th style="width: 18%;">GST Split</th>
             <th style="width: 10%;">Disc</th>
             <th style="width: 18%; text-align: right;">एकूण रक्कम</th>
           </tr>
@@ -3296,8 +3690,9 @@ function generateA4InvoiceHTML(bill) {
         <div class="inv-a4-summary">
           <div class="inv-a4-sum-row"><span>उप-रक्कम (Sub-Total):</span><span>₹${sub.toFixed(2)}</span></div>
           <div class="inv-a4-sum-row"><span>सवलत (Total Discount):</span><span>-₹${disc.toFixed(2)}</span></div>
-          <div class="inv-a4-sum-row"><span>लागू कर (GST Tax):</span><span>+₹${tax.toFixed(2)}</span></div>
-          ${bill.extraCharges > 0 ? `<div class="inv-a4-sum-row"><span>अतिरिक्त खर्च / हमाली:</span><span>+₹${Number(bill.extraCharges).toFixed(2)}</span></div>` : ''}
+          <div class="inv-a4-sum-row"><span>CGST Total:</span><span>+₹${cgstTotal.toFixed(2)}</span></div>
+          <div class="inv-a4-sum-row"><span>SGST Total:</span><span>+₹${sgstTotal.toFixed(2)}</span></div>
+          ${bill.extraCharges > 0 ? `<div class="inv-a4-sum-row"><span>वाहतूक खर्च (Transport):</span><span>+₹${Number(bill.extraCharges).toFixed(2)}</span></div>` : ''}
           <div class="inv-a4-sum-row final-payable"><span>एकूण देय रक्कम:</span><span>₹${grand.toFixed(2)}</span></div>
           <div class="inv-a4-sum-row" style="color:#10B981; font-weight:700;"><span>जमा रक्कम (Received):</span><span>-₹${rec.toFixed(2)}</span></div>
         </div>
@@ -3306,13 +3701,12 @@ function generateA4InvoiceHTML(bill) {
       <div class="inv-a4-footer">
         <p style="font-weight: 700; color:#111827; margin:0 0 4px 0;">आपल्या विश्वासाबद्दल धन्यवाद! 🙏</p>
         <p style="white-space: pre-line; margin:0; line-height:1.4;">${escapeHtml(shop.terms)}</p>
-        <div style="font-size:9px; color:#9CA3AF; margin-top:15px; border-top:1px dashed #E5E7EB; padding-top:10px;">Generated via ${escapeHtml(shop.shopName)} Billing System on ${new Date().toLocaleDateString('en-IN')}</div>
+        <div style="font-size:9px; color:#9CA3AF; margin-top:15px; border-top:1px dashed #E5E7EB; padding-top:10px;">Generated via Dhisle Hardware And Traders ERP System on ${new Date().toLocaleDateString('en-IN')}</div>
       </div>
     </div>
   `;
 }
 
-// Generate premium 80mm thermal receipt layout (Decimals supported beautifully)
 function generateThermalReceiptHTML(bill) {
   let shop = state.settings;
   let dateString = new Date(bill.createdAt).toLocaleDateString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
@@ -3334,6 +3728,9 @@ function generateThermalReceiptHTML(bill) {
   let logoHtml = shop.logo ? 
     `<div class="center" style="margin-bottom:8px;"><img src="${shop.logo}" style="max-height:48px; max-width:48px; border-radius:6px; object-fit:cover;" alt="Thermal logo"></div>` : 
     '';
+
+  let cgstTotal = bill.taxTotal / 2;
+  let sgstTotal = bill.taxTotal / 2;
 
   return `
     <div class="thermal-wrapper">
@@ -3364,12 +3761,15 @@ function generateThermalReceiptHTML(bill) {
         <span>उप-रक्कम (Sub-Total):</span><span>₹${bill.subtotal.toFixed(2)}</span>
       </div>
       <div style="display:flex; justify-content:space-between; font-size:11px;">
-        <span>एकूण कर (GST):</span><span>₹${bill.taxTotal.toFixed(2)}</span>
+        <span>CGST Total:</span><span>+₹${cgstTotal.toFixed(2)}</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:11px;">
+        <span>SGST Total:</span><span>+₹${sgstTotal.toFixed(2)}</span>
       </div>
       <div style="display:flex; justify-content:space-between; font-size:11px;">
         <span>सवलत (Disc):</span><span>-₹${bill.discountTotal.toFixed(2)}</span>
       </div>
-      ${bill.extraCharges > 0 ? `<div style="display:flex; justify-content:space-between; font-size:11px;"><span>इतर हमाली खर्च:</span><span>+₹${Number(bill.extraCharges).toFixed(2)}</span></div>` : ''}
+      ${bill.extraCharges > 0 ? `<div style="display:flex; justify-content:space-between; font-size:11px;"><span>वाहतूक खर्च:</span><span>+₹${Number(bill.extraCharges).toFixed(2)}</span></div>` : ''}
       
       <div class="divider"></div>
       
@@ -3393,17 +3793,11 @@ function generateThermalReceiptHTML(bill) {
   `;
 }
 
-
-/* ========================================================
-   UTILITY HELPER FUNCTIONS (CLEANING, ESCAPING)
-   ======================================================== */
-
 function escapeHtml(s) {
   return (s || '').replace(/[&<>"']/g, m => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[m]));
 }
-
 </script>
 </body>
 </html>
