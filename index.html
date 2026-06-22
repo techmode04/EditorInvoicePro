@@ -1263,7 +1263,8 @@ function doPost(e) {
             return dataUpdated;
         }
 
-        // Auto Sync Background Processor
+        // Auto Sync Background Processor with safety Debounce to prevent rapid parallel queries
+        let autoSyncTimeout = null;
         function autoSyncIfEnabled() {
             state.lastUpdated = Date.now();
             saveLocalStorageBackup();
@@ -1271,7 +1272,11 @@ function doPost(e) {
             const isAuto = localStorage.getItem('cutinvoice_autosync') === 'true';
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
             if (isAuto && webAppUrl && navigator.onLine) {
-                performCloudPush(buildSyncPayload(), true);
+                if (autoSyncTimeout) clearTimeout(autoSyncTimeout);
+                
+                autoSyncTimeout = setTimeout(() => {
+                    performCloudPush(buildSyncPayload(), true);
+                }, 1200); // 1.2s delay to batch up quick edits/clicks
             }
         }
 
@@ -2663,18 +2668,57 @@ function doPost(e) {
             autoSyncIfEnabled();
         };
 
+        // Helper function to dynamically resize & compress base64 images to make cloud syncing incredibly fast
+        function compressImage(base64Str, maxWidth, maxHeight, callback) {
+            if (!base64Str || !base64Str.startsWith('data:image')) {
+                callback(base64Str);
+                return;
+            }
+            const img = new Image();
+            img.src = base64Str;
+            img.onload = function() {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth || height > maxHeight) {
+                    if (width > height) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    } else {
+                        width = Math.round((width * maxHeight) / height);
+                        height = maxHeight;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Compress as JPEG format with 0.75 quality to save maximum bandwidth
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+                callback(compressedBase64);
+            };
+            img.onerror = function() {
+                callback(base64Str);
+            };
+        }
+
         document.getElementById('logo-uploader').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    state.settings.logo = evt.target.result;
-                    document.getElementById('logo-preview').src = evt.target.result;
-                    document.getElementById('logo-preview').classList.remove('hidden');
-                    document.getElementById('logo-preview-placeholder').classList.add('hidden');
-                    showToast("Brand logo loaded successfully");
-                    updateBrandUI();
-                    autoSyncIfEnabled();
+                    compressImage(evt.target.result, 300, 300, function(compressedBase64) {
+                        state.settings.logo = compressedBase64;
+                        document.getElementById('logo-preview').src = compressedBase64;
+                        document.getElementById('logo-preview').classList.remove('hidden');
+                        document.getElementById('logo-preview-placeholder').classList.add('hidden');
+                        showToast("Brand logo optimized and loaded successfully");
+                        updateBrandUI();
+                        autoSyncIfEnabled();
+                    });
                 };
                 reader.readAsDataURL(file);
             }
@@ -2685,12 +2729,14 @@ function doPost(e) {
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    state.settings.signature = evt.target.result;
-                    document.getElementById('sig-preview').src = evt.target.result;
-                    document.getElementById('sig-preview').classList.remove('hidden');
-                    document.getElementById('sig-preview-placeholder').classList.add('hidden');
-                    showToast("Authorized signature loaded successfully");
-                    autoSyncIfEnabled();
+                    compressImage(evt.target.result, 250, 100, function(compressedBase64) {
+                        state.settings.signature = compressedBase64;
+                        document.getElementById('sig-preview').src = compressedBase64;
+                        document.getElementById('sig-preview').classList.remove('hidden');
+                        document.getElementById('sig-preview-placeholder').classList.add('hidden');
+                        showToast("Authorized signature optimized and loaded successfully");
+                        autoSyncIfEnabled();
+                    });
                 };
                 reader.readAsDataURL(file);
             }
@@ -3011,6 +3057,19 @@ function doPost(e) {
                 localStorage.setItem('cutinvoice_webapp_url', decodeURIComponent(querySyncUrl));
                 localStorage.setItem('cutinvoice_autosync', 'true');
                 window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // If no App Script Web App URL is configured yet, set the user's provided secure URL as default
+            let savedUrl = localStorage.getItem('cutinvoice_webapp_url');
+            if (!savedUrl) {
+                savedUrl = "https://script.google.com/macros/s/AKfycbyho9ICf96bPVh0AkdwQbZpr6CoqfTMpf9Fd-8j1vwo_eI-5r-VhVIHEM25_ttTqjI2Aw/exec";
+                localStorage.setItem('cutinvoice_webapp_url', savedUrl);
+            }
+
+            // Enable Auto-sync by default if it's not set
+            let savedAutoSync = localStorage.getItem('cutinvoice_autosync');
+            if (savedAutoSync === null) {
+                localStorage.setItem('cutinvoice_autosync', 'true');
             }
 
             // Restore PIN from local storage or set default
