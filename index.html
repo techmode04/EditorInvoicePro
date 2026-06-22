@@ -2696,7 +2696,7 @@ function doPost(e) {
                 ctx.drawImage(img, 0, 0, width, height);
                 
                 // Compress as JPEG format with 0.75 quality to save maximum bandwidth
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+                const compressedBase64 = canvas.toDataURL('image/png');
                 callback(compressedBase64);
             };
             img.onerror = function() {
