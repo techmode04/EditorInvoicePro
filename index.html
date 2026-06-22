@@ -2119,214 +2119,45 @@ function doPost(e) {
             activeViewingInvoice = null;
         };
 
-        window.triggerPDFDownload = function() {
-            if (!activeViewingInvoice) return;
-            const { jsPDF } = window.jspdf;
-            
-            const docPdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
-            });
+    window.triggerPDFDownload = async function () {
 
-            const client = state.clients.find(c => c.id === activeViewingInvoice.clientId) || { name: "Unknown" };
-            let currY = 20;
+    if (!activeViewingInvoice) return;
 
-            if (state.settings.logo) {
-                try {
-                    let format = 'PNG';
-                    if (state.settings.logo.includes('image/jpeg') || state.settings.logo.includes('image/jpg')) {
-                        format = 'JPEG';
-                    }
-                    docPdf.addImage(state.settings.logo, format, 15, 12, 18, 18);
-                    currY = 36;
-                } catch (e) {
-                    docPdf.setFont("Helvetica", "bold");
-                    docPdf.setFontSize(18);
-                    docPdf.text(state.settings.name.toUpperCase(), 15, currY);
-                    currY += 8;
-                }
-            } else {
-                docPdf.setFont("Helvetica", "bold");
-                docPdf.setFontSize(18);
-                docPdf.text(state.settings.name.toUpperCase(), 15, currY);
-                currY += 8;
-            }
+    const { jsPDF } = window.jspdf;
 
-            docPdf.setFont("Helvetica", "normal");
-            docPdf.setFontSize(9);
-            docPdf.setTextColor(100);
-            
-            const splitAddress = docPdf.splitTextToSize(state.settings.address, 90);
-            docPdf.text(splitAddress, 15, currY);
-            currY += (splitAddress.length * 4) + 2;
-            docPdf.text(`Phone: ${state.settings.phone}`, 15, currY);
-            currY += 4;
-            docPdf.text(`Email: ${state.settings.email}`, 15, currY);
-            if (state.settings.gst) {
-                currY += 4;
-                docPdf.text(`GST ID: ${state.settings.gst}`, 15, currY);
-            }
+    const invoiceSheet = document.getElementById("invoice-sheet");
 
-            docPdf.setFont("Helvetica", "normal");
-            docPdf.setFontSize(22);
-            docPdf.setTextColor(150);
-            docPdf.text("INVOICE", 195, 20, { align: 'right' });
+    const canvas = await html2canvas(invoiceSheet, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff"
+    });
 
-            docPdf.setFont("Helvetica", "bold");
-            docPdf.setFontSize(11);
-            docPdf.setTextColor(0);
-            docPdf.text(activeViewingInvoice.invoiceNumber, 195, 26, { align: 'right' });
+    const imgData = canvas.toDataURL("image/png");
 
-            docPdf.setFont("Helvetica", "normal");
-            docPdf.setFontSize(9);
-            docPdf.setTextColor(100);
-            docPdf.text(`Invoice Date: ${activeViewingInvoice.invoiceDate}`, 195, 32, { align: 'right' });
-            docPdf.text(`Due Date: ${activeViewingInvoice.dueDate}`, 195, 36, { align: 'right' });
+    const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+    });
 
-            let separatorY = Math.max(52, currY + 6);
-            docPdf.setDrawColor(220);
-            docPdf.setLineWidth(0.2);
-            docPdf.line(15, separatorY, 195, separatorY);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            let billToY = separatorY + 7;
-            docPdf.setFont("Helvetica", "bold");
-            docPdf.setFontSize(9);
-            docPdf.setTextColor(120);
-            docPdf.text("BILL TO:", 15, billToY);
+    pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        0,
+        pdfWidth,
+        pdfHeight
+    );
 
-            docPdf.setFont("Helvetica", "bold");
-            docPdf.setFontSize(10);
-            docPdf.setTextColor(0);
-            docPdf.text(client.name, 15, billToY + 5);
-            
-            docPdf.setFont("Helvetica", "normal");
-            docPdf.setFontSize(9);
-            docPdf.setTextColor(100);
-            docPdf.text(client.company || "Individual Client", 15, billToY + 9);
-            
-            let clientY = billToY + 13;
-            if (client.address) {
-                const splitClientAddr = docPdf.splitTextToSize(client.address, 85);
-                docPdf.text(splitClientAddr, 15, clientY);
-                clientY += (splitClientAddr.length * 4);
-            }
-            docPdf.text(`Phone: ${client.phone || 'N/A'}`, 15, clientY);
-            docPdf.text(`Email: ${client.email || 'N/A'}`, 15, clientY + 4);
+    pdf.save(`Invoice_${activeViewingInvoice.invoiceNumber}.pdf`);
 
-            docPdf.setFillColor(248, 250, 252);
-            docPdf.rect(130, billToY, 65, 22, "F");
-            docPdf.setFont("Helvetica", "bold");
-            docPdf.setFontSize(8);
-            docPdf.setTextColor(120);
-            docPdf.text("OUTSTANDING DUE", 135, billToY + 6);
-            docPdf.setFont("Helvetica", "bold");
-            docPdf.setFontSize(14);
-            docPdf.setTextColor(180, 83, 9);
-            docPdf.text(`INR ${activeViewingInvoice.remainingAmount.toFixed(2)}`, 135, billToY + 15);
-
-            let tableY = Math.max(95, clientY + 10);
-            docPdf.setDrawColor(180);
-            docPdf.setLineWidth(0.4);
-            docPdf.line(15, tableY, 195, tableY);
-            
-            docPdf.setFont("Helvetica", "bold");
-            docPdf.setFontSize(8);
-            docPdf.setTextColor(80);
-            docPdf.text("SERVICE / DESCRIPTION", 15, tableY + 5);
-            docPdf.text("QTY", 125, tableY + 5, { align: 'center' });
-            docPdf.text("RATE (INR)", 155, tableY + 5, { align: 'right' });
-            docPdf.text("AMOUNT (INR)", 195, tableY + 5, { align: 'right' });
-
-            docPdf.line(15, tableY + 8, 195, tableY + 8);
-            
-            docPdf.setFont("Helvetica", "normal");
-            docPdf.setFontSize(9);
-            docPdf.setTextColor(50);
-            let itemY = tableY + 13;
-
-            activeViewingInvoice.items.forEach(item => {
-                docPdf.setFont("Helvetica", "bold");
-                docPdf.text(item.serviceName, 15, itemY);
-                docPdf.setFont("Helvetica", "normal");
-                docPdf.text(String(item.qty), 125, itemY, { align: 'center' });
-                docPdf.text(item.rate.toFixed(2), 155, itemY, { align: 'right' });
-                docPdf.text((item.qty * item.rate).toFixed(2), 195, itemY, { align: 'right' });
-                
-                docPdf.setDrawColor(240);
-                docPdf.line(15, itemY + 3, 195, itemY + 3);
-                itemY += 8;
-            });
-
-            let calcY = itemY + 5;
-            docPdf.setFont("Helvetica", "normal");
-            docPdf.setFontSize(9);
-            docPdf.setTextColor(100);
-            docPdf.text("Subtotal:", 140, calcY, { align: 'right' });
-            docPdf.text(activeViewingInvoice.subtotal.toFixed(2), 195, calcY, { align: 'right' });
-
-            calcY += 5;
-            docPdf.text(`Discount (${activeViewingInvoice.discount}%):`, 140, calcY, { align: 'right' });
-            docPdf.text(`-${(activeViewingInvoice.subtotal * (activeViewingInvoice.discount / 100)).toFixed(2)}`, 195, calcY, { align: 'right' });
-
-            calcY += 5;
-            docPdf.text(`GST (${activeViewingInvoice.gst}%):`, 140, calcY, { align: 'right' });
-            docPdf.text(`${(activeViewingInvoice.subtotal * (1 - (activeViewingInvoice.discount/100)) * (activeViewingInvoice.gst/100)).toFixed(2)}`, 195, calcY, { align: 'right' });
-
-            calcY += 6;
-            docPdf.setDrawColor(180);
-            docPdf.line(130, calcY - 3, 195, calcY - 3);
-            docPdf.setFont("Helvetica", "bold");
-            docPdf.setTextColor(0);
-            docPdf.text("Grand Total (INR):", 140, calcY, { align: 'right' });
-            docPdf.text(activeViewingInvoice.grandTotal.toFixed(2), 195, calcY, { align: 'right' });
-
-            calcY += 5;
-            docPdf.setFont("Helvetica", "normal");
-            docPdf.setTextColor(16, 185, 129);
-            docPdf.text("Cleared / Settled:", 140, calcY, { align: 'right' });
-            docPdf.text(activeViewingInvoice.amountReceived.toFixed(2), 195, calcY, { align: 'right' });
-
-            let footerY = itemY + 5;
-            docPdf.setFont("Helvetica", "bold");
-            docPdf.setFontSize(8);
-            docPdf.setTextColor(120);
-            docPdf.text("TERMS & REMITTANCES", 15, footerY);
-            
-            docPdf.setFont("Helvetica", "normal");
-            docPdf.setFontSize(8);
-            docPdf.setTextColor(140);
-            docPdf.text("Please settle active balance via digital transaction options.", 15, footerY + 4);
-            docPdf.text(`UPI payment Address: ${state.settings.upi}`, 15, footerY + 8);
-
-            if (state.settings.signature) {
-                try {
-                    let sigFormat = 'PNG';
-                    if (state.settings.signature.includes('image/jpeg') || state.settings.signature.includes('image/jpg')) {
-                        sigFormat = 'JPEG';
-                    }
-                    docPdf.addImage(state.settings.signature, sigFormat, 15, footerY + 14, 36, 12);
-                    docPdf.setFont("Helvetica", "bold");
-                    docPdf.text("Authorized Signature", 15, footerY + 30);
-                } catch(e) {
-                    console.error(e);
-                }
-            }
-
-            const qrCanvas = document.querySelector('#invoice-upi-qrcode canvas');
-            if (qrCanvas) {
-                const qrImageBase64 = qrCanvas.toDataURL('image/png');
-                docPdf.addImage(qrImageBase64, 'PNG', 155, calcY + 12, 22, 22);
-                docPdf.setFont("Helvetica", "bold");
-                docPdf.setFontSize(5);
-                docPdf.setTextColor(120);
-                docPdf.text("SCAN UPI QR CODE TO PAY", 166, calcY + 38, { align: 'center' });
-            }
-
-            docPdf.save(`Invoice_${activeViewingInvoice.invoiceNumber}.pdf`);
-            showToast("Invoice downloaded successfully as B&W PDF Layout!");
-        };
-
+    showToast("Invoice downloaded successfully!");
+};
 
         // ================= SEARCH & FILTERS LOGIC =================
 
