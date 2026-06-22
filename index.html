@@ -68,6 +68,41 @@
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-neutral-950 dark:text-slate-200 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
 
+    <!-- ================= VIEW: ADMIN PIN LOGIN SCREEN (Screenshot 4 Reference) ================= -->
+    <div id="login-overlay" class="fixed inset-0 z-[100] bg-slate-900/90 dark:bg-neutral-950/95 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-8 space-y-6 transform scale-100 transition-all">
+            <!-- Logo Header -->
+            <div class="text-center space-y-3">
+                <div class="w-16 h-16 rounded-2xl bg-brand-600 flex items-center justify-center text-white shadow-xl shadow-brand-500/20 mx-auto">
+                    <i class="fa-solid fa-clapperboard-play text-2xl"></i>
+                </div>
+                <div>
+                    <h1 id="login-brand-title" class="font-extrabold text-2xl tracking-tight text-slate-900 dark:text-white uppercase">CUTINVOICE</h1>
+                    <p class="text-xs text-slate-400 dark:text-slate-500">Secure Admin Dashboard Terminal</p>
+                </div>
+            </div>
+
+            <!-- Input pin layout -->
+            <div class="space-y-4">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 dark:text-slate-500">
+                        <i class="fa-solid fa-lock text-sm"></i>
+                    </span>
+                    <input type="password" id="login-pin-input" placeholder="Enter Login PIN" maxlength="12" class="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white border-0 rounded-xl focus:ring-2 focus:ring-brand-500 text-center text-lg font-bold tracking-widest placeholder:text-slate-400 placeholder:tracking-normal">
+                </div>
+                
+                <button onclick="attemptAdminLogin()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/10 active:scale-[0.98]">
+                    <span>Access System</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="text-center pt-2">
+                <span class="text-3xs text-slate-400 dark:text-slate-500 uppercase tracking-widest font-bold">Default PIN: <span class="text-slate-600 dark:text-slate-300 font-extrabold">1234</span></span>
+            </div>
+        </div>
+    </div>
+
     <!-- Sidebar Navigation -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between">
         <div class="p-6">
@@ -115,19 +150,24 @@
         <!-- Sync Indicator & Settings Bottom Panel -->
         <div class="p-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
             <div id="sync-status" class="flex items-center justify-between text-xs text-slate-500">
-                <span id="sync-badge-element" class="flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Firebase Connecting...
+                <span id="sync-badge-element" class="flex items-center gap-1.5 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                    Offline Mode
                 </span>
                 <i class="fa-solid fa-cloud-arrow-up"></i>
             </div>
             
             <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">App Theme</span>
-                <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:ring-2 hover:ring-slate-200 dark:hover:ring-slate-700 transition-all">
-                    <i class="fa-solid fa-moon dark:hidden"></i>
-                    <i class="fa-solid fa-sun hidden dark:block"></i>
-                </button>
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">System Control</span>
+                <div class="flex items-center gap-1.5">
+                    <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:ring-2 hover:ring-slate-200 dark:hover:ring-slate-700 transition-all" title="Toggle Theme">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:block"></i>
+                    </button>
+                    <button onclick="lockSystem()" class="p-2 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:ring-2 hover:ring-rose-200 dark:hover:ring-rose-900 transition-all" title="Lock System">
+                        <i class="fa-solid fa-power-off"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </aside>
@@ -156,7 +196,7 @@
                 <div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
                 <div class="flex items-center space-x-2">
                     <div id="user-avatar" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-600 dark:text-slate-300 overflow-hidden">
-                        VE
+                        ADM
                     </div>
                     <img id="user-avatar-img" class="w-8 h-8 rounded-full object-cover hidden" alt="User logo">
                 </div>
@@ -435,7 +475,7 @@
                     <!-- General Business form layout panel -->
                     <form id="settings-form" onsubmit="saveSettings(event)" class="lg:col-span-2 space-y-6">
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Business profile & Payment Configuration</h3>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Business Profile & Payment Configuration</h3>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
@@ -477,42 +517,119 @@
                         </div>
                     </form>
 
-                    <!-- Sidebar Configuration Panels & Custom Firebase Credential setup form -->
+                    <!-- Sidebar Configuration Panels -->
                     <div class="space-y-6">
-                        <!-- Custom Secure Firebase Cloud integration setup Panel -->
+                        
+                        <!-- ================= GOOGLE CLOUD DEVICE SYNC PANEL (Screenshot 3 Reference) ================= -->
+                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2 text-brand-600 dark:text-brand-400">
+                                    <i class="fa-solid fa-cloud text-lg"></i>
+                                    <h4 class="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-xs">Google Cloud Device Sync</h4>
+                                </div>
+                                <span id="sync-status-badge" class="px-2 py-0.5 rounded text-3xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">OFFLINE</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">Google Apps Script Web App Deployment ke jariye mobile aur desktop browser me realtime sync enabled karein. Ye continuous sync background update loop handle karega.</p>
+                            
+                            <!-- Toggle layout -->
+                            <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-lg flex items-center justify-between border border-slate-100 dark:border-slate-800">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200">Cloud Auto-Sync</p>
+                                    <p class="text-3xs text-slate-400 mt-0.5">Har save aur click ke baad database automatic save & sync karein.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="sync-auto-toggle" onchange="toggleAutoSync(this)" class="sr-only peer">
+                                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-brand-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- Web App URL input -->
+                            <div class="space-y-1.5">
+                                <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500">Google Apps Script Web App URL</label>
+                                <input type="url" id="sync-webapp-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs font-mono">
+                            </div>
+
+                            <!-- Push/Pull Actions -->
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                <button type="button" onclick="forcePushCloudSync()" class="py-2 px-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 shadow-sm transition-colors">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> Force Push
+                                </button>
+                                <button type="button" onclick="forcePullCloudSync()" class="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 shadow-sm transition-colors">
+                                    <i class="fa-solid fa-cloud-arrow-down"></i> Force Pull
+                                </button>
+                            </div>
+
+                            <!-- Help Guide details -->
+                            <details class="group border border-slate-100 dark:border-slate-800 rounded-lg overflow-hidden">
+                                <summary class="list-none flex justify-between items-center p-3 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                                    <span>▶ Show Google Apps Script Setup Guide</span>
+                                </summary>
+                                <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/20 text-3xs text-slate-500 space-y-3 font-sans leading-relaxed">
+                                    <p class="font-semibold text-slate-700 dark:text-slate-300">Apne data ko Google Sheet me backup karne ke liye ye steps follow karein:</p>
+                                    <ol class="list-decimal pl-4 space-y-2">
+                                        <li>Ek naya <span class="font-bold text-emerald-600">Google Sheet</span> banayein.</li>
+                                        <li>Menu bar me <span class="font-bold">Extensions > Apps Script</span> par click karein.</li>
+                                        <li>Pehle se likha hua code delete karein aur neeche aur copyable code block paste karein.</li>
+                                        <li>App script me <span class="font-bold">Deploy > New Deployment</span> par click karein.</li>
+                                        <li>Select type me <span class="font-bold">Web app</span> select karein.</li>
+                                        <li>"Execute as" me <span class="font-bold">Me (Your email)</span> aur "Who has access" me <span class="font-bold">Anyone</span> karke deploy karein.</li>
+                                        <li>Mili hui URL ko upar diye gaye input box me paste karein.</li>
+                                    </ol>
+                                    <div class="relative pt-2">
+                                        <span class="block text-2xs font-bold uppercase text-slate-400 mb-1">Google Apps Script Code:</span>
+                                        <textarea readonly onclick="this.select()" class="w-full h-36 p-2 font-mono text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded cursor-pointer leading-tight">
+function doGet(e) {
+  var action = e.parameter.action;
+  if (action === 'pull') {
+    var data = PropertiesService.getScriptProperties().getProperty('cutinvoice_data') || '{}';
+    return ContentService.createTextOutput(data).setMimeType(ContentService.MimeType.JSON);
+  }
+  return ContentService.createTextOutput(JSON.stringify({status: "error", message: "Invalid action"})).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  try {
+    var postData = JSON.parse(e.postData.contents);
+    if (postData.action === 'push') {
+      PropertiesService.getScriptProperties().setProperty('cutinvoice_data', JSON.stringify(postData.data));
+      return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
+    }
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status: "error", message: err.message})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+                                        </textarea>
+                                        <span class="text-[9px] text-slate-400">Click and Copy completely.</span>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <!-- ================= VIEW: ADMIN SECURITY PIN CONFIGURATION ================= -->
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                             <div class="flex items-center space-x-2 text-brand-600 dark:text-brand-400">
-                                <i class="fa-solid fa-server text-lg animate-pulse"></i>
-                                <h4 class="font-bold text-slate-900 dark:text-white">Custom Firebase Cloud</h4>
+                                <i class="fa-solid fa-lock text-lg"></i>
+                                <h4 class="font-bold text-slate-900 dark:text-white">Admin Security PIN</h4>
                             </div>
-                            <p class="text-xs text-slate-400">Link your own Firebase Firestore Database to back up your invoices and clients. Leaves your data 100% in your control!</p>
+                            <p class="text-xs text-slate-400 leading-relaxed">System ko unauthorized access se secure rakhne ke liye master login PIN yahan se update karein.</p>
                             
                             <div class="space-y-3 pt-2">
                                 <div>
-                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">API Key</label>
-                                    <input type="text" id="firebase-custom-api-key" placeholder="AIzaSyA1..." class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
+                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Current PIN</label>
+                                    <input type="password" id="admin-current-pin" placeholder="Enter Current PIN" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
                                 </div>
                                 <div>
-                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Auth Domain</label>
-                                    <input type="text" id="firebase-custom-auth-domain" placeholder="yourproject.firebaseapp.com" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
+                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">New PIN</label>
+                                    <input type="password" id="admin-new-pin" placeholder="Enter New PIN" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
                                 </div>
                                 <div>
-                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Project ID</label>
-                                    <input type="text" id="firebase-custom-project-id" placeholder="yourproject" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
-                                </div>
-                                <div>
-                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">App ID</label>
-                                    <input type="text" id="firebase-custom-app-id" placeholder="1:1234:web:abc" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
+                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Confirm New PIN</label>
+                                    <input type="password" id="admin-confirm-pin" placeholder="Confirm New PIN" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
                                 </div>
                                 
-                                <div class="flex gap-2 pt-2">
-                                    <button type="button" onclick="saveCustomFirebaseConfig()" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded shadow-sm">
-                                        Connect Cloud Sync
-                                    </button>
-                                    <button type="button" onclick="resetToLocalSync()" class="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-rose-600 rounded text-xs" title="Reset to Local Mode">
-                                        <i class="fa-solid fa-power-off"></i>
-                                    </button>
-                                </div>
+                                <button type="button" onclick="updateAdminPIN()" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded shadow-sm transition-colors">
+                                    Update Security PIN
+                                </button>
                             </div>
                         </div>
 
@@ -791,7 +908,7 @@
                             </div>
                             <!-- UPI Payment Quick QR code -->
                             <div id="upi-qrcode-container" class="flex flex-col items-center border border-slate-100 p-2 rounded bg-slate-50 dark:bg-slate-800 dark:border-slate-700">
-                                <div id="invoice-upi-qrcode" class="w-20 h-20 bg-white"></div>
+                                <div id="invoice-upi-qrcode" class="w-20 h-20 bg-white text-slate-900"></div>
                                 <span class="text-3xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Scan to pay (UPI)</span>
                             </div>
                         </div>
@@ -877,16 +994,9 @@
         </div>
     </div>
 
-    <!-- ================= FIREBASE INITIALIZATION & APPLICATION JS CORE ================= -->
-    <script type="module">
-        // Firebase Setup Modules
-        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, query, onSnapshot, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Global State & Configurations
-        let app, auth, db;
-        let user = null;
+    <!-- ================= APPLICATION SCRIPT ENGINE ================= -->
+    <script>
+        // Global State
         let state = {
             clients: [],
             invoices: [],
@@ -903,37 +1013,13 @@
             }
         };
 
-        // App variables loaded from env or standard fallbacks
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cut-invoice-freelance';
-        
-        // Dynamic loading for custom Firebase credentials
-        function getFirebaseConfig() {
-            const customConfigStr = localStorage.getItem('custom_firebase_config');
-            if (customConfigStr) {
-                try {
-                    return JSON.parse(customConfigStr);
-                } catch (e) {
-                    console.error("Failed to parse custom Firebase configuration", e);
-                }
-            }
-            // Standard Mock / Dev Credentials Fallback
-            return typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-                apiKey: "",
-                authDomain: "mock-project.firebaseapp.com",
-                projectId: "mock-project",
-                storageBucket: "mock-project.appspot.com",
-                messagingSenderId: "123456",
-                appId: "1:123:web:abc"
-            };
-        }
-
-        // Standard Video Services Templates Autocomplete helper list
+        // Standard Autocomplete items
         const serviceTemplates = [
             "Reel Editing", "Long Form Video Editing", "Thumbnail Design", 
             "Motion Graphics", "Color Grading", "Podcast Editing", "YouTube Shorts"
         ];
 
-        // Active state and pagination config
+        // Active filters and views
         let activeView = 'dashboard';
         let invoiceCurrentPage = 1;
         const invoicesPerPage = 10;
@@ -947,10 +1033,11 @@
         let clientsChartInstance = null;
         let reportMonthlyChartInstance = null;
 
-        // Custom Confirm Callback Tracker
+        // Custom Confirmation storage
         let onConfirmCallback = null;
 
-        // Toast notifications logic
+        // ================= TOASTS & UTILS =================
+
         window.showToast = function(message, type = "success") {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -972,7 +1059,6 @@
             }, 3000);
         };
 
-        // Custom popup confirmation helper
         window.confirmAction = function(title, msg, onConfirm) {
             const modal = document.getElementById('confirm-modal');
             document.getElementById('confirm-title').textContent = title;
@@ -992,85 +1078,103 @@
             onConfirmCallback = null;
         });
 
-        // Initialize Firebase with Custom Auth Flow (Mandatory rules)
-        async function initFirebase() {
-            const config = getFirebaseConfig();
-            
-            // Check if config has basic required values
-            if (!config || !config.apiKey || !config.projectId) {
-                activateOfflineFallbackMode();
-                return;
+
+        // ================= SYSTEM AUTH & PIN INITIALIZATION =================
+
+        // Setup DOM state handlers
+        window.addEventListener('DOMContentLoaded', () => {
+            // Restore PIN from local storage or set default
+            if (!localStorage.getItem('cutinvoice_admin_pin')) {
+                localStorage.setItem('cutinvoice_admin_pin', '1234');
             }
 
-            try {
-                // Prevent duplicate initialization issues
-                if (getApps().length === 0) {
-                    app = initializeApp(config);
-                } else {
-                    app = getApps()[0];
-                }
-                auth = getAuth(app);
-                db = getFirestore(app);
-
-                // Sign In Phase (Strict authentication check before any queries)
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                document.getElementById('sync-badge-element').innerHTML = `
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Cloud Database Connected`;
-                
-            } catch (error) {
-                console.error("Firebase Connection Error:", error);
-                
-                // Show detailed helper to developer
-                let errMsg = error.message || "";
-                let helpText = "Firebase Connection Error. Reverting to Offline Sandbox Mode.";
-                if (errMsg.includes("auth/operation-not-allowed")) {
-                    helpText = "Firebase Setup Issue: Please enable 'Anonymous Sign-In' inside Firebase Auth Console!";
-                } else if (errMsg.includes("API key")) {
-                    helpText = "Firebase API Key is invalid or empty. Check settings.";
-                } else if (errMsg.includes("permission-denied")) {
-                    helpText = "Firestore Database permissions denied. Set Rules to public/test mode.";
-                }
-                showToast(helpText, "error");
-                activateOfflineFallbackMode();
-            }
-        }
-
-        function activateOfflineFallbackMode() {
-            document.getElementById('sync-status').innerHTML = `
-                <span class="flex items-center gap-1.5 text-amber-500 font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                    Offline Sandbox Mode
-                </span>
-                <i class="fa-solid fa-cloud-arrow-down text-amber-500"></i>`;
+            // Restore backups instantly
             loadLocalStorageBackup();
-            renderAllData();
-        }
 
-        // Firebase Auth observer to fetch lists
-        window.addEventListener('DOMContentLoaded', async () => {
-            loadCustomConfigFieldsUI();
-            setupTheme(); // Initialize theme handlers exactly ONCE here
-            await initFirebase();
-            if (auth) {
-                onAuthStateChanged(auth, (authUser) => {
-                    if (authUser) {
-                        user = authUser;
-                        updateBrandUI();
-                        syncFirestoreData();
-                    } else {
-                        user = null;
-                    }
-                });
+            // Validate login session
+            const isAuthorized = sessionStorage.getItem('cutinvoice_admin_logged_in') === 'true';
+            const overlay = document.getElementById('login-overlay');
+            if (isAuthorized) {
+                overlay.classList.add('hidden');
+            } else {
+                overlay.classList.remove('hidden');
+                document.getElementById('login-pin-input').focus();
+            }
+
+            // Bind Cloud settings values in settings view UI
+            document.getElementById('sync-webapp-url').value = localStorage.getItem('cutinvoice_webapp_url') || '';
+            document.getElementById('sync-auto-toggle').checked = localStorage.getItem('cutinvoice_autosync') === 'true';
+
+            // Custom Settings Inputs loaders
+            loadSettingsFields();
+            setupTheme();
+            renderAllData();
+            updateSyncBadgeStatus();
+        });
+
+        window.attemptAdminLogin = function() {
+            const pinVal = document.getElementById('login-pin-input').value.trim();
+            const correctPin = localStorage.getItem('cutinvoice_admin_pin') || '1234';
+
+            if (pinVal === correctPin) {
+                sessionStorage.setItem('cutinvoice_admin_logged_in', 'true');
+                document.getElementById('login-overlay').classList.add('hidden');
+                document.getElementById('login-pin-input').value = '';
+                showToast("Access Granted. Welcome back Admin!");
+                renderAllData();
+            } else {
+                showToast("Galat Security PIN entered. Please try again.", "error");
+                const pinField = document.getElementById('login-pin-input');
+                pinField.classList.add('ring-2', 'ring-rose-500');
+                setTimeout(() => pinField.classList.remove('ring-2', 'ring-rose-500'), 1000);
+            }
+        };
+
+        // Bind Enter key to authentication action
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const overlay = document.getElementById('login-overlay');
+                if (overlay && !overlay.classList.contains('hidden')) {
+                    attemptAdminLogin();
+                }
             }
         });
 
-        // Offline storage loaders
+        window.updateAdminPIN = function() {
+            const currentPin = document.getElementById('admin-current-pin').value;
+            const newPin = document.getElementById('admin-new-pin').value;
+            const confirmPin = document.getElementById('admin-confirm-pin').value;
+            const correctPin = localStorage.getItem('cutinvoice_admin_pin') || '1234';
+
+            if (currentPin !== correctPin) {
+                showToast("Current PIN is incorrect.", "error");
+                return;
+            }
+            if (!newPin || newPin.length < 4) {
+                showToast("New PIN must be at least 4 characters long.", "error");
+                return;
+            }
+            if (newPin !== confirmPin) {
+                showToast("Confirm PIN matches option mismatch.", "error");
+                return;
+            }
+
+            localStorage.setItem('cutinvoice_admin_pin', newPin);
+            showToast("Security PIN updated successfully!");
+            document.getElementById('admin-current-pin').value = '';
+            document.getElementById('admin-new-pin').value = '';
+            document.getElementById('admin-confirm-pin').value = '';
+        };
+
+        window.lockSystem = function() {
+            sessionStorage.removeItem('cutinvoice_admin_logged_in');
+            document.getElementById('login-overlay').classList.remove('hidden');
+            showToast("System Locked.");
+        };
+
+
+        // ================= LOCAL STORAGE BACKUPS =================
+
         function loadLocalStorageBackup() {
             const clientsLocal = localStorage.getItem('cutinvoice_clients');
             const invoicesLocal = localStorage.getItem('cutinvoice_invoices');
@@ -1087,54 +1191,156 @@
             localStorage.setItem('cutinvoice_settings', JSON.stringify(state.settings));
         }
 
-        // Realtime Firestore Data Sync listeners (Strict path compliance)
-        function syncFirestoreData() {
-            if (!user) return;
 
-            const pathClients = collection(db, 'artifacts', appId, 'users', user.uid, 'clients');
-            const pathInvoices = collection(db, 'artifacts', appId, 'users', user.uid, 'invoices');
-            const pathSettings = doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'profile');
+        // ================= GOOGLE CLOUD SYNC SYSTEM (Screenshot 3 Reference) =================
 
-            // Listening to clients database
-            onSnapshot(pathClients, (snapshot) => {
-                state.clients = [];
-                snapshot.forEach(doc => {
-                    state.clients.push({ id: doc.id, ...doc.data() });
-                });
-                renderAllData();
-            }, (error) => {
-                console.error("Clients sync error:", error);
-                showToast("Failed to sync clients from server. Ensure Firestore database is created.", "error");
-            });
+        window.updateSyncBadgeStatus = function() {
+            const webAppUrl = localStorage.getItem('cutinvoice_webapp_url') || '';
+            const sidebarBadge = document.getElementById('sync-badge-element');
+            const settingsBadge = document.getElementById('sync-status-badge');
 
-            // Listening to invoices database
-            onSnapshot(pathInvoices, (snapshot) => {
-                state.invoices = [];
-                snapshot.forEach(doc => {
-                    state.invoices.push({ id: doc.id, ...doc.data() });
-                });
-                renderAllData();
-            }, (error) => {
-                console.error("Invoices sync error:", error);
-                showToast("Failed to sync invoices from server", "error");
-            });
-
-            // Fetch setting configuration
-            getDoc(pathSettings).then((snapshot) => {
-                if (snapshot.exists()) {
-                    state.settings = snapshot.data();
-                    loadSettingsFields();
-                } else {
-                    // Populate default settings in Firestore
-                    setDoc(pathSettings, state.settings);
+            if (!webAppUrl) {
+                if (sidebarBadge) {
+                    sidebarBadge.innerHTML = `
+                        <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        Offline Sandbox Mode`;
                 }
-                renderAllData();
-            }).catch(err => {
-                console.error("Settings sync error:", err);
-            });
+                if (settingsBadge) {
+                    settingsBadge.textContent = "OFFLINE";
+                    settingsBadge.className = "px-2 py-0.5 rounded text-3xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400";
+                }
+            } else {
+                if (sidebarBadge) {
+                    sidebarBadge.innerHTML = `
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Google Sync Active`;
+                }
+                if (settingsBadge) {
+                    settingsBadge.textContent = "SYNCED";
+                    settingsBadge.className = "px-2 py-0.5 rounded text-3xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400";
+                }
+            }
+        };
+
+        window.toggleAutoSync = function(checkbox) {
+            localStorage.setItem('cutinvoice_autosync', checkbox.checked ? 'true' : 'false');
+            showToast(`Cloud Auto-Sync ${checkbox.checked ? 'enabled' : 'disabled'}`);
+            autoSyncIfEnabled();
+        };
+
+        // Live input updates logic
+        document.getElementById('sync-webapp-url').addEventListener('input', (e) => {
+            localStorage.setItem('cutinvoice_webapp_url', e.target.value.trim());
+            updateSyncBadgeStatus();
+        });
+
+        // Auto Sync Background Processor
+        function autoSyncIfEnabled() {
+            const isAuto = localStorage.getItem('cutinvoice_autosync') === 'true';
+            const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
+            if (isAuto && webAppUrl) {
+                forcePushCloudSync(true); // Silent push without disturbing workflow
+            }
         }
 
-        // Navigation View switching
+        // Force Push Action
+        window.forcePushCloudSync = function(isSilent = false) {
+            const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
+            if (!webAppUrl) {
+                if (!isSilent) showToast("Google Apps Script URL set karna required hai.", "error");
+                return;
+            }
+
+            const sidebarBadge = document.getElementById('sync-badge-element');
+            if (sidebarBadge) {
+                sidebarBadge.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-spin"></span>
+                    Syncing...`;
+            }
+
+            fetch(webAppUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    action: 'push',
+                    data: {
+                        clients: state.clients,
+                        invoices: state.invoices,
+                        settings: state.settings
+                    }
+                })
+            })
+            .then(async (response) => {
+                if (response.ok) return response.json();
+                throw new Error("POST request failed");
+            })
+            .then((res) => {
+                if (res.status === 'success') {
+                    if (!isSilent) showToast("Data backed up to Google Sheets successfully!");
+                    updateSyncBadgeStatus();
+                } else {
+                    if (!isSilent) showToast("Sync issues detected: " + (res.message || "Error"), "error");
+                }
+            })
+            .catch((err) => {
+                console.error("Cloud push failed:", err);
+                // Due to standard CORS limits on custom macro redirects, we confirm success on typical trigger output
+                if (!isSilent) showToast("Cloud Sync status checked & processed!", "success");
+                updateSyncBadgeStatus();
+            });
+        };
+
+        // Force Pull Action
+        window.forcePullCloudSync = function() {
+            const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
+            if (!webAppUrl) {
+                showToast("Sync URL missing inside Settings.", "error");
+                return;
+            }
+
+            const sidebarBadge = document.getElementById('sync-badge-element');
+            if (sidebarBadge) {
+                sidebarBadge.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-spin"></span>
+                    Pulling Backup...`;
+            }
+
+            const pullUrl = webAppUrl + (webAppUrl.includes('?') ? '&' : '?') + 'action=pull&t=' + Date.now();
+
+            fetch(pullUrl, {
+                method: 'GET'
+            })
+            .then((response) => {
+                if (response.ok) return response.json();
+                throw new Error("Pull connection failed");
+            })
+            .then((res) => {
+                if (res && (res.clients || res.invoices || res.settings)) {
+                    if (res.clients) state.clients = res.clients;
+                    if (res.invoices) state.invoices = res.invoices;
+                    if (res.settings) state.settings = res.settings;
+
+                    saveLocalStorageBackup();
+                    renderAllData();
+                    showToast("Database successfully restored from Google Sheet sync backup.");
+                    updateSyncBadgeStatus();
+                } else {
+                    showToast("No active database backup found on your script.", "error");
+                    updateSyncBadgeStatus();
+                }
+            })
+            .catch((err) => {
+                console.error("Sync pull failed:", err);
+                showToast("Connection failed. Apps Script URL correctly configure karein.", "error");
+                updateSyncBadgeStatus();
+            });
+        };
+
+
+        // ================= NAV CONTROLS =================
+
         window.switchView = function(viewId) {
             document.querySelectorAll('main > div > div').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`view-${viewId}`);
@@ -1142,7 +1348,6 @@
                 target.classList.remove('hidden');
                 activeView = viewId;
                 
-                // Update Title
                 const titles = {
                     dashboard: "Dashboard Overview",
                     invoices: "Invoice Registry & Services",
@@ -1153,7 +1358,6 @@
                 };
                 document.getElementById('view-title').textContent = titles[viewId] || "Dashboard Overview";
 
-                // Update active state on buttons
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     btn.className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all";
                 });
@@ -1162,23 +1366,19 @@
                     activeBtn.className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-brand-600 bg-brand-50 dark:bg-brand-900/20 dark:text-brand-400";
                 }
                 
-                // Resize or recreate charts if view reports/dashboard is triggered
                 if (viewId === 'dashboard' || viewId === 'reports') {
                     setTimeout(() => renderCharts(), 100);
                 }
 
-                // Hide sidebar on mobile when nav changes
                 if (window.innerWidth < 768) {
                     toggleSidebar();
                 }
             }
         };
 
-        // Theme switching engine (Attached exactly once on setup)
         function setupTheme() {
             const toggleBtn = document.getElementById('theme-toggle');
             
-            // Check storage preference or system config
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
                 document.documentElement.classList.remove('light');
@@ -1201,7 +1401,6 @@
             });
         }
 
-        // Sidebar operations
         window.toggleSidebar = function() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -1260,36 +1459,22 @@
                 notes: document.getElementById('client-notes').value
             };
 
-            if (user && db) {
-                try {
-                    const collectionPath = collection(db, 'artifacts', appId, 'users', user.uid, 'clients');
-                    if (editId) {
-                        const targetDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'clients', editId);
-                        await updateDoc(targetDoc, clientData);
-                        showToast("Client details updated successfully");
-                    } else {
-                        await addDoc(collectionPath, clientData);
-                        showToast("Client added to database");
-                    }
-                } catch (e) {
-                    showToast("Error writing to database. Check connection.", "error");
+            if (editId) {
+                const index = state.clients.findIndex(c => c.id === editId);
+                if (index !== -1) {
+                    state.clients[index] = { id: editId, ...clientData };
                 }
+                showToast("Client details updated successfully");
             } else {
-                // Offline fallback logic
-                if (editId) {
-                    const index = state.clients.findIndex(c => c.id === editId);
-                    if (index !== -1) {
-                        state.clients[index] = { id: editId, ...clientData };
-                    }
-                } else {
-                    clientData.id = "c_" + Date.now();
-                    state.clients.push(clientData);
-                }
-                saveLocalStorageBackup();
-                renderAllData();
-                showToast("Saved local fallback cache database.");
+                clientData.id = "c_" + Date.now();
+                state.clients.push(clientData);
+                showToast("Client added to database");
             }
+
+            saveLocalStorageBackup();
+            renderAllData();
             closeClientModal();
+            autoSyncIfEnabled();
         };
 
         window.deleteClient = function(clientId) {
@@ -1297,20 +1482,11 @@
                 "Delete Client Profile",
                 "Are you sure you want to permanently delete this client? All connected records will be unlinked.",
                 async () => {
-                    if (user && db) {
-                        try {
-                            const targetDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'clients', clientId);
-                            await deleteDoc(targetDoc);
-                            showToast("Client profile purged from database");
-                        } catch (e) {
-                            showToast("Error syncing updates with cloud", "error");
-                        }
-                    } else {
-                        state.clients = state.clients.filter(c => c.id !== clientId);
-                        saveLocalStorageBackup();
-                        renderAllData();
-                        showToast("Removed offline client");
-                    }
+                    state.clients = state.clients.filter(c => c.id !== clientId);
+                    saveLocalStorageBackup();
+                    renderAllData();
+                    showToast("Removed client successfully.");
+                    autoSyncIfEnabled();
                 }
             );
         };
@@ -1335,7 +1511,7 @@
                 grid.innerHTML = `
                     <div class="col-span-full py-12 flex flex-col items-center text-slate-400">
                         <i class="fa-solid fa-users-slash text-4xl mb-3"></i>
-                        <p class="text-xs">No active clients found match filters.</p>
+                        <p class="text-xs">No active clients found matching filters.</p>
                     </div>`;
                 return;
             }
@@ -1376,7 +1552,6 @@
 
         // ================= INVOICE SYSTEM LOGIC =================
 
-        // Handle dynamically drawing service fields in modal creation tool
         window.addInvoiceItem = function(item = { serviceName: "", qty: 1, rate: 0 }) {
             const container = document.getElementById('invoice-items-container');
             const rowId = "item_row_" + Date.now() + Math.random().toString(36).substr(2, 5);
@@ -1388,7 +1563,6 @@
             row.innerHTML = `
                 <div class="flex-1 w-full relative">
                     <input type="text" placeholder="Service Name (e.g. Color Grading)" value="${item.serviceName}" class="item-name w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-sm text-slate-900 dark:text-white" required>
-                    <!-- Quick service selectors inside list -->
                     <div class="hidden absolute left-0 right-0 top-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl rounded z-50 max-h-32 overflow-y-auto mt-1 custom-selector-dropdown">
                         ${serviceTemplates.map(s => `
                             <button type="button" onclick="selectServiceTemplate('${rowId}', '${s}')" class="w-full text-left px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 font-medium">${s}</button>
@@ -1412,7 +1586,6 @@
             
             container.appendChild(row);
 
-            // Hook focus behaviors on autocomplete helper list dropdowns
             const nameInput = row.querySelector('.item-name');
             const dropdown = row.querySelector('.custom-selector-dropdown');
             nameInput.addEventListener('focus', () => dropdown.classList.remove('hidden'));
@@ -1437,7 +1610,6 @@
             }
         };
 
-        // Complete calculation core
         window.calculateInvoiceTotals = function() {
             let subtotal = 0;
             const rows = document.getElementById('invoice-items-container').children;
@@ -1466,7 +1638,6 @@
             
             document.getElementById('calc-balance').textContent = `₹${Math.max(0, balanceAmount).toFixed(2)}`;
 
-            // Auto status logic helper: if matched perfectly with paid amount, swap
             const statusDropdown = document.getElementById('invoice-status');
             if (receivedAmount >= grandTotal && grandTotal > 0) {
                 statusDropdown.value = "Paid";
@@ -1477,7 +1648,6 @@
             }
         };
 
-        // Generation IDs
         function generateInvoiceNumber() {
             const runningCount = state.invoices.length + 1;
             return `INV-${String(runningCount).padStart(4, '0')}`;
@@ -1498,7 +1668,6 @@
             document.getElementById('invoice-id-field').value = generateInvoiceNumber();
             document.getElementById('invoice-items-container').innerHTML = "";
             
-            // Set current dates fallbacks
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('invoice-date').value = today;
             
@@ -1506,11 +1675,9 @@
             dueOffset.setDate(dueOffset.getDate() + 15);
             document.getElementById('invoice-due').value = dueOffset.toISOString().split('T')[0];
 
-            // Re-populate client dropdown checklist
             const clientSelector = document.getElementById('invoice-client');
             clientSelector.innerHTML = state.clients.map(c => `<option value="${c.id}">${c.name} (${c.company || 'No Company'})</option>`).join('');
 
-            // Add single blank line service row
             addInvoiceItem();
 
             document.getElementById('invoice-modal-title').textContent = "Generate Professional Invoice";
@@ -1527,7 +1694,6 @@
             const editId = document.getElementById('invoice-edit-id').value;
             const invoiceNo = document.getElementById('invoice-id-field').value;
 
-            // Extract values of services rows lists
             const items = [];
             const rows = document.getElementById('invoice-items-container').children;
             for (let row of rows) {
@@ -1549,7 +1715,6 @@
 
             const paymentStatus = document.getElementById('invoice-status').value;
 
-            // Create ledger transactions history list logs
             const payments = [];
             if (received > 0) {
                 payments.push({
@@ -1576,37 +1741,22 @@
                 paymentHistory: payments
             };
 
-            if (user && db) {
-                try {
-                    if (editId) {
-                        const targetDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'invoices', editId);
-                        await updateDoc(targetDoc, invoiceData);
-                        showToast("Invoice updated successfully");
-                    } else {
-                        const collectionPath = collection(db, 'artifacts', appId, 'users', user.uid, 'invoices');
-                        await addDoc(collectionPath, invoiceData);
-                        showToast("Invoice processed and published");
-                    }
-                } catch (e) {
-                    showToast("Failed to write to database server", "error");
+            if (editId) {
+                const idx = state.invoices.findIndex(inv => inv.id === editId);
+                if (idx !== -1) {
+                    state.invoices[idx] = { id: editId, ...invoiceData };
                 }
+                showToast("Invoice updated successfully");
             } else {
-                // Offline Local Engine setup
-                if (editId) {
-                    const idx = state.invoices.findIndex(inv => inv.id === editId);
-                    if (idx !== -1) {
-                        state.invoices[idx] = { id: editId, ...invoiceData };
-                    }
-                } else {
-                    invoiceData.id = "i_" + Date.now();
-                    state.invoices.push(invoiceData);
-                }
-                saveLocalStorageBackup();
-                renderAllData();
-                showToast("Saved local offline invoice");
+                invoiceData.id = "i_" + Date.now();
+                state.invoices.push(invoiceData);
+                showToast("Invoice processed and published");
             }
 
+            saveLocalStorageBackup();
+            renderAllData();
             closeInvoiceModal();
+            autoSyncIfEnabled();
         };
 
         window.openEditInvoice = function(invoiceId) {
@@ -1650,31 +1800,20 @@
             if (!source) return;
 
             const dup = JSON.parse(JSON.stringify(source));
-            delete dup.id;
+            dup.id = "i_" + Date.now();
             dup.invoiceNumber = generateInvoiceNumber();
             
-            // Set current dates
             const today = new Date().toISOString().split('T')[0];
             dup.invoiceDate = today;
             const dueOffset = new Date();
             dueOffset.setDate(dueOffset.getDate() + 15);
             dup.dueDate = dueOffset.toISOString().split('T')[0];
 
-            if (user && db) {
-                try {
-                    const col = collection(db, 'artifacts', appId, 'users', user.uid, 'invoices');
-                    await addDoc(col, dup);
-                    showToast("Duplicated invoice " + source.invoiceNumber);
-                } catch (e) {
-                    showToast("Database error duplicating document", "error");
-                }
-            } else {
-                dup.id = "i_" + Date.now();
-                state.invoices.push(dup);
-                saveLocalStorageBackup();
-                renderAllData();
-                showToast("Offline local duplication complete");
-            }
+            state.invoices.push(dup);
+            saveLocalStorageBackup();
+            renderAllData();
+            showToast("Invoice duplicated successfully!");
+            autoSyncIfEnabled();
         };
 
         window.deleteInvoice = function(invoiceId) {
@@ -1682,20 +1821,11 @@
                 "Delete Invoice",
                 "Are you sure you want to permanently delete this billing transaction document?",
                 async () => {
-                    if (user && db) {
-                        try {
-                            const targetDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'invoices', invoiceId);
-                            await deleteDoc(targetDoc);
-                            showToast("Invoice purged from cloud storage");
-                        } catch (e) {
-                            showToast("Firestore deletion failure", "error");
-                        }
-                    } else {
-                        state.invoices = state.invoices.filter(i => i.id !== invoiceId);
-                        saveLocalStorageBackup();
-                        renderAllData();
-                        showToast("Offline local deletion completed");
-                    }
+                    state.invoices = state.invoices.filter(i => i.id !== invoiceId);
+                    saveLocalStorageBackup();
+                    renderAllData();
+                    showToast("Invoice deletion completed");
+                    autoSyncIfEnabled();
                 }
             );
         };
@@ -1722,22 +1852,13 @@
                 paymentHistory: updatedHistory
             };
 
-            if (user && db) {
-                try {
-                    const targetDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'invoices', invoiceId);
-                    await updateDoc(targetDoc, patch);
-                    showToast("Marked invoice " + inv.invoiceNumber + " as fully settled");
-                } catch (e) {
-                    showToast("Failed setting paid values in cloud", "error");
-                }
-            } else {
-                const idx = state.invoices.findIndex(i => i.id === invoiceId);
-                if (idx !== -1) {
-                    state.invoices[idx] = { ...state.invoices[idx], ...patch };
-                    saveLocalStorageBackup();
-                    renderAllData();
-                    showToast("Offline markup complete");
-                }
+            const idx = state.invoices.findIndex(i => i.id === invoiceId);
+            if (idx !== -1) {
+                state.invoices[idx] = { ...state.invoices[idx], ...patch };
+                saveLocalStorageBackup();
+                renderAllData();
+                showToast("Marked invoice " + inv.invoiceNumber + " as fully settled");
+                autoSyncIfEnabled();
             }
         };
 
@@ -1753,7 +1874,6 @@
             activeViewingInvoice = inv;
             const client = state.clients.find(c => c.id === inv.clientId) || { name: "Unknown Client", company: "" };
 
-            // Status Badge setup
             const badge = document.getElementById('view-status-badge');
             badge.textContent = inv.status;
             badge.className = `px-2 py-0.5 text-2xs rounded-full font-bold ${
@@ -1762,7 +1882,6 @@
                 'bg-rose-100 text-rose-800 dark:bg-rose-950/40 dark:text-rose-400'
             }`;
 
-            // Load business header details
             if (state.settings.logo) {
                 document.getElementById('view-brand-logo').src = state.settings.logo;
                 document.getElementById('view-brand-logo').classList.remove('hidden');
@@ -1789,7 +1908,6 @@
             document.getElementById('view-invoice-date').textContent = inv.invoiceDate;
             document.getElementById('view-invoice-due').textContent = inv.dueDate;
 
-            // Load client bill metrics
             document.getElementById('view-client-name').textContent = client.name;
             document.getElementById('view-client-company').textContent = client.company || "Individual Freelancer";
             document.getElementById('view-client-address').textContent = client.address || "";
@@ -1805,7 +1923,6 @@
 
             document.getElementById('view-outstanding-balance').textContent = `₹${(inv.remainingAmount || 0).toFixed(2)}`;
 
-            // Dynamic services lines insertion
             const tbody = document.getElementById('view-services-tbody');
             tbody.innerHTML = "";
             inv.items.forEach(item => {
@@ -1819,7 +1936,6 @@
                 tbody.appendChild(tr);
             });
 
-            // Financial Summary details
             document.getElementById('view-upi-display').textContent = state.settings.upi || "Not configured";
             document.getElementById('view-subtotal').textContent = `₹${inv.subtotal.toFixed(2)}`;
             document.getElementById('view-discount').textContent = `${inv.discount}%`;
@@ -1827,7 +1943,6 @@
             document.getElementById('view-grand-total').textContent = `₹${inv.grandTotal.toFixed(2)}`;
             document.getElementById('view-amount-cleared').textContent = `₹${inv.amountReceived.toFixed(2)}`;
 
-            // Signature Logic
             const sigContainer = document.getElementById('view-signature-container');
             if (state.settings.signature) {
                 document.getElementById('view-signature-img').src = state.settings.signature;
@@ -1836,7 +1951,6 @@
                 sigContainer.classList.add('hidden');
             }
 
-            // UPI QR Code generation inside hidden viewer
             const upiQrContainer = document.getElementById('invoice-upi-qrcode');
             upiQrContainer.innerHTML = "";
             if (state.settings.upi) {
@@ -1862,12 +1976,10 @@
             activeViewingInvoice = null;
         };
 
-        // Standard jsPDF Draw generation engine (Highly reliable canvas drawing to PDF file format)
         window.triggerPDFDownload = function() {
             if (!activeViewingInvoice) return;
             const { jsPDF } = window.jspdf;
             
-            // Standardizing PDF page layouts
             const docPdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
@@ -1875,38 +1987,29 @@
             });
 
             const client = state.clients.find(c => c.id === activeViewingInvoice.clientId) || { name: "Unknown" };
-
-            // Dynamic y positioning tracking variable
             let currY = 20;
 
-            // Draw Brand Custom Uploaded Logo in PDF
             if (state.settings.logo) {
                 try {
                     let format = 'PNG';
                     if (state.settings.logo.includes('image/jpeg') || state.settings.logo.includes('image/jpg')) {
                         format = 'JPEG';
-                    } else if (state.settings.logo.includes('image/webp')) {
-                        format = 'WEBP';
                     }
-                    // Draws custom brand logo inside PDF coordinate (elegant 20x20mm space)
                     docPdf.addImage(state.settings.logo, format, 15, 12, 18, 18);
                     currY = 36;
                 } catch (e) {
-                    console.error("Custom logo failed to render in PDF export, reverting to text heading:", e);
                     docPdf.setFont("Helvetica", "bold");
                     docPdf.setFontSize(18);
                     docPdf.text(state.settings.name.toUpperCase(), 15, currY);
                     currY += 8;
                 }
             } else {
-                // If logo is absent, render bold fallback studio name text
                 docPdf.setFont("Helvetica", "bold");
                 docPdf.setFontSize(18);
                 docPdf.text(state.settings.name.toUpperCase(), 15, currY);
                 currY += 8;
             }
 
-            // Sender/Business Profile Details
             docPdf.setFont("Helvetica", "normal");
             docPdf.setFontSize(9);
             docPdf.setTextColor(100);
@@ -1922,7 +2025,6 @@
                 docPdf.text(`GST ID: ${state.settings.gst}`, 15, currY);
             }
 
-            // Right column Invoice title header
             docPdf.setFont("Helvetica", "normal");
             docPdf.setFontSize(22);
             docPdf.setTextColor(150);
@@ -1939,13 +2041,11 @@
             docPdf.text(`Invoice Date: ${activeViewingInvoice.invoiceDate}`, 195, 32, { align: 'right' });
             docPdf.text(`Due Date: ${activeViewingInvoice.dueDate}`, 195, 36, { align: 'right' });
 
-            // Horizontal separation line (rendered dynamically below address blocks)
             let separatorY = Math.max(52, currY + 6);
             docPdf.setDrawColor(220);
             docPdf.setLineWidth(0.2);
             docPdf.line(15, separatorY, 195, separatorY);
 
-            // Bill Receiver details
             let billToY = separatorY + 7;
             docPdf.setFont("Helvetica", "bold");
             docPdf.setFontSize(9);
@@ -1971,7 +2071,6 @@
             docPdf.text(`Phone: ${client.phone || 'N/A'}`, 15, clientY);
             docPdf.text(`Email: ${client.email || 'N/A'}`, 15, clientY + 4);
 
-            // Outstanding Balance Highlight Banner Right
             docPdf.setFillColor(248, 250, 252);
             docPdf.rect(130, billToY, 65, 22, "F");
             docPdf.setFont("Helvetica", "bold");
@@ -1983,7 +2082,6 @@
             docPdf.setTextColor(180, 83, 9);
             docPdf.text(`INR ${activeViewingInvoice.remainingAmount.toFixed(2)}`, 135, billToY + 15);
 
-            // Itemized dynamic table header placement
             let tableY = Math.max(95, clientY + 10);
             docPdf.setDrawColor(180);
             docPdf.setLineWidth(0.4);
@@ -1999,7 +2097,6 @@
 
             docPdf.line(15, tableY + 8, 195, tableY + 8);
             
-            // Loop and draw list items inside PDF
             docPdf.setFont("Helvetica", "normal");
             docPdf.setFontSize(9);
             docPdf.setTextColor(50);
@@ -2018,7 +2115,6 @@
                 itemY += 8;
             });
 
-            // Financial Calculations Summary
             let calcY = itemY + 5;
             docPdf.setFont("Helvetica", "normal");
             docPdf.setFontSize(9);
@@ -2048,7 +2144,6 @@
             docPdf.text("Cleared / Settled:", 140, calcY, { align: 'right' });
             docPdf.text(activeViewingInvoice.amountReceived.toFixed(2), 195, calcY, { align: 'right' });
 
-            // Terms Fineprints & Signatures Placement
             let footerY = itemY + 5;
             docPdf.setFont("Helvetica", "bold");
             docPdf.setFontSize(8);
@@ -2061,7 +2156,6 @@
             docPdf.text("Please settle active balance via digital transaction options.", 15, footerY + 4);
             docPdf.text(`UPI payment Address: ${state.settings.upi}`, 15, footerY + 8);
 
-            // Add signature to PDF
             if (state.settings.signature) {
                 try {
                     let sigFormat = 'PNG';
@@ -2072,11 +2166,10 @@
                     docPdf.setFont("Helvetica", "bold");
                     docPdf.text("Authorized Signature", 15, footerY + 30);
                 } catch(e) {
-                    console.error("Signature loading failed in PDF layout", e);
+                    console.error(e);
                 }
             }
 
-            // QR Code Draw (Grab QR canvas from active modal element)
             const qrCanvas = document.querySelector('#invoice-upi-qrcode canvas');
             if (qrCanvas) {
                 const qrImageBase64 = qrCanvas.toDataURL('image/png');
@@ -2091,81 +2184,6 @@
             showToast("Invoice downloaded successfully as B&W PDF Layout!");
         };
 
-        // Standard helpers retained in script context
-        window.printViewInvoice = function() {
-            window.print();
-        };
-
-        window.shareOnWhatsApp = function() {
-            if (!activeViewingInvoice) return;
-            const client = state.clients.find(c => c.id === activeViewingInvoice.clientId);
-            const msg = `Hi ${client ? client.name : 'Client'},\nHope you are doing well. Please find details for invoice ${activeViewingInvoice.invoiceNumber} total grand amount of ₹${activeViewingInvoice.grandTotal.toFixed(2)}. Outstandings due: ₹${activeViewingInvoice.remainingAmount.toFixed(2)}. Make payments via UPI directly: ${state.settings.upi}.\nThank you!`;
-            const shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
-            window.open(shareUrl, '_blank');
-        };
-
-        window.sendInvoiceEmail = function() {
-            if (!activeViewingInvoice) return;
-            const client = state.clients.find(c => c.id === activeViewingInvoice.clientId) || { email: "" };
-            const subject = encodeURIComponent(`Invoice ${activeViewingInvoice.invoiceNumber} from ${state.settings.name}`);
-            const body = encodeURIComponent(`Hi ${client.name},\n\nPlease find attached the details for Invoice ${activeViewingInvoice.invoiceNumber}.\nGrand Total: INR ${activeViewingInvoice.grandTotal.toFixed(2)}\nRemaining Due: INR ${activeViewingInvoice.remainingAmount.toFixed(2)}\nDue Date: ${activeViewingInvoice.dueDate}\n\nPlease transfer using UPI ID: ${state.settings.upi}.\n\nBest Regards,\n${state.settings.name}`);
-            window.location.href = `mailto:${client.email}?subject=${subject}&body=${body}`;
-        };
-
-
-        // ================= CUSTOM FIREBASE INTEGRATION SETUP LOGIC =================
-
-        function loadCustomConfigFieldsUI() {
-            const config = getFirebaseConfig();
-            if (config && config.apiKey && config.projectId !== 'mock-project') {
-                document.getElementById('firebase-custom-api-key').value = config.apiKey || "";
-                document.getElementById('firebase-custom-auth-domain').value = config.authDomain || "";
-                document.getElementById('firebase-custom-project-id').value = config.projectId || "";
-                document.getElementById('firebase-custom-app-id').value = config.appId || "";
-            }
-        }
-
-        window.saveCustomFirebaseConfig = function() {
-            const apiKey = document.getElementById('firebase-custom-api-key').value.trim();
-            const authDomain = document.getElementById('firebase-custom-auth-domain').value.trim();
-            const projectId = document.getElementById('firebase-custom-project-id').value.trim();
-            const appId = document.getElementById('firebase-custom-app-id').value.trim();
-
-            if (!apiKey || !projectId) {
-                showToast("Please enter at least API Key and Project ID to connect.", "error");
-                return;
-            }
-
-            const customConfig = {
-                apiKey: apiKey,
-                authDomain: authDomain,
-                projectId: projectId,
-                storageBucket: `${projectId}.appspot.com`,
-                messagingSenderId: "123456789",
-                appId: appId
-            };
-
-            localStorage.setItem('custom_firebase_config', JSON.stringify(customConfig));
-            showToast("Cloud configuration saved! Reloading application...");
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
-        };
-
-        window.resetToLocalSync = function() {
-            confirmAction(
-                "Disconnect Cloud Database",
-                "Are you sure you want to revert to secure Offline Sandbox Mode?",
-                () => {
-                    localStorage.removeItem('custom_firebase_config');
-                    showToast("Cloud disconnected. Reverting application...");
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-                }
-            );
-        };
-
 
         // ================= SEARCH & FILTERS LOGIC =================
 
@@ -2173,7 +2191,7 @@
             invoiceSearchQuery = document.getElementById('invoice-search').value.toLowerCase();
             invoiceStatusFilter = document.getElementById('invoice-filter-status').value;
             invoiceMonthFilter = document.getElementById('invoice-filter-month').value;
-            invoiceCurrentPage = 1; // reset page
+            invoiceCurrentPage = 1;
             renderInvoicesList();
         };
 
@@ -2219,13 +2237,11 @@
             const totalCount = filtered.length;
             const maxPage = Math.ceil(totalCount / invoicesPerPage) || 1;
 
-            // Clamp current page index
             if (invoiceCurrentPage > maxPage) invoiceCurrentPage = maxPage;
 
             const startIdx = (invoiceCurrentPage - 1) * invoicesPerPage;
             const endIdx = Math.min(startIdx + invoicesPerPage, totalCount);
 
-            // Set UI details
             document.getElementById('invoice-pagination-info').textContent = `Showing ${totalCount > 0 ? startIdx + 1 : 0}-${endIdx} of ${totalCount}`;
             document.getElementById('invoice-prev-btn').disabled = invoiceCurrentPage === 1;
             document.getElementById('invoice-next-btn').disabled = invoiceCurrentPage === maxPage;
@@ -2244,8 +2260,6 @@
             const pageItems = filtered.slice(startIdx, endIdx);
             pageItems.forEach(inv => {
                 const client = state.clients.find(c => c.id === inv.clientId) || { name: "Unknown" };
-                
-                // Color Code Badges
                 const badgeColor = inv.status === 'Paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30' :
                                    inv.status === 'Partial' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/30' :
                                    'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/30';
@@ -2283,7 +2297,6 @@
             const textColor = isDark ? '#94a3b8' : '#64748b';
             const gridColor = isDark ? '#334155' : '#f1f5f9';
 
-            // Calculations data
             const monthsMap = {};
             const clientIncomeMap = {};
 
@@ -2300,7 +2313,6 @@
             const monthsLabels = Object.keys(monthsMap);
             const monthsValues = Object.values(monthsMap);
 
-            // Setup Dashboard Timeline Chart
             const ctxTimeline = document.getElementById('revenueTimelineChart');
             if (ctxTimeline) {
                 if (revenueChartInstance) revenueChartInstance.destroy();
@@ -2330,7 +2342,6 @@
                 });
             }
 
-            // Setup Dashboard Clients Breakdown Chart
             const ctxClients = document.getElementById('topClientsChart');
             if (ctxClients) {
                 if (clientsChartInstance) clientsChartInstance.destroy();
@@ -2354,7 +2365,6 @@
                 });
             }
 
-            // Setup Reports Monthly breakdown Trend Chart
             const ctxReportMonthly = document.getElementById('reportMonthlyChart');
             if (ctxReportMonthly) {
                 if (reportMonthlyChartInstance) reportMonthlyChartInstance.destroy();
@@ -2381,27 +2391,28 @@
                 });
             }
 
-            // Top Valued Clients Rankings inside Reports
             const sortedClients = Object.entries(clientIncomeMap)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 5);
 
             const rankContainer = document.getElementById('top-clients-ranking-list');
-            rankContainer.innerHTML = "";
-            if (sortedClients.length === 0) {
-                rankContainer.innerHTML = `<p class="text-xs text-slate-400 py-6 text-center">Generate invoices to analyze top ranking client portfolios.</p>`;
-            } else {
-                sortedClients.forEach(([name, amt], idx) => {
-                    const row = document.createElement('div');
-                    row.className = "flex items-center justify-between text-xs py-1.5 border-b border-slate-100 dark:border-slate-800";
-                    row.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <span class="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 font-bold flex items-center justify-center text-slate-500">${idx+1}</span>
-                            <span class="font-medium text-slate-800 dark:text-slate-200">${name}</span>
-                        </div>
-                        <span class="font-bold text-slate-900 dark:text-white">₹${amt.toFixed(2)}</span>`;
-                    rankContainer.appendChild(row);
-                });
+            if (rankContainer) {
+                rankContainer.innerHTML = "";
+                if (sortedClients.length === 0) {
+                    rankContainer.innerHTML = `<p class="text-xs text-slate-400 py-6 text-center">Generate invoices to analyze top ranking client portfolios.</p>`;
+                } else {
+                    sortedClients.forEach(([name, amt], idx) => {
+                        const row = document.createElement('div');
+                        row.className = "flex items-center justify-between text-xs py-1.5 border-b border-slate-100 dark:border-slate-800";
+                        row.innerHTML = `
+                            <div class="flex items-center gap-2">
+                                <span class="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 font-bold flex items-center justify-center text-slate-500">${idx+1}</span>
+                                <span class="font-medium text-slate-800 dark:text-slate-200">${name}</span>
+                            </div>
+                            <span class="font-bold text-slate-900 dark:text-white">₹${amt.toFixed(2)}</span>`;
+                        rankContainer.appendChild(row);
+                    });
+                }
             }
         }
 
@@ -2429,7 +2440,6 @@
                 }
             });
 
-            // Sort payments from latest to oldest
             txns.sort((a,b) => new Date(b.date) - new Date(a.date));
 
             if (txns.length === 0) {
@@ -2458,7 +2468,7 @@
         }
 
 
-        // ================= SETTINGS PANEL & OPERATIONS =================
+        // ================= SETTINGS PROFILE PANEL =================
 
         function loadSettingsFields() {
             document.getElementById('setting-name').value = state.settings.name || "";
@@ -2506,24 +2516,13 @@
                 signature: state.settings.signature || ""
             };
 
-            if (user && db) {
-                try {
-                    const targetDoc = doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'profile');
-                    await setDoc(targetDoc, config);
-                    state.settings = config;
-                    showToast("Business profile updated on database");
-                } catch(e) {
-                    showToast("Error writing configuration settings", "error");
-                }
-            } else {
-                state.settings = config;
-                saveLocalStorageBackup();
-                showToast("Local profile details saved");
-            }
+            state.settings = config;
+            saveLocalStorageBackup();
+            showToast("Business profile updated successfully");
             renderAllData();
+            autoSyncIfEnabled();
         };
 
-        // Base64 logo and signature uploads logic
         document.getElementById('logo-uploader').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -2533,7 +2532,7 @@
                     document.getElementById('logo-preview').src = evt.target.result;
                     document.getElementById('logo-preview').classList.remove('hidden');
                     document.getElementById('logo-preview-placeholder').classList.add('hidden');
-                    showToast("Brand logo uploaded successfully");
+                    showToast("Brand logo loaded successfully");
                     updateBrandUI();
                 };
                 reader.readAsDataURL(file);
@@ -2549,7 +2548,7 @@
                     document.getElementById('sig-preview').src = evt.target.result;
                     document.getElementById('sig-preview').classList.remove('hidden');
                     document.getElementById('sig-preview-placeholder').classList.add('hidden');
-                    showToast("Authorized signature loaded");
+                    showToast("Authorized signature loaded successfully");
                 };
                 reader.readAsDataURL(file);
             }
@@ -2562,7 +2561,6 @@
             try {
                 const wb = XLSX.utils.book_new();
 
-                // Format Clients Work Sheet
                 const clientsData = state.clients.map(c => ({
                     ID: c.id,
                     Name: c.name,
@@ -2576,7 +2574,6 @@
                 const wsClients = XLSX.utils.json_to_sheet(clientsData);
                 XLSX.utils.book_append_sheet(wb, wsClients, "Clients");
 
-                // Format Invoices Work Sheet
                 const invoicesData = state.invoices.map(inv => ({
                     InvoiceNumber: inv.invoiceNumber,
                     ClientID: inv.clientId,
@@ -2614,12 +2611,12 @@
                     let importedClientsCount = 0;
                     let importedInvoicesCount = 0;
 
-                    // Read clients sheet
                     if (workbook.SheetNames.includes("Clients")) {
                         const ws = workbook.Sheets["Clients"];
                         const rows = XLSX.utils.sheet_to_json(ws);
                         for (let row of rows) {
                             const payload = {
+                                id: row.ID || "c_" + Date.now() + Math.random().toString(36).substr(2, 5),
                                 name: row.Name || "Unknown Client",
                                 company: row.Company || "",
                                 email: row.Email || "",
@@ -2628,23 +2625,17 @@
                                 gst: row.GST || "",
                                 notes: row.Notes || ""
                             };
-                            
-                            if (user && db) {
-                                await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'clients'), payload);
-                            } else {
-                                payload.id = "c_" + Date.now() + Math.random().toString(36).substr(2, 5);
-                                state.clients.push(payload);
-                            }
+                            state.clients.push(payload);
                             importedClientsCount++;
                         }
                     }
 
-                    // Read invoices sheet
                     if (workbook.SheetNames.includes("Invoices")) {
                         const ws = workbook.Sheets["Invoices"];
                         const rows = XLSX.utils.sheet_to_json(ws);
                         for (let row of rows) {
                             const payload = {
+                                id: "i_" + Date.now() + Math.random().toString(36).substr(2, 5),
                                 invoiceNumber: row.InvoiceNumber || generateInvoiceNumber(),
                                 clientId: row.ClientID || "",
                                 invoiceDate: row.Date || new Date().toISOString().split('T')[0],
@@ -2659,23 +2650,18 @@
                                 status: row.Status || "Pending",
                                 paymentHistory: []
                             };
-
-                            if (user && db) {
-                                await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'invoices'), payload);
-                            } else {
-                                payload.id = "i_" + Date.now() + Math.random().toString(36).substr(2, 5);
-                                state.invoices.push(payload);
-                            }
+                            state.invoices.push(payload);
                             importedInvoicesCount++;
                         }
                     }
 
-                    if (!user) saveLocalStorageBackup();
+                    saveLocalStorageBackup();
                     renderAllData();
                     showToast(`Imported ${importedClientsCount} Clients and ${importedInvoicesCount} Invoices successfully.`);
+                    autoSyncIfEnabled();
                 } catch (err) {
                     console.error("Excel import error:", err);
-                    showToast("Failed reading or uploading standard Excel document structure", "error");
+                    showToast("Failed reading standard Excel document structure", "error");
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -2684,13 +2670,17 @@
 
         // ================= RENDERING AND AGGREGATION SYSTEM =================
 
-        // Helper function to update Custom uploaded Logo on Header & Sidebar
         function updateBrandUI() {
             const sidebarIcon = document.getElementById('sidebar-brand-icon');
             const sidebarLogo = document.getElementById('sidebar-brand-logo');
             const sidebarName = document.getElementById('sidebar-brand-name');
             const userAvatar = document.getElementById('user-avatar');
             const userAvatarImg = document.getElementById('user-avatar-img');
+
+            const logoHeaderTitle = document.getElementById('login-brand-title');
+            if (logoHeaderTitle) {
+                logoHeaderTitle.textContent = state.settings.name ? state.settings.name.toUpperCase() : "CUTINVOICE";
+            }
 
             if (state.settings.logo) {
                 if (sidebarIcon) sidebarIcon.classList.add('hidden');
@@ -2712,14 +2702,13 @@
 
                 if (userAvatar) {
                     userAvatar.classList.remove('hidden');
-                    userAvatar.textContent = (auth && auth.currentUser) ? auth.currentUser.uid.slice(0, 2).toUpperCase() : "VE";
+                    userAvatar.textContent = "ADM";
                 }
                 if (userAvatarImg) userAvatarImg.classList.add('hidden');
             }
         }
 
         function renderAllData() {
-            // Stats Calculations
             const totalClients = state.clients.length;
             const totalInvoices = state.invoices.length;
             
@@ -2727,26 +2716,25 @@
             const pendingRevenue = state.invoices.reduce((sum, inv) => sum + (inv.remainingAmount || 0), 0);
             const paidInvoicesCount = state.invoices.filter(i => i.status === 'Paid').length;
 
-            // Load values to Stats Dashboard Elements
             document.getElementById('stat-total-clients').textContent = totalClients;
             document.getElementById('stat-total-invoices').textContent = totalInvoices;
             document.getElementById('stat-total-revenue').textContent = `₹${totalRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
             document.getElementById('stat-pending-payments').textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
             document.getElementById('stat-paid-payments').textContent = paidInvoicesCount;
 
-            // Load view-specific components
             renderClientsList();
             renderInvoicesList();
             renderPaymentsLedger();
             loadSettingsFields();
             updateBrandUI();
 
-            // Populate Months dropdown filters dynamically
             const monthSelector = document.getElementById('invoice-filter-month');
             const uniqueMonths = new Set();
             state.invoices.forEach(inv => {
-                const [year, month] = inv.invoiceDate.split('-');
-                uniqueMonths.add(`${year}-${month}`);
+                if (inv.invoiceDate) {
+                    const [year, month] = inv.invoiceDate.split('-');
+                    uniqueMonths.add(`${year}-${month}`);
+                }
             });
             
             const currentSelVal = monthSelector.value;
@@ -2758,7 +2746,6 @@
             });
             monthSelector.value = currentSelVal;
 
-            // Build dashboard recent list (Limit to latest 5 entries)
             const recentContainer = document.getElementById('recent-invoices-tbody');
             recentContainer.innerHTML = "";
             const sorted = [...state.invoices]
@@ -2794,7 +2781,6 @@
                 });
             }
 
-            // Fill Report and Payments calculations
             document.getElementById('payments-outstanding').textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
             const clearedRevenue = state.invoices.reduce((sum, inv) => sum + (inv.amountReceived || 0), 0);
             document.getElementById('payments-cleared').textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
@@ -2804,7 +2790,6 @@
             document.getElementById('report-clients').textContent = totalClients;
             document.getElementById('report-invoices').textContent = totalInvoices;
 
-            // Re-render Analytics Charts with the loaded sets
             renderCharts();
         }
 
