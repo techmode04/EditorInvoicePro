@@ -66,573 +66,502 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-neutral-950 dark:text-slate-200 min-h-screen flex flex-col overflow-x-hidden">
+<body class="bg-slate-50 text-slate-800 dark:bg-neutral-950 dark:text-slate-200 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
 
-    <!-- ================= VIEW: AUTH SCREEN (LOGIN / SIGNUP) ================= -->
-    <div id="auth-layout" class="hidden min-h-screen flex items-center justify-center bg-slate-100 dark:bg-neutral-950 p-4 transition-colors">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-2xl shadow-xl max-w-md w-full space-y-6">
-            <div class="text-center space-y-2">
-                <div class="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-brand-500/20">
-                    <i class="fa-solid fa-clapperboard-play text-xl"></i>
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between">
+        <div class="p-6">
+            <!-- Brand Logo Header -->
+            <div class="flex items-center space-x-3 mb-8">
+                <div id="sidebar-brand-icon" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 shrink-0">
+                    <i class="fa-solid fa-clapperboard-play text-lg"></i>
                 </div>
-                <h2 id="auth-title" class="text-2xl font-bold text-slate-900 dark:text-white">Sign In to CutInvoice</h2>
-                <p id="auth-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Video Editor Hub Billing Dashboard</p>
+                <img id="sidebar-brand-logo" class="w-10 h-10 rounded-xl object-cover hidden shrink-0" alt="Brand Logo">
+                <div>
+                    <h1 id="sidebar-brand-name" class="font-bold text-lg leading-tight dark:text-white">CutInvoice</h1>
+                    <span class="text-xs text-slate-400 dark:text-slate-500">Video Editor Hub</span>
+                </div>
             </div>
 
-            <!-- Login Form -->
-            <form id="login-form" onsubmit="handleEmailLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-2xs font-bold uppercase tracking-wider text-slate-500 mb-1">Email Address</label>
-                    <input type="email" id="login-email" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500" placeholder="e.g. sachindhislepatil04@gmail.com">
-                </div>
-                <div>
-                    <label class="block text-2xs font-bold uppercase tracking-wider text-slate-500 mb-1">Password</label>
-                    <input type="password" id="login-password" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500" placeholder="••••••••">
-                </div>
-                <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg text-sm transition-colors shadow-sm">
-                    Access Dashboard
+            <!-- Navigation Links -->
+            <nav class="space-y-1.5">
+                <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-brand-600 bg-brand-50 dark:bg-brand-900/20 dark:text-brand-400">
+                    <i class="fa-solid fa-chart-pie w-5"></i>
+                    <span>Dashboard</span>
                 </button>
-            </form>
-
-            <!-- Signup Form (Hidden initially) -->
-            <form id="signup-form" onsubmit="handleEmailSignup(event)" class="space-y-4 hidden">
-                <div>
-                    <label class="block text-2xs font-bold uppercase tracking-wider text-slate-500 mb-1">Business Studio Name</label>
-                    <input type="text" id="signup-studio-name" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500" placeholder="e.g. Sachindhisle Hub">
-                </div>
-                <div>
-                    <label class="block text-2xs font-bold uppercase tracking-wider text-slate-500 mb-1">Email Address</label>
-                    <input type="email" id="signup-email" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500" placeholder="e.g. sachindhislepatil04@gmail.com">
-                </div>
-                <div>
-                    <label class="block text-2xs font-bold uppercase tracking-wider text-slate-500 mb-1">New Password</label>
-                    <input type="password" id="signup-password" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500" placeholder="At least 6 characters">
-                </div>
-                <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg text-sm transition-colors shadow-sm">
-                    Create My Studio
+                <button onclick="switchView('invoices')" id="nav-invoices" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
+                    <i class="fa-solid fa-file-invoice-dollar w-5"></i>
+                    <span>Invoices</span>
                 </button>
-            </form>
-
-            <!-- Forgot Password Form (Hidden initially) -->
-            <form id="reset-password-form" onsubmit="handlePasswordReset(event)" class="space-y-4 hidden">
-                <p class="text-xs text-slate-500 dark:text-slate-400 text-center">Enter your registered email address and we'll send you link to reset your credentials.</p>
-                <div>
-                    <label class="block text-2xs font-bold uppercase tracking-wider text-slate-500 mb-1">Email Address</label>
-                    <input type="email" id="reset-email" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500" placeholder="e.g. yourname@example.com">
-                </div>
-                <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg text-sm transition-colors shadow-sm">
-                    Send Reset Link
+                <button onclick="switchView('clients')" id="nav-clients" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
+                    <i class="fa-solid fa-user-group w-5"></i>
+                    <span>Clients</span>
                 </button>
-            </form>
+                <button onclick="switchView('payments')" id="nav-payments" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
+                    <i class="fa-solid fa-receipt w-5"></i>
+                    <span>Payments</span>
+                </button>
+                <button onclick="switchView('reports')" id="nav-reports" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
+                    <i class="fa-solid fa-chart-line w-5"></i>
+                    <span>Reports</span>
+                </button>
+                <button onclick="switchView('settings')" id="nav-settings" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
+                    <i class="fa-solid fa-sliders w-5"></i>
+                    <span>Settings</span>
+                </button>
+            </nav>
+        </div>
 
-            <!-- Toggle views buttons -->
-            <div class="text-center pt-2 text-xs text-slate-500 space-y-1">
-                <div id="toggle-signup-container">
-                    New Video Editor? <button onclick="toggleAuthForm('signup')" class="text-brand-600 font-bold hover:underline">Create an Account</button>
-                </div>
-                <div id="toggle-login-container" class="hidden">
-                    Already registered? <button onclick="toggleAuthForm('login')" class="text-brand-600 font-bold hover:underline">Sign In Here</button>
-                </div>
-                <div>
-                    Forgot Credentials? <button onclick="toggleAuthForm('reset')" class="text-slate-600 dark:text-slate-400 hover:underline">Reset Password</button>
-                </div>
+        <!-- Sync Indicator & Settings Bottom Panel -->
+        <div class="p-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <div id="sync-status" class="flex items-center justify-between text-xs text-slate-500">
+                <span id="sync-badge-element" class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Firebase Connecting...
+                </span>
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">App Theme</span>
+                <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:ring-2 hover:ring-slate-200 dark:hover:ring-slate-700 transition-all">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block"></i>
+                </button>
             </div>
         </div>
-    </div>
+    </aside>
 
-    <!-- ================= MAIN APP CORE LAYOUT (HIDDEN UNTIL AUTHENTICATED) ================= -->
-    <div id="app-layout" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
+    <!-- Overlay for Mobile Sidebar -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 md:ml-64 flex flex-col min-h-screen">
         
-        <!-- Sidebar Navigation -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between">
-            <div class="p-6">
-                <!-- Brand Logo Header -->
-                <div class="flex items-center space-x-3 mb-8">
-                    <div id="sidebar-brand-icon" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 shrink-0">
-                        <i class="fa-solid fa-clapperboard-play text-lg"></i>
-                    </div>
-                    <img id="sidebar-brand-logo" class="w-10 h-10 rounded-xl object-cover hidden shrink-0" alt="Brand Logo">
-                    <div>
-                        <h1 id="sidebar-brand-name" class="font-bold text-lg leading-tight dark:text-white">CutInvoice</h1>
-                        <span class="text-xs text-slate-400 dark:text-slate-500">Video Editor Hub</span>
-                    </div>
-                </div>
-
-                <!-- Navigation Links -->
-                <nav class="space-y-1.5">
-                    <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-brand-600 bg-brand-50 dark:bg-brand-900/20 dark:text-brand-400">
-                        <i class="fa-solid fa-chart-pie w-5"></i>
-                        <span>Dashboard</span>
-                    </button>
-                    <button onclick="switchView('invoices')" id="nav-invoices" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
-                        <i class="fa-solid fa-file-invoice-dollar w-5"></i>
-                        <span>Invoices</span>
-                    </button>
-                    <button onclick="switchView('clients')" id="nav-clients" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
-                        <i class="fa-solid fa-user-group w-5"></i>
-                        <span>Clients</span>
-                    </button>
-                    <button onclick="switchView('payments')" id="nav-payments" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
-                        <i class="fa-solid fa-receipt w-5"></i>
-                        <span>Payments</span>
-                    </button>
-                    <button onclick="switchView('reports')" id="nav-reports" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
-                        <i class="fa-solid fa-chart-line w-5"></i>
-                        <span>Reports</span>
-                    </button>
-                    <button onclick="switchView('settings')" id="nav-settings" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
-                        <i class="fa-solid fa-sliders w-5"></i>
-                        <span>Settings</span>
-                    </button>
-                </nav>
-            </div>
-
-            <!-- Sync Indicator & Settings Bottom Panel -->
-            <div class="p-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
-                <div id="sync-status" class="flex items-center justify-between text-xs text-slate-500">
-                    <span id="sync-badge-element" class="flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Cloud Active
-                    </span>
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">App Theme</span>
-                    <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:ring-2 hover:ring-slate-200 dark:hover:ring-slate-700 transition-all">
-                        <i class="fa-solid fa-moon dark:hidden"></i>
-                        <i class="fa-solid fa-sun hidden dark:block"></i>
-                    </button>
-                </div>
-
-                <!-- Sign Out Options -->
-                <button onclick="handleUserSignOut()" class="w-full flex items-center space-x-3 px-4 py-2.5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 rounded-lg text-xs font-semibold hover:bg-rose-100 transition-all">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>Log Out Account</span>
+        <!-- Header Panel -->
+        <header class="h-16 px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between sticky top-0 z-20">
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleSidebar()" class="p-2 -ml-2 rounded-lg text-slate-600 dark:text-slate-300 md:hidden hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-bars text-lg"></i>
                 </button>
+                <h2 id="view-title" class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Dashboard Overview</h2>
             </div>
-        </aside>
-
-        <!-- Overlay for Mobile Sidebar -->
-        <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden md:hidden"></div>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 md:ml-64 flex flex-col min-h-screen">
             
-            <!-- Header Panel -->
-            <header class="h-16 px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between sticky top-0 z-20">
-                <div class="flex items-center space-x-4">
-                    <button onclick="toggleSidebar()" class="p-2 -ml-2 rounded-lg text-slate-600 dark:text-slate-300 md:hidden hover:bg-slate-100 dark:hover:bg-slate-800">
-                        <i class="fa-solid fa-bars text-lg"></i>
-                    </button>
-                    <h2 id="view-title" class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Dashboard Overview</h2>
+            <!-- Quick Actions Header Menu -->
+            <div class="flex items-center space-x-3">
+                <button onclick="openNewInvoiceModal()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs rounded-lg shadow-sm shadow-brand-500/10 transition-colors">
+                    <i class="fa-solid fa-plus text-2xs"></i>
+                    <span class="hidden sm:inline">New Invoice</span>
+                </button>
+                <div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+                <div class="flex items-center space-x-2">
+                    <div id="user-avatar" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-600 dark:text-slate-300 overflow-hidden">
+                        VE
+                    </div>
+                    <img id="user-avatar-img" class="w-8 h-8 rounded-full object-cover hidden" alt="User logo">
                 </div>
-                
-                <!-- Quick Actions Header Menu -->
-                <div class="flex items-center space-x-3">
-                    <button onclick="openNewInvoiceModal()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs rounded-lg shadow-sm shadow-brand-500/10 transition-colors">
-                        <i class="fa-solid fa-plus text-2xs"></i>
-                        <span class="hidden sm:inline">New Invoice</span>
-                    </button>
-                    <div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
-                    <div class="flex items-center space-x-2">
-                        <div id="user-avatar" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-600 dark:text-slate-300 overflow-hidden">
-                            VE
-                        </div>
-                        <img id="user-avatar-img" class="w-8 h-8 rounded-full object-cover hidden" alt="User logo">
-                    </div>
-                </div>
-            </header>
+            </div>
+        </header>
 
-            <!-- View Content Containers -->
-            <div id="content-container" class="flex-1 p-6 md:p-8 space-y-6">
-                
-                <!-- ================= VIEW: DASHBOARD ================= -->
-                <div id="view-dashboard" class="space-y-6">
-                    <!-- Stats Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-                            <div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl">
-                                <i class="fa-solid fa-user-group text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">Total Clients</p>
-                                <h3 id="stat-total-clients" class="text-2xl font-bold dark:text-white">0</h3>
-                            </div>
+        <!-- View Content Containers -->
+        <div id="content-container" class="flex-1 p-6 md:p-8 space-y-6">
+            
+            <!-- ================= VIEW: DASHBOARD ================= -->
+            <div id="view-dashboard" class="space-y-6">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl">
+                            <i class="fa-solid fa-user-group text-xl"></i>
                         </div>
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-                            <div class="p-3 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-xl">
-                                <i class="fa-solid fa-file-invoice text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">Total Invoices</p>
-                                <h3 id="stat-total-invoices" class="text-2xl font-bold dark:text-white">0</h3>
-                            </div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-                            <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl">
-                                <i class="fa-solid fa-indian-rupee-sign text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">Total Revenue</p>
-                                <h3 id="stat-total-revenue" class="text-2xl font-bold dark:text-white">₹0</h3>
-                            </div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-                            <div class="p-3 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-xl">
-                                <i class="fa-solid fa-hourglass-half text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">Pending</p>
-                                <h3 id="stat-pending-payments" class="text-2xl font-bold dark:text-white">₹0</h3>
-                            </div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-                            <div class="p-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-xl">
-                                <i class="fa-solid fa-chart-pie-simple text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">Paid Invoices</p>
-                                <h3 id="stat-paid-payments" class="text-2xl font-bold dark:text-white">0</h3>
-                            </div>
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Total Clients</p>
+                            <h3 id="stat-total-clients" class="text-2xl font-bold dark:text-white">0</h3>
                         </div>
                     </div>
-
-                    <!-- Live Charts & Insights Section -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm lg:col-span-2">
-                            <div class="flex items-center justify-between mb-4">
-                                <h4 class="font-bold text-slate-900 dark:text-white">Revenue Timeline</h4>
-                                <span class="text-xs text-slate-400">Monthly breakdown</span>
-                            </div>
-                            <div class="h-64 relative">
-                                <canvas id="revenueTimelineChart"></canvas>
-                            </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+                        <div class="p-3 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-xl">
+                            <i class="fa-solid fa-file-invoice text-xl"></i>
                         </div>
-                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <h4 class="font-bold text-slate-900 dark:text-white mb-4">Top Clients Contribution</h4>
-                            <div class="h-64 relative flex items-center justify-center">
-                                <canvas id="topClientsChart"></canvas>
-                            </div>
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Total Invoices</p>
+                            <h3 id="stat-total-invoices" class="text-2xl font-bold dark:text-white">0</h3>
                         </div>
                     </div>
-
-                    <!-- Recent Invoices & Quick Actions List -->
-                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                        <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                            <h4 class="font-bold text-slate-900 dark:text-white">Recent Invoices</h4>
-                            <button onclick="switchView('invoices')" class="text-brand-600 text-xs font-semibold hover:underline">View All Invoices</button>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+                        <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl">
+                            <i class="fa-solid fa-indian-rupee-sign text-xl"></i>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-sm">
-                                <thead>
-                                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 font-medium">
-                                        <th class="px-6 py-3">Invoice No.</th>
-                                        <th class="px-6 py-3">Client</th>
-                                        <th class="px-6 py-3">Due Date</th>
-                                        <th class="px-6 py-3">Amount</th>
-                                        <th class="px-6 py-3">Status</th>
-                                        <th class="px-6 py-3 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="recent-invoices-tbody">
-                                    <!-- Populated dynamically -->
-                                </tbody>
-                            </table>
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Total Revenue</p>
+                            <h3 id="stat-total-revenue" class="text-2xl font-bold dark:text-white">₹0</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+                        <div class="p-3 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-xl">
+                            <i class="fa-solid fa-hourglass-half text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Pending</p>
+                            <h3 id="stat-pending-payments" class="text-2xl font-bold dark:text-white">₹0</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-4">
+                        <div class="p-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-xl">
+                            <i class="fa-solid fa-chart-pie-simple text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Paid Invoices</p>
+                            <h3 id="stat-paid-payments" class="text-2xl font-bold dark:text-white">0</h3>
                         </div>
                     </div>
                 </div>
 
-                <!-- ================= VIEW: INVOICES ================= -->
-                <div id="view-invoices" class="space-y-6 hidden">
-                    <!-- Toolbar Area -->
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <div class="flex flex-wrap items-center gap-3">
-                            <div class="relative min-w-[200px]">
-                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400"></i>
-                                <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="Search invoice..." class="pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-lg border-0 focus:ring-2 focus:ring-brand-500 w-full">
-                            </div>
-                            <select id="invoice-filter-status" onchange="filterInvoices()" class="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500">
-                                <option value="All">All Statuses</option>
-                                <option value="Paid">Paid</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Partial">Partial</option>
-                            </select>
-                            <select id="invoice-filter-month" onchange="filterInvoices()" class="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500">
-                                <option value="All">All Months</option>
-                                <!-- Programmatically loaded -->
-                            </select>
+                <!-- Live Charts & Insights Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm lg:col-span-2">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-bold text-slate-900 dark:text-white">Revenue Timeline</h4>
+                            <span class="text-xs text-slate-400">Monthly breakdown</span>
                         </div>
+                        <div class="h-64 relative">
+                            <canvas id="revenueTimelineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="font-bold text-slate-900 dark:text-white mb-4">Top Clients Contribution</h4>
+                        <div class="h-64 relative flex items-center justify-center">
+                            <canvas id="topClientsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Invoices & Quick Actions List -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 dark:text-white">Recent Invoices</h4>
+                        <button onclick="switchView('invoices')" class="text-brand-600 text-xs font-semibold hover:underline">View All Invoices</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 font-medium">
+                                    <th class="px-6 py-3">Invoice No.</th>
+                                    <th class="px-6 py-3">Client</th>
+                                    <th class="px-6 py-3">Due Date</th>
+                                    <th class="px-6 py-3">Amount</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-invoices-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW: INVOICES ================= -->
+            <div id="view-invoices" class="space-y-6 hidden">
+                <!-- Toolbar Area -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="relative min-w-[200px]">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400"></i>
+                            <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="Search invoice..." class="pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-lg border-0 focus:ring-2 focus:ring-brand-500 w-full">
+                        </div>
+                        <select id="invoice-filter-status" onchange="filterInvoices()" class="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500">
+                            <option value="All">All Statuses</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Partial">Partial</option>
+                        </select>
+                        <select id="invoice-filter-month" onchange="filterInvoices()" class="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500">
+                            <option value="All">All Months</option>
+                            <!-- Programmatically loaded -->
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openNewInvoiceModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold flex items-center gap-1.5 shadow-sm shadow-brand-500/10">
+                            <i class="fa-solid fa-plus"></i> New Invoice
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Invoice Grid/List Wrapper -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 font-medium">
+                                    <th class="px-6 py-4">Invoice ID</th>
+                                    <th class="px-6 py-4">Client</th>
+                                    <th class="px-6 py-4">Issue Date</th>
+                                    <th class="px-6 py-4">Due Date</th>
+                                    <th class="px-6 py-4">Amount</th>
+                                    <th class="px-6 py-4">Remaining</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoices-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination bar -->
+                    <div class="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <span id="invoice-pagination-info" class="text-xs text-slate-500">Showing 1-10 of 100</span>
                         <div class="flex items-center gap-2">
-                            <button onclick="openNewInvoiceModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold flex items-center gap-1.5 shadow-sm shadow-brand-500/10">
-                                <i class="fa-solid fa-plus"></i> New Invoice
+                            <button id="invoice-prev-btn" onclick="prevInvoicePage()" class="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 disabled:opacity-50">
+                                <i class="fa-solid fa-angle-left"></i>
+                            </button>
+                            <button id="invoice-next-btn" onclick="nextInvoicePage()" class="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 disabled:opacity-50">
+                                <i class="fa-solid fa-angle-right"></i>
                             </button>
                         </div>
                     </div>
-
-                    <!-- Invoice Grid/List Wrapper -->
-                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-sm">
-                                <thead>
-                                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 font-medium">
-                                        <th class="px-6 py-4">Invoice ID</th>
-                                        <th class="px-6 py-4">Client</th>
-                                        <th class="px-6 py-4">Issue Date</th>
-                                        <th class="px-6 py-4">Due Date</th>
-                                        <th class="px-6 py-4">Amount</th>
-                                        <th class="px-6 py-4">Remaining</th>
-                                        <th class="px-6 py-4">Status</th>
-                                        <th class="px-6 py-4 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="invoices-tbody">
-                                    <!-- Populated dynamically -->
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Pagination bar -->
-                        <div class="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                            <span id="invoice-pagination-info" class="text-xs text-slate-500">Showing 1-10 of 100</span>
-                            <div class="flex items-center gap-2">
-                                <button id="invoice-prev-btn" onclick="prevInvoicePage()" class="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 disabled:opacity-50">
-                                    <i class="fa-solid fa-angle-left"></i>
-                                </button>
-                                <button id="invoice-next-btn" onclick="nextInvoicePage()" class="p-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 disabled:opacity-50">
-                                    <i class="fa-solid fa-angle-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-                <!-- ================= VIEW: CLIENTS ================= -->
-                <div id="view-clients" class="space-y-6 hidden">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <div class="relative min-w-[240px] flex-1 max-w-sm">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400"></i>
-                            <input type="text" id="client-search" oninput="filterClients()" placeholder="Search clients by name, company, email..." class="pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-lg border-0 focus:ring-2 focus:ring-brand-500 w-full">
-                        </div>
-                        <button onclick="openClientModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-solid fa-user-plus"></i> Add Client
-                        </button>
-                    </div>
-
-                    <!-- Client List Grid -->
-                    <div id="clients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
-
-                <!-- ================= VIEW: PAYMENTS ================= -->
-                <div id="view-payments" class="space-y-6 hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Revenue Stats Panel -->
-                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Total Outstanding Amount</h4>
-                            <p id="payments-outstanding" class="text-3xl font-extrabold text-amber-600 dark:text-amber-400">₹0</p>
-                            <span class="text-xs text-slate-400">Awaiting clearance from clients</span>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Cleared & Settled</h4>
-                            <p id="payments-cleared" class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">₹0</p>
-                            <span class="text-xs text-slate-400">Transferred into your accounts</span>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
-                            <div>
-                                <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Record Payment Received</h4>
-                                <span class="text-xs text-slate-400">To log payment details on dynamic partial/fully paid structures, choose "Edit payment" directly on the invoice list.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Live Ledger Panel -->
-                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                        <div class="p-5 border-b border-slate-100 dark:border-slate-800">
-                            <h4 class="font-bold text-slate-900 dark:text-white">Payments Registry Log</h4>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-sm">
-                                <thead>
-                                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 font-medium">
-                                        <th class="px-6 py-4">Transaction ID</th>
-                                        <th class="px-6 py-4">Invoice ID</th>
-                                        <th class="px-6 py-4">Client</th>
-                                        <th class="px-6 py-4">Payment Date</th>
-                                        <th class="px-6 py-4">Payment Method</th>
-                                        <th class="px-6 py-4 text-right">Settled Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ledger-tbody">
-                                    <!-- Populated dynamically from state invoices metadata payments lists -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ================= VIEW: REPORTS ================= -->
-                <div id="view-reports" class="space-y-6 hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Total All-Time Earnings</p>
-                            <h3 id="report-earnings" class="text-2xl font-bold dark:text-white text-emerald-600 dark:text-emerald-400">₹0</h3>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Pending Receivables</p>
-                            <h3 id="report-pending" class="text-2xl font-bold dark:text-white text-amber-600">₹0</h3>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Active Retainers / Clients</p>
-                            <h3 id="report-clients" class="text-2xl font-bold dark:text-white">0</h3>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Invoices Handled</p>
-                            <h3 id="report-invoices" class="text-2xl font-bold dark:text-white">0</h3>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <h4 class="font-bold text-slate-900 dark:text-white mb-4">Monthly Income Trends</h4>
-                            <div class="h-64 relative">
-                                <canvas id="reportMonthlyChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
-                            <div>
-                                <h4 class="font-bold text-slate-900 dark:text-white mb-4">Top Valuation Clients</h4>
-                                <div class="space-y-3" id="top-clients-ranking-list">
-                                    <!-- Top Clients dynamic listings -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ================= VIEW: SETTINGS ================= -->
-                <div id="view-settings" class="space-y-6 hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- General Business form layout panel -->
-                        <div class="lg:col-span-2 space-y-6">
-                            <form id="settings-form" onsubmit="saveSettings(event)">
-                                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Business profile & Payment Configuration</h3>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Freelancer / Company Name</label>
-                                            <input type="text" id="setting-name" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">GST Number (Optional)</label>
-                                            <input type="text" id="setting-gst" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Phone Number</label>
-                                            <input type="text" id="setting-phone" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Email Address</label>
-                                            <input type="email" id="setting-email" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">UPI ID (For Quick QR Payment Generation)</label>
-                                            <input type="text" id="setting-upi" required placeholder="e.g. yourname@okaxis" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Website URL</label>
-                                            <input type="url" id="setting-website" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Postal Address</label>
-                                        <textarea id="setting-address" required rows="3" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm"></textarea>
-                                    </div>
-
-                                    <div class="flex justify-end pt-4">
-                                        <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold shadow-sm shadow-brand-500/10">
-                                            Save Business Profile
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <!-- Secure Password Change Panel -->
-                            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Security Settings</h3>
-                                <p class="text-xs text-slate-400">Change your login password. (If this operation fails, please logout and log back in to re-authenticate first).</p>
-                                
-                                <form id="change-password-form" onsubmit="handleUserPasswordChange(event)" class="space-y-4">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">New Password</label>
-                                            <input type="password" id="change-new-pass" required minlength="6" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Confirm New Password</label>
-                                            <input type="password" id="change-confirm-pass" required minlength="6" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-end pt-2">
-                                        <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold shadow-sm shadow-brand-500/10">
-                                            Update Password
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Side assets configuration panel -->
-                        <div class="space-y-6">
-                            <!-- Branding Logistics Assets -->
-                            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                                <h4 class="font-bold text-slate-900 dark:text-white">Business Logo & Signature</h4>
-                                
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Logo Upload (Base64 URL)</label>
-                                    <input type="file" id="logo-uploader" accept="image/*" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 dark:file:bg-brand-900/30 file:text-brand-700 dark:file:text-brand-300 hover:file:bg-brand-100 transition-colors">
-                                    <div class="mt-2 flex items-center justify-center p-4 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg">
-                                        <img id="logo-preview" class="max-h-16 object-contain hidden" alt="Logo preview">
-                                        <span id="logo-preview-placeholder" class="text-2xs text-slate-400">No logo uploaded. Standard styling text fallback used.</span>
-                                    </div>
-                                </div>
-
-                                <hr class="border-slate-100 dark:border-slate-800">
-
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Signature Upload (Base64 URL)</label>
-                                    <input type="file" id="sig-uploader" accept="image/*" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 dark:file:bg-brand-900/30 file:text-brand-700 dark:file:text-brand-300 hover:file:bg-brand-100 transition-colors">
-                                    <div class="mt-2 flex items-center justify-center p-4 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg">
-                                        <img id="sig-preview" class="max-h-16 object-contain hidden" alt="Signature preview">
-                                        <span id="sig-preview-placeholder" class="text-2xs text-slate-400">No signature image uploaded.</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Data Imports & Exports Configuration -->
-                            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                                <h4 class="font-bold text-slate-900 dark:text-white">Excel Operations / Backup Data</h4>
-                                <p class="text-xs text-slate-400">Export or upload fully standardized Excel books containing client databases, invoice details and dynamic listings.</p>
-                                
-                                <div class="grid grid-cols-2 gap-3">
-                                    <button type="button" onclick="exportDataToExcel()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors">
-                                        <i class="fa-solid fa-file-excel text-emerald-600"></i> Export Excel
-                                    </button>
-                                    <label class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer text-center">
-                                        <i class="fa-solid fa-file-import text-blue-600"></i> Import Excel
-                                        <input type="file" id="excel-importer" accept=".xlsx, .xls" class="hidden" onchange="importDataFromExcel(event)">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </main>
-    </div>
+
+            <!-- ================= VIEW: CLIENTS ================= -->
+            <div id="view-clients" class="space-y-6 hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="relative min-w-[240px] flex-1 max-w-sm">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400"></i>
+                        <input type="text" id="client-search" oninput="filterClients()" placeholder="Search clients by name, company, email..." class="pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-lg border-0 focus:ring-2 focus:ring-brand-500 w-full">
+                    </div>
+                    <button onclick="openClientModal()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-user-plus"></i> Add Client
+                    </button>
+                </div>
+
+                <!-- Client List Grid -->
+                <div id="clients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- ================= VIEW: PAYMENTS ================= -->
+            <div id="view-payments" class="space-y-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Revenue Stats Panel -->
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Total Outstanding Amount</h4>
+                        <p id="payments-outstanding" class="text-3xl font-extrabold text-amber-600 dark:text-amber-400">₹0</p>
+                        <span class="text-xs text-slate-400">Awaiting clearance from clients</span>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Cleared & Settled</h4>
+                        <p id="payments-cleared" class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">₹0</p>
+                        <span class="text-xs text-slate-400">Transferred into your accounts</span>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Record Payment Received</h4>
+                            <span class="text-xs text-slate-400">To log payment details on dynamic partial/fully paid structures, choose "Edit payment" directly on the invoice list.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Ledger Panel -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 dark:border-slate-800">
+                        <h4 class="font-bold text-slate-900 dark:text-white">Payments Registry Log</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 font-medium">
+                                    <th class="px-6 py-4">Transaction ID</th>
+                                    <th class="px-6 py-4">Invoice ID</th>
+                                    <th class="px-6 py-4">Client</th>
+                                    <th class="px-6 py-4">Payment Date</th>
+                                    <th class="px-6 py-4">Payment Method</th>
+                                    <th class="px-6 py-4 text-right">Settled Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledger-tbody">
+                                <!-- Populated dynamically from state invoices metadata payments lists -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW: REPORTS ================= -->
+            <div id="view-reports" class="space-y-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Total All-Time Earnings</p>
+                        <h3 id="report-earnings" class="text-2xl font-bold dark:text-white text-emerald-600 dark:text-emerald-400">₹0</h3>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Pending Receivables</p>
+                        <h3 id="report-pending" class="text-2xl font-bold dark:text-white text-amber-600">₹0</h3>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Active Retainers / Clients</p>
+                        <h3 id="report-clients" class="text-2xl font-bold dark:text-white">0</h3>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Invoices Handled</p>
+                        <h3 id="report-invoices" class="text-2xl font-bold dark:text-white">0</h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="font-bold text-slate-900 dark:text-white mb-4">Monthly Income Trends</h4>
+                        <div class="h-64 relative">
+                            <canvas id="reportMonthlyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-4">Top Valuation Clients</h4>
+                            <div class="space-y-3" id="top-clients-ranking-list">
+                                <!-- Top Clients dynamic listings -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VIEW: SETTINGS ================= -->
+            <div id="view-settings" class="space-y-6 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- General Business form layout panel -->
+                    <form id="settings-form" onsubmit="saveSettings(event)" class="lg:col-span-2 space-y-6">
+                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Business profile & Payment Configuration</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Freelancer / Company Name</label>
+                                    <input type="text" id="setting-name" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">GST Number (Optional)</label>
+                                    <input type="text" id="setting-gst" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Phone Number</label>
+                                    <input type="text" id="setting-phone" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Email Address</label>
+                                    <input type="email" id="setting-email" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">UPI ID (For Quick QR Payment Generation)</label>
+                                    <input type="text" id="setting-upi" required placeholder="e.g. yourname@okaxis" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Website URL</label>
+                                    <input type="url" id="setting-website" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Postal Address</label>
+                                <textarea id="setting-address" required rows="3" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500 text-sm"></textarea>
+                            </div>
+
+                            <div class="flex justify-end pt-4">
+                                <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold shadow-sm shadow-brand-500/10">
+                                    Save Business Profile
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Sidebar Configuration Panels & Custom Firebase Credential setup form -->
+                    <div class="space-y-6">
+                        <!-- Custom Secure Firebase Cloud integration setup Panel -->
+                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                            <div class="flex items-center space-x-2 text-brand-600 dark:text-brand-400">
+                                <i class="fa-solid fa-server text-lg animate-pulse"></i>
+                                <h4 class="font-bold text-slate-900 dark:text-white">Custom Firebase Cloud</h4>
+                            </div>
+                            <p class="text-xs text-slate-400">Link your own Firebase Firestore Database to back up your invoices and clients. Leaves your data 100% in your control!</p>
+                            
+                            <div class="space-y-3 pt-2">
+                                <div>
+                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">API Key</label>
+                                    <input type="text" id="firebase-custom-api-key" placeholder="AIzaSyA1..." class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Auth Domain</label>
+                                    <input type="text" id="firebase-custom-auth-domain" placeholder="yourproject.firebaseapp.com" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">Project ID</label>
+                                    <input type="text" id="firebase-custom-project-id" placeholder="yourproject" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500 mb-1">App ID</label>
+                                    <input type="text" id="firebase-custom-app-id" placeholder="1:1234:web:abc" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs">
+                                </div>
+                                
+                                <div class="flex gap-2 pt-2">
+                                    <button type="button" onclick="saveCustomFirebaseConfig()" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded shadow-sm">
+                                        Connect Cloud Sync
+                                    </button>
+                                    <button type="button" onclick="resetToLocalSync()" class="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-rose-600 rounded text-xs" title="Reset to Local Mode">
+                                        <i class="fa-solid fa-power-off"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Branding Logistics Assets -->
+                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                            <h4 class="font-bold text-slate-900 dark:text-white">Business Logo & Signature</h4>
+                            
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Logo Upload (Base64 URL)</label>
+                                <input type="file" id="logo-uploader" accept="image/*" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 dark:file:bg-brand-900/30 file:text-brand-700 dark:file:text-brand-300 hover:file:bg-brand-100 transition-colors">
+                                <div class="mt-2 flex items-center justify-center p-4 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg">
+                                    <img id="logo-preview" class="max-h-16 object-contain hidden" alt="Logo preview">
+                                    <span id="logo-preview-placeholder" class="text-2xs text-slate-400">No logo uploaded. Standard styling text fallback used.</span>
+                                </div>
+                            </div>
+
+                            <hr class="border-slate-100 dark:border-slate-800">
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Signature Upload (Base64 URL)</label>
+                                <input type="file" id="sig-uploader" accept="image/*" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 dark:file:bg-brand-900/30 file:text-brand-700 dark:file:text-brand-300 hover:file:bg-brand-100 transition-colors">
+                                <div class="mt-2 flex items-center justify-center p-4 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg">
+                                    <img id="sig-preview" class="max-h-16 object-contain hidden" alt="Signature preview">
+                                    <span id="sig-preview-placeholder" class="text-2xs text-slate-400">No signature image uploaded.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Imports & Exports Configuration -->
+                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                            <h4 class="font-bold text-slate-900 dark:text-white">Excel Operations / Backup Data</h4>
+                            <p class="text-xs text-slate-400">Export or upload fully standardized Excel books containing client databases, invoice details and dynamic listings.</p>
+                            
+                            <div class="grid grid-cols-2 gap-3">
+                                <button type="button" onclick="exportDataToExcel()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors">
+                                    <i class="fa-solid fa-file-excel text-emerald-600"></i> Export Excel
+                                </button>
+                                <label class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer text-center">
+                                    <i class="fa-solid fa-file-import text-blue-600"></i> Import Excel
+                                    <input type="file" id="excel-importer" accept=".xlsx, .xls" class="hidden" onchange="importDataFromExcel(event)">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
 
     <!-- ================= MODAL: CLIENT ADD/EDIT ================= -->
     <div id="client-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
@@ -796,23 +725,164 @@
         </div>
     </div>
 
+    <!-- ================= MODAL: INVOICE VIEWER (PRINT/PREVIEW) ================= -->
+    <div id="invoice-view-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-4xl w-full my-8 flex flex-col max-h-[90vh]">
+            <!-- Header Operations Area -->
+            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center space-x-2">
+                    <h3 class="font-bold text-slate-900 dark:text-white text-base">Invoice Ledger Preview</h3>
+                    <span id="view-status-badge" class="px-2 py-0.5 text-2xs rounded-full font-bold"></span>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
+                    <button onclick="triggerPDFDownload()" class="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-pdf text-red-500"></i> Download PDF
+                    </button>
+                    <button onclick="closeInvoiceViewModal()" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 ml-2">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Zoho Classic Black and White Layout Panel Container -->
+            <div class="p-8 overflow-y-auto flex-1 bg-white dark:bg-slate-900" id="print-area">
+                <div class="max-w-3xl mx-auto border border-slate-200 dark:border-slate-800 p-8 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 space-y-8" id="invoice-sheet">
+                    <!-- Heading -->
+                    <div class="flex justify-between items-start">
+                        <div class="space-y-2">
+                            <!-- Logo Preview Placeholder in PDF Layout -->
+                            <div class="h-12 flex items-center">
+                                <img id="view-brand-logo" class="max-h-12 object-contain hidden" alt="Brand Logo">
+                                <span id="view-brand-title" class="text-xl font-extrabold tracking-tight text-slate-950 dark:text-white uppercase">CUTINVOICE</span>
+                            </div>
+                            <div class="text-xs text-slate-500 space-y-0.5">
+                                <p id="view-sender-name" class="font-semibold text-slate-800 dark:text-slate-200"></p>
+                                <p id="view-sender-address"></p>
+                                <p>Phone: <span id="view-sender-phone"></span></p>
+                                <p>Email: <span id="view-sender-email"></span></p>
+                                <p id="view-sender-gst-container" class="hidden">GST: <span id="view-sender-gst"></span></p>
+                            </div>
+                        </div>
+                        <div class="text-right space-y-1">
+                            <h2 class="text-2xl font-light tracking-wide text-slate-400">INVOICE</h2>
+                            <p class="text-base font-bold" id="view-invoice-id"></p>
+                            <div class="text-xs text-slate-500 pt-2 space-y-0.5">
+                                <p>Date: <span id="view-invoice-date" class="font-medium text-slate-700 dark:text-slate-300"></span></p>
+                                <p>Due Date: <span id="view-invoice-due" class="font-medium text-slate-700 dark:text-slate-300"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Client Details & Metas -->
+                    <div class="border-t border-slate-200 dark:border-slate-800 pt-6 grid grid-cols-2 gap-4">
+                        <div class="space-y-1 text-xs text-slate-500">
+                            <span class="block font-bold uppercase tracking-wider text-2xs text-slate-400">Bill To:</span>
+                            <p id="view-client-name" class="font-bold text-slate-800 dark:text-slate-200 text-sm"></p>
+                            <p id="view-client-company" class="font-medium text-slate-700 dark:text-slate-300"></p>
+                            <p id="view-client-address" class="whitespace-pre-line"></p>
+                            <p>Phone: <span id="view-client-phone"></span></p>
+                            <p>Email: <span id="view-client-email"></span></p>
+                            <p id="view-client-gst-container" class="hidden">GST: <span id="view-client-gst"></span></p>
+                        </div>
+                        <div class="flex flex-col items-end justify-between">
+                            <div class="text-right text-xs">
+                                <span class="block font-bold uppercase tracking-wider text-2xs text-slate-400">Outstanding Balance</span>
+                                <p id="view-outstanding-balance" class="text-lg font-bold text-amber-600">₹0.00</p>
+                            </div>
+                            <!-- UPI Payment Quick QR code -->
+                            <div id="upi-qrcode-container" class="flex flex-col items-center border border-slate-100 p-2 rounded bg-slate-50 dark:bg-slate-800 dark:border-slate-700">
+                                <div id="invoice-upi-qrcode" class="w-20 h-20 bg-white"></div>
+                                <span class="text-3xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Scan to pay (UPI)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services Table -->
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-300 dark:border-slate-700 font-bold uppercase text-slate-500">
+                                <th class="py-2.5">Service / Item</th>
+                                <th class="py-2.5 text-center">Qty</th>
+                                <th class="py-2.5 text-right">Rate</th>
+                                <th class="py-2.5 text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="view-services-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+
+                    <!-- Totals and Fineprint Details -->
+                    <div class="border-t border-slate-200 dark:border-slate-800 pt-6 grid grid-cols-2 gap-4">
+                        <div class="text-xs text-slate-500 space-y-1">
+                            <p class="font-bold text-slate-700 dark:text-slate-300">Notes & Terms</p>
+                            <p>All items listed are due as per agreement standard. Please clear dues timely to prevent penalty indices.</p>
+                            <div class="pt-4">
+                                <p class="font-bold text-slate-700 dark:text-slate-300">UPI ID for transfers:</p>
+                                <p class="font-mono text-xs text-slate-800 dark:text-slate-200" id="view-upi-display"></p>
+                            </div>
+                        </div>
+                        <div class="text-right text-xs space-y-1.5 max-w-xs ml-auto w-full">
+                            <div class="flex justify-between text-slate-500">
+                                <span>Subtotal:</span>
+                                <span id="view-subtotal">₹0.00</span>
+                            </div>
+                            <div class="flex justify-between text-slate-500">
+                                <span>Discount:</span>
+                                <span id="view-discount">0%</span>
+                            </div>
+                            <div class="flex justify-between text-slate-500">
+                                <span>GST:</span>
+                                <span id="view-gst">18%</span>
+                            </div>
+                            <div class="border-t border-dashed border-slate-200 dark:border-slate-800 my-1"></div>
+                            <div class="flex justify-between text-sm font-extrabold text-slate-900 dark:text-white">
+                                <span>Grand Total:</span>
+                                <span id="view-grand-total">₹0.00</span>
+                            </div>
+                            <div class="flex justify-between text-emerald-600 font-semibold">
+                                <span>Amount Cleared:</span>
+                                <span id="view-amount-cleared">₹0.00</span>
+                            </div>
+
+                            <!-- Signature Area inside preview layout -->
+                            <div id="view-signature-container" class="pt-6 hidden flex flex-col items-end">
+                                <span class="text-2xs text-slate-400 block mb-1">Authorized Signature</span>
+                                <img id="view-signature-img" class="max-h-12 object-contain" alt="Signature">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TOAST NOTIFICATIONS ================= -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- ================= CUSTOM CONFIRMATION POPUP ================= -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-sm w-full p-6 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+                <h4 id="confirm-title" class="font-bold text-slate-900 dark:text-white text-base">Are you sure?</h4>
+                <p id="confirm-msg" class="text-xs text-slate-500 mt-1">This operation is destructive and cannot be undone.</p>
+            </div>
+            <div class="flex justify-center space-x-3 pt-2">
+                <button id="confirm-cancel" class="px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 rounded-lg">Cancel</button>
+                <button id="confirm-action" class="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-lg">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= FIREBASE INITIALIZATION & APPLICATION JS CORE ================= -->
     <script type="module">
         // Firebase Setup Modules
         import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updatePassword, signOut, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Real hardcoded Firebase Credentials (Direct Cloud Integration)
-        const firebaseConfig = {
-            apiKey: "AIzaSyBmJih04cVd-uAqzGU9_-d8cwP-Hej_Ng4",
-            authDomain: "editing-invoice-generator.firebaseapp.com",
-            projectId: "editing-invoice-generator",
-            storageBucket: "editing-invoice-generator.firebasestorage.app",
-            messagingSenderId: "245548169678",
-            appId: "1:245548169678:web:11c247e9475986aa49539f",
-            measurementId: "G-L88VX3XKLD"
-        };
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, onSnapshot, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Global State & Configurations
         let app, auth, db;
@@ -821,21 +891,43 @@
             clients: [],
             invoices: [],
             settings: {
-                name: "Sachindhisle",
-                email: "sachindhislepatil04@gmail.com",
-                phone: "+91 9359876866",
-                address: "Ch.Shivaji Maharaj Chowk, Shirur rode, Raimoh, Maharashtra 414205",
+                name: "Your Studio Name",
+                email: "studio@billing.com",
+                phone: "+91 98765 43210",
+                address: "Flat 101, Creative Enclave, Sector 5\nMumbai, Maharashtra - 400001",
                 gst: "",
-                website: "https://techmode04.github.io/portfolio/",
-                upi: "dhislesachin04@axl",
+                website: "www.yourstudio.com",
+                upi: "studio@pay",
                 logo: "",
                 signature: ""
             }
         };
 
+        // App variables loaded from env or standard fallbacks
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'cut-invoice-freelance';
+        
+        // Dynamic loading for custom Firebase credentials
+        function getFirebaseConfig() {
+            const customConfigStr = localStorage.getItem('custom_firebase_config');
+            if (customConfigStr) {
+                try {
+                    return JSON.parse(customConfigStr);
+                } catch (e) {
+                    console.error("Failed to parse custom Firebase configuration", e);
+                }
+            }
+            // Standard Mock / Dev Credentials Fallback
+            return typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+                apiKey: "",
+                authDomain: "mock-project.firebaseapp.com",
+                projectId: "mock-project",
+                storageBucket: "mock-project.appspot.com",
+                messagingSenderId: "123456",
+                appId: "1:123:web:abc"
+            };
+        }
 
-        // Standard Video Services Templates
+        // Standard Video Services Templates Autocomplete helper list
         const serviceTemplates = [
             "Reel Editing", "Long Form Video Editing", "Thumbnail Design", 
             "Motion Graphics", "Color Grading", "Podcast Editing", "YouTube Shorts"
@@ -861,7 +953,6 @@
         // Toast notifications logic
         window.showToast = function(message, type = "success") {
             const container = document.getElementById('toast-container');
-            if (!container) return;
             const toast = document.createElement('div');
             toast.className = `flex items-center space-x-2 px-4 py-3 rounded-xl shadow-lg text-xs font-semibold text-white pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 ${
                 type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-700'
@@ -884,79 +975,119 @@
         // Custom popup confirmation helper
         window.confirmAction = function(title, msg, onConfirm) {
             const modal = document.getElementById('confirm-modal');
-            if (!modal) return;
-            const titleEl = document.getElementById('confirm-title');
-            const msgEl = document.getElementById('confirm-msg');
-            if (titleEl) titleEl.textContent = title;
-            if (msgEl) msgEl.textContent = msg;
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-msg').textContent = msg;
             modal.classList.remove('hidden');
             onConfirmCallback = onConfirm;
         };
 
-        const confirmCancelBtn = document.getElementById('confirm-cancel');
-        if (confirmCancelBtn) {
-            confirmCancelBtn.addEventListener('click', () => {
-                const modal = document.getElementById('confirm-modal');
-                if (modal) modal.classList.add('hidden');
-                onConfirmCallback = null;
-            });
-        }
+        document.getElementById('confirm-cancel').addEventListener('click', () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            onConfirmCallback = null;
+        });
 
-        const confirmActionBtn = document.getElementById('confirm-action');
-        if (confirmActionBtn) {
-            confirmActionBtn.addEventListener('click', () => {
-                if (onConfirmCallback) onConfirmCallback();
-                const modal = document.getElementById('confirm-modal');
-                if (modal) modal.classList.add('hidden');
-                onConfirmCallback = null;
-            });
-        }
+        document.getElementById('confirm-action').addEventListener('click', () => {
+            if (onConfirmCallback) onConfirmCallback();
+            document.getElementById('confirm-modal').classList.add('hidden');
+            onConfirmCallback = null;
+        });
 
         // Initialize Firebase with Custom Auth Flow (Mandatory rules)
         async function initFirebase() {
+            const config = getFirebaseConfig();
+            
+            // Check if config has basic required values
+            if (!config || !config.apiKey || !config.projectId) {
+                activateOfflineFallbackMode();
+                return;
+            }
+
             try {
+                // Prevent duplicate initialization issues
                 if (getApps().length === 0) {
-                    app = initializeApp(firebaseConfig);
+                    app = initializeApp(config);
                 } else {
                     app = getApps()[0];
                 }
                 auth = getAuth(app);
                 db = getFirestore(app);
 
-                // Check auth status change
-                onAuthStateChanged(auth, (authUser) => {
-                    const authLayout = document.getElementById('auth-layout');
-                    const appLayout = document.getElementById('app-layout');
-                    const syncBadge = document.getElementById('sync-badge-element');
+                // Sign In Phase (Strict authentication check before any queries)
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
 
-                    if (authUser) {
-                        user = authUser;
-                        if (authLayout) authLayout.classList.add('hidden');
-                        if (appLayout) appLayout.classList.remove('hidden');
-                        
-                        if (syncBadge) {
-                            syncBadge.innerHTML = `
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                Cloud Connected`;
-                        }
-
-                        updateBrandUI();
-                        syncFirestoreData();
-                        showToast("Access Granted: Welcome back!");
-                    } else {
-                        user = null;
-                        if (appLayout) appLayout.classList.add('hidden');
-                        if (authLayout) authLayout.classList.remove('hidden');
-                    }
-                });
-
+                document.getElementById('sync-badge-element').innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Cloud Database Connected`;
+                
             } catch (error) {
                 console.error("Firebase Connection Error:", error);
-                showToast("Firebase Config error: Check rules & keys.", "error");
+                
+                // Show detailed helper to developer
+                let errMsg = error.message || "";
+                let helpText = "Firebase Connection Error. Reverting to Offline Sandbox Mode.";
+                if (errMsg.includes("auth/operation-not-allowed")) {
+                    helpText = "Firebase Setup Issue: Please enable 'Anonymous Sign-In' inside Firebase Auth Console!";
+                } else if (errMsg.includes("API key")) {
+                    helpText = "Firebase API Key is invalid or empty. Check settings.";
+                } else if (errMsg.includes("permission-denied")) {
+                    helpText = "Firestore Database permissions denied. Set Rules to public/test mode.";
+                }
+                showToast(helpText, "error");
+                activateOfflineFallbackMode();
             }
         }
 
-        // Realtime Firestore Data Sync listeners (Strict path compliance - RULE 1)
+        function activateOfflineFallbackMode() {
+            document.getElementById('sync-status').innerHTML = `
+                <span class="flex items-center gap-1.5 text-amber-500 font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    Offline Sandbox Mode
+                </span>
+                <i class="fa-solid fa-cloud-arrow-down text-amber-500"></i>`;
+            loadLocalStorageBackup();
+            renderAllData();
+        }
+
+        // Firebase Auth observer to fetch lists
+        window.addEventListener('DOMContentLoaded', async () => {
+            loadCustomConfigFieldsUI();
+            setupTheme(); // Initialize theme handlers exactly ONCE here
+            await initFirebase();
+            if (auth) {
+                onAuthStateChanged(auth, (authUser) => {
+                    if (authUser) {
+                        user = authUser;
+                        updateBrandUI();
+                        syncFirestoreData();
+                    } else {
+                        user = null;
+                    }
+                });
+            }
+        });
+
+        // Offline storage loaders
+        function loadLocalStorageBackup() {
+            const clientsLocal = localStorage.getItem('cutinvoice_clients');
+            const invoicesLocal = localStorage.getItem('cutinvoice_invoices');
+            const settingsLocal = localStorage.getItem('cutinvoice_settings');
+
+            if (clientsLocal) state.clients = JSON.parse(clientsLocal);
+            if (invoicesLocal) state.invoices = JSON.parse(invoicesLocal);
+            if (settingsLocal) state.settings = JSON.parse(settingsLocal);
+        }
+
+        function saveLocalStorageBackup() {
+            localStorage.setItem('cutinvoice_clients', JSON.stringify(state.clients));
+            localStorage.setItem('cutinvoice_invoices', JSON.stringify(state.invoices));
+            localStorage.setItem('cutinvoice_settings', JSON.stringify(state.settings));
+        }
+
+        // Realtime Firestore Data Sync listeners (Strict path compliance)
         function syncFirestoreData() {
             if (!user) return;
 
@@ -973,7 +1104,7 @@
                 renderAllData();
             }, (error) => {
                 console.error("Clients sync error:", error);
-                showToast("Clients sync failure. Check Firestore configuration.", "error");
+                showToast("Failed to sync clients from server. Ensure Firestore database is created.", "error");
             });
 
             // Listening to invoices database
@@ -985,6 +1116,7 @@
                 renderAllData();
             }, (error) => {
                 console.error("Invoices sync error:", error);
+                showToast("Failed to sync invoices from server", "error");
             });
 
             // Fetch setting configuration
@@ -993,6 +1125,7 @@
                     state.settings = snapshot.data();
                     loadSettingsFields();
                 } else {
+                    // Populate default settings in Firestore
                     setDoc(pathSettings, state.settings);
                 }
                 renderAllData();
@@ -1000,125 +1133,6 @@
                 console.error("Settings sync error:", err);
             });
         }
-
-        // ================= SECURE AUTH HANDLING =================
-
-        window.toggleAuthForm = function(view) {
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('signup-form').classList.add('hidden');
-            document.getElementById('reset-password-form').classList.add('hidden');
-            
-            document.getElementById('toggle-signup-container').classList.add('hidden');
-            document.getElementById('toggle-login-container').classList.remove('hidden');
-
-            if (view === 'login') {
-                document.getElementById('login-form').classList.remove('hidden');
-                document.getElementById('auth-title').textContent = "Sign In to CutInvoice";
-                document.getElementById('toggle-signup-container').classList.remove('hidden');
-                document.getElementById('toggle-login-container').classList.add('hidden');
-            } else if (view === 'signup') {
-                document.getElementById('signup-form').classList.remove('hidden');
-                document.getElementById('auth-title').textContent = "Create New Studio";
-            } else if (view === 'reset') {
-                document.getElementById('reset-password-form').classList.remove('hidden');
-                document.getElementById('auth-title').textContent = "Reset Password";
-            }
-        };
-
-        window.handleEmailLogin = async function(event) {
-            event.preventDefault();
-            const email = document.getElementById('login-email').value.trim();
-            const pass = document.getElementById('login-password').value;
-
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-            } catch (err) {
-                console.error(err);
-                showToast("Invalid credentials or user doesn't exist.", "error");
-            }
-        };
-
-        window.handleEmailSignup = async function(event) {
-            event.preventDefault();
-            const name = document.getElementById('signup-studio-name').value.trim();
-            const email = document.getElementById('signup-email').value.trim();
-            const pass = document.getElementById('signup-password').value;
-
-            if (pass.length < 6) {
-                showToast("Password should be at least 6 characters.", "error");
-                return;
-            }
-
-            try {
-                const creds = await createUserWithEmailAndPassword(auth, email, pass);
-                if (creds.user) {
-                    const pathSettings = doc(db, 'artifacts', appId, 'users', creds.user.uid, 'settings', 'profile');
-                    const initialConfig = {
-                        name: name,
-                        email: email,
-                        phone: "+91 9359876866",
-                        address: "Ch.Shivaji Maharaj Chowk, Shirur rode, Raimoh, Maharashtra 414205",
-                        gst: "",
-                        website: "https://techmode04.github.io/portfolio/",
-                        upi: "dhislesachin04@axl",
-                        logo: "",
-                        signature: ""
-                    };
-                    await setDoc(pathSettings, initialConfig);
-                    state.settings = initialConfig;
-                }
-            } catch (err) {
-                console.error(err);
-                showToast("Signup failed: " + err.message, "error");
-            }
-        };
-
-        window.handlePasswordReset = async function(event) {
-            event.preventDefault();
-            const email = document.getElementById('reset-email').value.trim();
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showToast("Password reset link dispatched!");
-                toggleAuthForm('login');
-            } catch (err) {
-                showToast("Failed to dispatch reset email: " + err.message, "error");
-            }
-        };
-
-        window.handleUserSignOut = async function() {
-            confirmAction(
-                "Sign Out Dashboard",
-                "Are you sure you want to end your active workspace session?",
-                async () => {
-                    try {
-                        await signOut(auth);
-                        showToast("Workspace Closed.");
-                    } catch (e) {
-                        showToast("Signout failure", "error");
-                    }
-                }
-            );
-        };
-
-        window.handleUserPasswordChange = async function(event) {
-            event.preventDefault();
-            const newPass = document.getElementById('change-new-pass').value;
-            const confirmPass = document.getElementById('change-confirm-pass').value;
-
-            if (newPass !== confirmPass) {
-                showToast("Passwords do not match!", "error");
-                return;
-            }
-
-            try {
-                await updatePassword(auth.currentUser, newPass);
-                showToast("Password updated successfully!");
-                document.getElementById('change-password-form').reset();
-            } catch (err) {
-                console.error(err);
-                showToast("Action rejected: Log out & log back in to re-authenticate, then retry.", "error");
-            }
-        };
 
         // Navigation View switching
         window.switchView = function(viewId) {
@@ -1128,6 +1142,7 @@
                 target.classList.remove('hidden');
                 activeView = viewId;
                 
+                // Update Title
                 const titles = {
                     dashboard: "Dashboard Overview",
                     invoices: "Invoice Registry & Services",
@@ -1136,9 +1151,9 @@
                     reports: "Financial Analytics & Growth Reports",
                     settings: "Business Profile & Settings"
                 };
-                const viewTitle = document.getElementById('view-title');
-                if (viewTitle) viewTitle.textContent = titles[viewId] || "Dashboard Overview";
+                document.getElementById('view-title').textContent = titles[viewId] || "Dashboard Overview";
 
+                // Update active state on buttons
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     btn.className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all";
                 });
@@ -1147,22 +1162,23 @@
                     activeBtn.className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-brand-600 bg-brand-50 dark:bg-brand-900/20 dark:text-brand-400";
                 }
                 
+                // Resize or recreate charts if view reports/dashboard is triggered
                 if (viewId === 'dashboard' || viewId === 'reports') {
                     setTimeout(() => renderCharts(), 100);
                 }
 
+                // Hide sidebar on mobile when nav changes
                 if (window.innerWidth < 768) {
                     toggleSidebar();
                 }
             }
         };
 
-        // Theme switching engine
+        // Theme switching engine (Attached exactly once on setup)
         function setupTheme() {
             const toggleBtn = document.getElementById('theme-toggle');
-            if (!toggleBtn) return;
             
-            // Apply preserved local setting
+            // Check storage preference or system config
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
                 document.documentElement.classList.remove('light');
@@ -1189,7 +1205,6 @@
         window.toggleSidebar = function() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            if (!sidebar || !overlay) return;
             if (sidebar.classList.contains('-translate-x-full')) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
@@ -1206,7 +1221,6 @@
             const modal = document.getElementById('client-modal');
             const form = document.getElementById('client-form');
             const title = document.getElementById('client-modal-title');
-            if (!modal || !form || !title) return;
             
             form.reset();
             document.getElementById('client-edit-id').value = "";
@@ -1230,8 +1244,7 @@
         };
 
         window.closeClientModal = function() {
-            const modal = document.getElementById('client-modal');
-            if (modal) modal.classList.add('hidden');
+            document.getElementById('client-modal').classList.add('hidden');
         };
 
         window.submitClientForm = async function(event) {
@@ -1262,6 +1275,7 @@
                     showToast("Error writing to database. Check connection.", "error");
                 }
             } else {
+                // Offline fallback logic
                 if (editId) {
                     const index = state.clients.findIndex(c => c.id === editId);
                     if (index !== -1) {
@@ -1302,14 +1316,12 @@
         };
 
         window.filterClients = function() {
-            const searchField = document.getElementById('client-search');
-            if (searchField) clientSearchQuery = searchField.value.toLowerCase();
+            clientSearchQuery = document.getElementById('client-search').value.toLowerCase();
             renderClientsList();
         };
 
         function renderClientsList() {
             const grid = document.getElementById('clients-grid');
-            if (!grid) return;
             grid.innerHTML = "";
 
             const filtered = state.clients.filter(c => {
@@ -1364,9 +1376,9 @@
 
         // ================= INVOICE SYSTEM LOGIC =================
 
+        // Handle dynamically drawing service fields in modal creation tool
         window.addInvoiceItem = function(item = { serviceName: "", qty: 1, rate: 0 }) {
             const container = document.getElementById('invoice-items-container');
-            if (!container) return;
             const rowId = "item_row_" + Date.now() + Math.random().toString(36).substr(2, 5);
 
             const row = document.createElement('div');
@@ -1400,12 +1412,11 @@
             
             container.appendChild(row);
 
+            // Hook focus behaviors on autocomplete helper list dropdowns
             const nameInput = row.querySelector('.item-name');
             const dropdown = row.querySelector('.custom-selector-dropdown');
-            if (nameInput && dropdown) {
-                nameInput.addEventListener('focus', () => dropdown.classList.remove('hidden'));
-                nameInput.addEventListener('blur', () => setTimeout(() => dropdown.classList.add('hidden'), 200));
-            }
+            nameInput.addEventListener('focus', () => dropdown.classList.remove('hidden'));
+            nameInput.addEventListener('blur', () => setTimeout(() => dropdown.classList.add('hidden'), 200));
 
             calculateInvoiceTotals();
         };
@@ -1413,8 +1424,7 @@
         window.selectServiceTemplate = function(rowId, val) {
             const row = document.getElementById(rowId);
             if (row) {
-                const nameInput = row.querySelector('.item-name');
-                if (nameInput) nameInput.value = val;
+                row.querySelector('.item-name').value = val;
                 calculateInvoiceTotals();
             }
         };
@@ -1427,57 +1437,47 @@
             }
         };
 
+        // Complete calculation core
         window.calculateInvoiceTotals = function() {
             let subtotal = 0;
-            const itemsContainer = document.getElementById('invoice-items-container');
-            if (!itemsContainer) return;
-            const rows = itemsContainer.children;
+            const rows = document.getElementById('invoice-items-container').children;
 
             for (let row of rows) {
-                const qtyEl = row.querySelector('.item-qty');
-                const rateEl = row.querySelector('.item-rate');
-                const qty = qtyEl ? (parseFloat(qtyEl.value) || 0) : 0;
-                const rate = rateEl ? (parseFloat(rateEl.value) || 0) : 0;
+                const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+                const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
                 const amount = qty * rate;
-                const amtEl = row.querySelector('.item-amount');
-                if (amtEl) amtEl.textContent = `₹${amount.toFixed(2)}`;
+                row.querySelector('.item-amount').textContent = `₹${amount.toFixed(2)}`;
                 subtotal += amount;
             }
 
-            const calcSubtotal = document.getElementById('calc-subtotal');
-            if (calcSubtotal) calcSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('calc-subtotal').textContent = `₹${subtotal.toFixed(2)}`;
             
-            const discountInput = document.getElementById('invoice-discount');
-            const gstInput = document.getElementById('invoice-gst');
-            const discountPct = discountInput ? (parseFloat(discountInput.value) || 0) : 0;
-            const gstPct = gstInput ? (parseFloat(gstInput.value) || 0) : 0;
+            const discountPct = parseFloat(document.getElementById('invoice-discount').value) || 0;
+            const gstPct = parseFloat(document.getElementById('invoice-gst').value) || 0;
 
             const discountedAmount = subtotal * (1 - (discountPct / 100));
             const taxAmount = discountedAmount * (gstPct / 100);
             const grandTotal = discountedAmount + taxAmount;
 
-            const calcGrandtotal = document.getElementById('calc-grandtotal');
-            if (calcGrandtotal) calcGrandtotal.textContent = `₹${grandTotal.toFixed(2)}`;
+            document.getElementById('calc-grandtotal').textContent = `₹${grandTotal.toFixed(2)}`;
 
-            const receivedInput = document.getElementById('invoice-received');
-            const receivedAmount = receivedInput ? (parseFloat(receivedInput.value) || 0) : 0;
+            const receivedAmount = parseFloat(document.getElementById('invoice-received').value) || 0;
             const balanceAmount = grandTotal - receivedAmount;
             
-            const calcBalance = document.getElementById('calc-balance');
-            if (calcBalance) calcBalance.textContent = `₹${Math.max(0, balanceAmount).toFixed(2)}`;
+            document.getElementById('calc-balance').textContent = `₹${Math.max(0, balanceAmount).toFixed(2)}`;
 
+            // Auto status logic helper: if matched perfectly with paid amount, swap
             const statusDropdown = document.getElementById('invoice-status');
-            if (statusDropdown) {
-                if (receivedAmount >= grandTotal && grandTotal > 0) {
-                    statusDropdown.value = "Paid";
-                } else if (receivedAmount > 0 && receivedAmount < grandTotal) {
-                    statusDropdown.value = "Partial";
-                } else {
-                    statusDropdown.value = "Pending";
-                }
+            if (receivedAmount >= grandTotal && grandTotal > 0) {
+                statusDropdown.value = "Paid";
+            } else if (receivedAmount > 0 && receivedAmount < grandTotal) {
+                statusDropdown.value = "Partial";
+            } else {
+                statusDropdown.value = "Pending";
             }
         };
 
+        // Generation IDs
         function generateInvoiceNumber() {
             const runningCount = state.invoices.length + 1;
             return `INV-${String(runningCount).padStart(4, '0')}`;
@@ -1492,39 +1492,34 @@
 
             const modal = document.getElementById('invoice-modal');
             const form = document.getElementById('invoice-form');
-            if (!modal || !form) return;
             form.reset();
 
-            const invoiceIdField = document.getElementById('invoice-id-field');
-            if (invoiceIdField) invoiceIdField.value = generateInvoiceNumber();
-            const itemsContainer = document.getElementById('invoice-items-container');
-            if (itemsContainer) itemsContainer.innerHTML = "";
+            document.getElementById('invoice-edit-id').value = "";
+            document.getElementById('invoice-id-field').value = generateInvoiceNumber();
+            document.getElementById('invoice-items-container').innerHTML = "";
             
+            // Set current dates fallbacks
             const today = new Date().toISOString().split('T')[0];
-            const dateField = document.getElementById('invoice-date');
-            if (dateField) dateField.value = today;
+            document.getElementById('invoice-date').value = today;
             
             const dueOffset = new Date();
             dueOffset.setDate(dueOffset.getDate() + 15);
-            const dueField = document.getElementById('invoice-due');
-            if (dueField) dueField.value = dueOffset.toISOString().split('T')[0];
+            document.getElementById('invoice-due').value = dueOffset.toISOString().split('T')[0];
 
+            // Re-populate client dropdown checklist
             const clientSelector = document.getElementById('invoice-client');
-            if (clientSelector) {
-                clientSelector.innerHTML = state.clients.map(c => `<option value="${c.id}">${c.name} (${c.company || 'No Company'})</option>`).join('');
-            }
+            clientSelector.innerHTML = state.clients.map(c => `<option value="${c.id}">${c.name} (${c.company || 'No Company'})</option>`).join('');
 
+            // Add single blank line service row
             addInvoiceItem();
 
-            const modalTitle = document.getElementById('invoice-modal-title');
-            if (modalTitle) modalTitle.textContent = "Generate Professional Invoice";
+            document.getElementById('invoice-modal-title').textContent = "Generate Professional Invoice";
             modal.classList.remove('hidden');
             calculateInvoiceTotals();
         };
 
         window.closeInvoiceModal = function() {
-            const modal = document.getElementById('invoice-modal');
-            if (modal) modal.classList.add('hidden');
+            document.getElementById('invoice-modal').classList.add('hidden');
         };
 
         window.submitInvoiceForm = async function(event) {
@@ -1532,62 +1527,44 @@
             const editId = document.getElementById('invoice-edit-id').value;
             const invoiceNo = document.getElementById('invoice-id-field').value;
 
+            // Extract values of services rows lists
             const items = [];
-            const itemsContainer = document.getElementById('invoice-items-container');
-            if (!itemsContainer) return;
-            const rows = itemsContainer.children;
+            const rows = document.getElementById('invoice-items-container').children;
             for (let row of rows) {
-                const nameInp = row.querySelector('.item-name');
-                const qtyInp = row.querySelector('.item-qty');
-                const rateInp = row.querySelector('.item-rate');
                 items.push({
-                    serviceName: nameInp ? nameInp.value : "",
-                    qty: qtyInp ? (parseFloat(qtyInp.value) || 1) : 1,
-                    rate: rateInp ? (parseFloat(rateInp.value) || 0) : 0
+                    serviceName: row.querySelector('.item-name').value,
+                    qty: parseFloat(row.querySelector('.item-qty').value) || 1,
+                    rate: parseFloat(row.querySelector('.item-rate').value) || 0
                 });
             }
 
-            const discountInp = document.getElementById('invoice-discount');
-            const gstInp = document.getElementById('invoice-gst');
-            const discountPct = discountInp ? (parseFloat(discountInp.value) || 0) : 0;
-            const gstPct = gstInp ? (parseFloat(gstInp.value) || 0) : 0;
+            const discountPct = parseFloat(document.getElementById('invoice-discount').value) || 0;
+            const gstPct = parseFloat(document.getElementById('invoice-gst').value) || 0;
             const subtotal = items.reduce((sum, i) => sum + (i.qty * i.rate), 0);
             const discountedAmount = subtotal * (1 - (discountPct / 100));
             const taxAmount = discountedAmount * (gstPct / 100);
             const grandTotal = discountedAmount + taxAmount;
-            const receivedInp = document.getElementById('invoice-received');
-            const received = receivedInp ? (parseFloat(receivedInp.value) || 0) : 0;
+            const received = parseFloat(document.getElementById('invoice-received').value) || 0;
             const remaining = Math.max(0, grandTotal - received);
 
-            const statusEl = document.getElementById('invoice-status');
-            const paymentStatus = statusEl ? statusEl.value : "Pending";
+            const paymentStatus = document.getElementById('invoice-status').value;
 
-            const dateInp = document.getElementById('invoice-date');
-            const invoiceDateStr = dateInp ? dateInp.value : new Date().toISOString().split('T')[0];
-            const dueInp = document.getElementById('invoice-due');
-            const dueDateStr = dueInp ? dueInp.value : new Date().toISOString().split('T')[0];
-
-            const payMethodEl = document.getElementById('invoice-pay-method');
-            const payMethodStr = payMethodEl ? payMethodEl.value : "UPI";
-
-            const clientEl = document.getElementById('invoice-client');
-            const clientSelectedId = clientEl ? clientEl.value : "";
-
+            // Create ledger transactions history list logs
             const payments = [];
             if (received > 0) {
                 payments.push({
                     paymentId: "TXN_" + Date.now(),
-                    paymentDate: invoiceDateStr,
-                    paymentMethod: payMethodStr,
+                    paymentDate: document.getElementById('invoice-date').value,
+                    paymentMethod: document.getElementById('invoice-pay-method').value,
                     amount: received
                 });
             }
 
             const invoiceData = {
                 invoiceNumber: invoiceNo,
-                clientId: clientSelectedId,
-                invoiceDate: invoiceDateStr,
-                dueDate: dueDateStr,
+                clientId: document.getElementById('invoice-client').value,
+                invoiceDate: document.getElementById('invoice-date').value,
+                dueDate: document.getElementById('invoice-due').value,
                 items: items,
                 discount: discountPct,
                 gst: gstPct,
@@ -1614,6 +1591,7 @@
                     showToast("Failed to write to database server", "error");
                 }
             } else {
+                // Offline Local Engine setup
                 if (editId) {
                     const idx = state.invoices.findIndex(inv => inv.id === editId);
                     if (idx !== -1) {
@@ -1637,49 +1615,32 @@
 
             const modal = document.getElementById('invoice-modal');
             const form = document.getElementById('invoice-form');
-            if (!modal || !form) return;
             form.reset();
 
-            const editIdEl = document.getElementById('invoice-edit-id');
-            const idFieldEl = document.getElementById('invoice-id-field');
-            const dateEl = document.getElementById('invoice-date');
-            const dueEl = document.getElementById('invoice-due');
-            const discEl = document.getElementById('invoice-discount');
-            const gstEl = document.getElementById('invoice-gst');
-            const receivedEl = document.getElementById('invoice-received');
-            const statusEl = document.getElementById('invoice-status');
-
-            if (editIdEl) editIdEl.value = inv.id;
-            if (idFieldEl) idFieldEl.value = inv.invoiceNumber;
-            if (dateEl) dateEl.value = inv.invoiceDate;
-            if (dueEl) dueEl.value = inv.dueDate;
+            document.getElementById('invoice-edit-id').value = inv.id;
+            document.getElementById('invoice-id-field').value = inv.invoiceNumber;
+            document.getElementById('invoice-date').value = inv.invoiceDate;
+            document.getElementById('invoice-due').value = inv.dueDate;
 
             const clientSelector = document.getElementById('invoice-client');
-            if (clientSelector) {
-                clientSelector.innerHTML = state.clients.map(c => `<option value="${c.id}">${c.name} (${c.company || 'No Company'})</option>`).join('');
-                clientSelector.value = inv.clientId;
+            clientSelector.innerHTML = state.clients.map(c => `<option value="${c.id}">${c.name} (${c.company || 'No Company'})</option>`).join('');
+            clientSelector.value = inv.clientId;
+
+            document.getElementById('invoice-items-container').innerHTML = "";
+            inv.items.forEach(item => {
+                addInvoiceItem(item);
+            });
+
+            document.getElementById('invoice-discount').value = inv.discount;
+            document.getElementById('invoice-gst').value = inv.gst;
+            document.getElementById('invoice-received').value = inv.amountReceived;
+            document.getElementById('invoice-status').value = inv.status;
+
+            if (inv.paymentHistory && inv.paymentHistory.length > 0) {
+                document.getElementById('invoice-pay-method').value = inv.paymentHistory[0].paymentMethod;
             }
 
-            const itemsContainer = document.getElementById('invoice-items-container');
-            if (itemsContainer) {
-                itemsContainer.innerHTML = "";
-                inv.items.forEach(item => {
-                    addInvoiceItem(item);
-                });
-            }
-
-            if (discEl) discEl.value = inv.discount;
-            if (gstEl) gstEl.value = inv.gst;
-            if (receivedEl) receivedEl.value = inv.amountReceived;
-            if (statusEl) statusEl.value = inv.status;
-
-            const payMethodEl = document.getElementById('invoice-pay-method');
-            if (payMethodEl && inv.paymentHistory && inv.paymentHistory.length > 0) {
-                payMethodEl.value = inv.paymentHistory[0].paymentMethod;
-            }
-
-            const modalTitle = document.getElementById('invoice-modal-title');
-            if (modalTitle) modalTitle.textContent = "Modify Invoice Details";
+            document.getElementById('invoice-modal-title').textContent = "Modify Invoice Details";
             modal.classList.remove('hidden');
             calculateInvoiceTotals();
         };
@@ -1692,6 +1653,7 @@
             delete dup.id;
             dup.invoiceNumber = generateInvoiceNumber();
             
+            // Set current dates
             const today = new Date().toISOString().split('T')[0];
             dup.invoiceDate = today;
             const dueOffset = new Date();
@@ -1791,155 +1753,121 @@
             activeViewingInvoice = inv;
             const client = state.clients.find(c => c.id === inv.clientId) || { name: "Unknown Client", company: "" };
 
+            // Status Badge setup
             const badge = document.getElementById('view-status-badge');
-            if (badge) {
-                badge.textContent = inv.status;
-                badge.className = `px-2 py-0.5 text-2xs rounded-full font-bold ${
-                    inv.status === 'Paid' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400' :
-                    inv.status === 'Partial' ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400' :
-                    'bg-rose-100 text-rose-800 dark:bg-rose-950/40 dark:text-rose-400'
-                }`;
-            }
+            badge.textContent = inv.status;
+            badge.className = `px-2 py-0.5 text-2xs rounded-full font-bold ${
+                inv.status === 'Paid' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400' :
+                inv.status === 'Partial' ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400' :
+                'bg-rose-100 text-rose-800 dark:bg-rose-950/40 dark:text-rose-400'
+            }`;
 
-            const viewBrandLogo = document.getElementById('view-brand-logo');
-            const viewBrandTitle = document.getElementById('view-brand-title');
+            // Load business header details
             if (state.settings.logo) {
-                if (viewBrandLogo) {
-                    viewBrandLogo.src = state.settings.logo;
-                    viewBrandLogo.classList.remove('hidden');
-                }
-                if (viewBrandTitle) viewBrandTitle.classList.add('hidden');
+                document.getElementById('view-brand-logo').src = state.settings.logo;
+                document.getElementById('view-brand-logo').classList.remove('hidden');
+                document.getElementById('view-brand-title').classList.add('hidden');
             } else {
-                if (viewBrandLogo) viewBrandLogo.classList.add('hidden');
-                if (viewBrandTitle) {
-                    viewBrandTitle.classList.remove('hidden');
-                    viewBrandTitle.textContent = state.settings.name;
-                }
+                document.getElementById('view-brand-logo').classList.add('hidden');
+                document.getElementById('view-brand-title').classList.remove('hidden');
+                document.getElementById('view-brand-title').textContent = state.settings.name;
             }
 
-            const vSenderName = document.getElementById('view-sender-name');
-            const vSenderAddress = document.getElementById('view-sender-address');
-            const vSenderPhone = document.getElementById('view-sender-phone');
-            const vSenderEmail = document.getElementById('view-sender-email');
-
-            if (vSenderName) vSenderName.textContent = state.settings.name;
-            if (vSenderAddress) vSenderAddress.textContent = state.settings.address;
-            if (vSenderPhone) vSenderPhone.textContent = state.settings.phone;
-            if (vSenderEmail) vSenderEmail.textContent = state.settings.email;
+            document.getElementById('view-sender-name').textContent = state.settings.name;
+            document.getElementById('view-sender-address').textContent = state.settings.address;
+            document.getElementById('view-sender-phone').textContent = state.settings.phone;
+            document.getElementById('view-sender-email').textContent = state.settings.email;
             
-            const vSenderGstContainer = document.getElementById('view-sender-gst-container');
-            const vSenderGst = document.getElementById('view-sender-gst');
             if (state.settings.gst) {
-                if (vSenderGst) vSenderGst.textContent = state.settings.gst;
-                if (vSenderGstContainer) vSenderGstContainer.classList.remove('hidden');
+                document.getElementById('view-sender-gst').textContent = state.settings.gst;
+                document.getElementById('view-sender-gst-container').classList.remove('hidden');
             } else {
-                if (vSenderGstContainer) vSenderGstContainer.classList.add('hidden');
+                document.getElementById('view-sender-gst-container').classList.add('hidden');
             }
 
-            const vInvoiceId = document.getElementById('view-invoice-id');
-            const vInvoiceDate = document.getElementById('view-invoice-date');
-            const vInvoiceDue = document.getElementById('view-invoice-due');
+            document.getElementById('view-invoice-id').textContent = inv.invoiceNumber;
+            document.getElementById('view-invoice-date').textContent = inv.invoiceDate;
+            document.getElementById('view-invoice-due').textContent = inv.dueDate;
 
-            if (vInvoiceId) vInvoiceId.textContent = inv.invoiceNumber;
-            if (vInvoiceDate) vInvoiceDate.textContent = inv.invoiceDate;
-            if (vInvoiceDue) vInvoiceDue.textContent = inv.dueDate;
+            // Load client bill metrics
+            document.getElementById('view-client-name').textContent = client.name;
+            document.getElementById('view-client-company').textContent = client.company || "Individual Freelancer";
+            document.getElementById('view-client-address').textContent = client.address || "";
+            document.getElementById('view-client-phone').textContent = client.phone || "No phone added";
+            document.getElementById('view-client-email').textContent = client.email || "No email available";
 
-            const vClientName = document.getElementById('view-client-name');
-            const vClientCompany = document.getElementById('view-client-company');
-            const vClientAddress = document.getElementById('view-client-address');
-            const vClientPhone = document.getElementById('view-client-phone');
-            const vClientEmail = document.getElementById('view-client-email');
-
-            if (vClientName) vClientName.textContent = client.name;
-            if (vClientCompany) vClientCompany.textContent = client.company || "Individual Freelancer";
-            if (vClientAddress) vClientAddress.textContent = client.address || "";
-            if (vClientPhone) vClientPhone.textContent = client.phone || "No phone added";
-            if (vClientEmail) vClientEmail.textContent = client.email || "No email available";
-
-            const vClientGst = document.getElementById('view-client-gst');
-            const vClientGstContainer = document.getElementById('view-client-gst-container');
             if (client.gst) {
-                if (vClientGst) vClientGst.textContent = client.gst;
-                if (vClientGstContainer) vClientGstContainer.classList.remove('hidden');
+                document.getElementById('view-client-gst').textContent = client.gst;
+                document.getElementById('view-client-gst-container').classList.remove('hidden');
             } else {
-                if (vClientGstContainer) vClientGstContainer.classList.add('hidden');
+                document.getElementById('view-client-gst-container').classList.add('hidden');
             }
 
-            const vOutstandingBal = document.getElementById('view-outstanding-balance');
-            if (vOutstandingBal) vOutstandingBal.textContent = `₹${(inv.remainingAmount || 0).toFixed(2)}`;
+            document.getElementById('view-outstanding-balance').textContent = `₹${(inv.remainingAmount || 0).toFixed(2)}`;
 
+            // Dynamic services lines insertion
             const tbody = document.getElementById('view-services-tbody');
-            if (tbody) {
-                tbody.innerHTML = "";
-                inv.items.forEach(item => {
-                    const tr = document.createElement('tr');
-                    tr.className = "border-b border-slate-100 dark:border-slate-800 text-xs";
-                    tr.innerHTML = `
-                        <td class="py-3 font-semibold text-slate-800 dark:text-slate-200">${item.serviceName}</td>
-                        <td class="py-3 text-center">${item.qty}</td>
-                        <td class="py-3 text-right">₹${item.rate.toFixed(2)}</td>
-                        <td class="py-3 text-right font-semibold">₹${(item.qty * item.rate).toFixed(2)}</td>`;
-                    tbody.appendChild(tr);
-                });
-            }
+            tbody.innerHTML = "";
+            inv.items.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100 dark:border-slate-800 text-xs";
+                tr.innerHTML = `
+                    <td class="py-3 font-semibold text-slate-800 dark:text-slate-200">${item.serviceName}</td>
+                    <td class="py-3 text-center">${item.qty}</td>
+                    <td class="py-3 text-right">₹${item.rate.toFixed(2)}</td>
+                    <td class="py-3 text-right font-semibold">₹${(item.qty * item.rate).toFixed(2)}</td>`;
+                tbody.appendChild(tr);
+            });
 
-            const vUpiDisplay = document.getElementById('view-upi-display');
-            const vSubtotal = document.getElementById('view-subtotal');
-            const vDiscount = document.getElementById('view-discount');
-            const vGst = document.getElementById('view-gst');
-            const vGrandTotal = document.getElementById('view-grand-total');
-            const vAmountCleared = document.getElementById('view-amount-cleared');
+            // Financial Summary details
+            document.getElementById('view-upi-display').textContent = state.settings.upi || "Not configured";
+            document.getElementById('view-subtotal').textContent = `₹${inv.subtotal.toFixed(2)}`;
+            document.getElementById('view-discount').textContent = `${inv.discount}%`;
+            document.getElementById('view-gst').textContent = `${inv.gst}%`;
+            document.getElementById('view-grand-total').textContent = `₹${inv.grandTotal.toFixed(2)}`;
+            document.getElementById('view-amount-cleared').textContent = `₹${inv.amountReceived.toFixed(2)}`;
 
-            if (vUpiDisplay) vUpiDisplay.textContent = state.settings.upi || "Not configured";
-            if (vSubtotal) vSubtotal.textContent = `₹${inv.subtotal.toFixed(2)}`;
-            if (vDiscount) vDiscount.textContent = `${inv.discount}%`;
-            if (vGst) vGst.textContent = `${inv.gst}%`;
-            if (vGrandTotal) vGrandTotal.textContent = `₹${inv.grandTotal.toFixed(2)}`;
-            if (vAmountCleared) vAmountCleared.textContent = `₹${inv.amountReceived.toFixed(2)}`;
-
+            // Signature Logic
             const sigContainer = document.getElementById('view-signature-container');
-            const sigImg = document.getElementById('view-signature-img');
             if (state.settings.signature) {
-                if (sigImg) sigImg.src = state.settings.signature;
-                if (sigContainer) sigContainer.classList.remove('hidden');
+                document.getElementById('view-signature-img').src = state.settings.signature;
+                sigContainer.classList.remove('hidden');
             } else {
-                if (sigContainer) sigContainer.classList.add('hidden');
+                sigContainer.classList.add('hidden');
             }
 
+            // UPI QR Code generation inside hidden viewer
             const upiQrContainer = document.getElementById('invoice-upi-qrcode');
-            const upiQrBox = document.getElementById('upi-qrcode-container');
-            if (upiQrContainer) {
-                upiQrContainer.innerHTML = "";
-                if (state.settings.upi) {
-                    const upiString = `upi://pay?pa=${state.settings.upi}&pn=${encodeURIComponent(state.settings.name)}&am=${inv.remainingAmount}&cu=INR`;
-                    new QRCode(upiQrContainer, {
-                        text: upiString,
-                        width: 80,
-                        height: 80,
-                        colorDark : "#000000",
-                        colorLight : "#ffffff",
-                        correctLevel : QRCode.CorrectLevel.H
-                    });
-                    if (upiQrBox) upiQrBox.classList.remove('hidden');
-                } else {
-                    if (upiQrBox) upiQrBox.classList.add('hidden');
-                }
+            upiQrContainer.innerHTML = "";
+            if (state.settings.upi) {
+                const upiString = `upi://pay?pa=${state.settings.upi}&pn=${encodeURIComponent(state.settings.name)}&am=${inv.remainingAmount}&cu=INR`;
+                new QRCode(upiQrContainer, {
+                    text: upiString,
+                    width: 80,
+                    height: 80,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+                document.getElementById('upi-qrcode-container').classList.remove('hidden');
+            } else {
+                document.getElementById('upi-qrcode-container').classList.add('hidden');
             }
 
-            const viewModal = document.getElementById('invoice-view-modal');
-            if (viewModal) viewModal.classList.remove('hidden');
+            document.getElementById('invoice-view-modal').classList.remove('hidden');
         };
 
         window.closeInvoiceViewModal = function() {
-            const viewModal = document.getElementById('invoice-view-modal');
-            if (viewModal) viewModal.classList.add('hidden');
+            document.getElementById('invoice-view-modal').classList.add('hidden');
             activeViewingInvoice = null;
         };
 
+        // Standard jsPDF Draw generation engine (Highly reliable canvas drawing to PDF file format)
         window.triggerPDFDownload = function() {
             if (!activeViewingInvoice) return;
             const { jsPDF } = window.jspdf;
             
+            // Standardizing PDF page layouts
             const docPdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
@@ -1947,8 +1875,11 @@
             });
 
             const client = state.clients.find(c => c.id === activeViewingInvoice.clientId) || { name: "Unknown" };
+
+            // Dynamic y positioning tracking variable
             let currY = 20;
 
+            // Draw Brand Custom Uploaded Logo in PDF
             if (state.settings.logo) {
                 try {
                     let format = 'PNG';
@@ -1957,22 +1888,25 @@
                     } else if (state.settings.logo.includes('image/webp')) {
                         format = 'WEBP';
                     }
+                    // Draws custom brand logo inside PDF coordinate (elegant 20x20mm space)
                     docPdf.addImage(state.settings.logo, format, 15, 12, 18, 18);
                     currY = 36;
                 } catch (e) {
-                    console.error("Custom logo failed to render in PDF", e);
+                    console.error("Custom logo failed to render in PDF export, reverting to text heading:", e);
                     docPdf.setFont("Helvetica", "bold");
                     docPdf.setFontSize(18);
                     docPdf.text(state.settings.name.toUpperCase(), 15, currY);
                     currY += 8;
                 }
             } else {
+                // If logo is absent, render bold fallback studio name text
                 docPdf.setFont("Helvetica", "bold");
                 docPdf.setFontSize(18);
                 docPdf.text(state.settings.name.toUpperCase(), 15, currY);
                 currY += 8;
             }
 
+            // Sender/Business Profile Details
             docPdf.setFont("Helvetica", "normal");
             docPdf.setFontSize(9);
             docPdf.setTextColor(100);
@@ -1988,6 +1922,7 @@
                 docPdf.text(`GST ID: ${state.settings.gst}`, 15, currY);
             }
 
+            // Right column Invoice title header
             docPdf.setFont("Helvetica", "normal");
             docPdf.setFontSize(22);
             docPdf.setTextColor(150);
@@ -2004,11 +1939,13 @@
             docPdf.text(`Invoice Date: ${activeViewingInvoice.invoiceDate}`, 195, 32, { align: 'right' });
             docPdf.text(`Due Date: ${activeViewingInvoice.dueDate}`, 195, 36, { align: 'right' });
 
+            // Horizontal separation line (rendered dynamically below address blocks)
             let separatorY = Math.max(52, currY + 6);
             docPdf.setDrawColor(220);
             docPdf.setLineWidth(0.2);
             docPdf.line(15, separatorY, 195, separatorY);
 
+            // Bill Receiver details
             let billToY = separatorY + 7;
             docPdf.setFont("Helvetica", "bold");
             docPdf.setFontSize(9);
@@ -2034,6 +1971,7 @@
             docPdf.text(`Phone: ${client.phone || 'N/A'}`, 15, clientY);
             docPdf.text(`Email: ${client.email || 'N/A'}`, 15, clientY + 4);
 
+            // Outstanding Balance Highlight Banner Right
             docPdf.setFillColor(248, 250, 252);
             docPdf.rect(130, billToY, 65, 22, "F");
             docPdf.setFont("Helvetica", "bold");
@@ -2045,6 +1983,7 @@
             docPdf.setTextColor(180, 83, 9);
             docPdf.text(`INR ${activeViewingInvoice.remainingAmount.toFixed(2)}`, 135, billToY + 15);
 
+            // Itemized dynamic table header placement
             let tableY = Math.max(95, clientY + 10);
             docPdf.setDrawColor(180);
             docPdf.setLineWidth(0.4);
@@ -2060,6 +1999,7 @@
 
             docPdf.line(15, tableY + 8, 195, tableY + 8);
             
+            // Loop and draw list items inside PDF
             docPdf.setFont("Helvetica", "normal");
             docPdf.setFontSize(9);
             docPdf.setTextColor(50);
@@ -2078,6 +2018,7 @@
                 itemY += 8;
             });
 
+            // Financial Calculations Summary
             let calcY = itemY + 5;
             docPdf.setFont("Helvetica", "normal");
             docPdf.setFontSize(9);
@@ -2107,6 +2048,7 @@
             docPdf.text("Cleared / Settled:", 140, calcY, { align: 'right' });
             docPdf.text(activeViewingInvoice.amountReceived.toFixed(2), 195, calcY, { align: 'right' });
 
+            // Terms Fineprints & Signatures Placement
             let footerY = itemY + 5;
             docPdf.setFont("Helvetica", "bold");
             docPdf.setFontSize(8);
@@ -2119,6 +2061,7 @@
             docPdf.text("Please settle active balance via digital transaction options.", 15, footerY + 4);
             docPdf.text(`UPI payment Address: ${state.settings.upi}`, 15, footerY + 8);
 
+            // Add signature to PDF
             if (state.settings.signature) {
                 try {
                     let sigFormat = 'PNG';
@@ -2133,6 +2076,7 @@
                 }
             }
 
+            // QR Code Draw (Grab QR canvas from active modal element)
             const qrCanvas = document.querySelector('#invoice-upi-qrcode canvas');
             if (qrCanvas) {
                 const qrImageBase64 = qrCanvas.toDataURL('image/png');
@@ -2147,6 +2091,7 @@
             showToast("Invoice downloaded successfully as B&W PDF Layout!");
         };
 
+        // Standard helpers retained in script context
         window.printViewInvoice = function() {
             window.print();
         };
@@ -2168,18 +2113,67 @@
         };
 
 
+        // ================= CUSTOM FIREBASE INTEGRATION SETUP LOGIC =================
+
+        function loadCustomConfigFieldsUI() {
+            const config = getFirebaseConfig();
+            if (config && config.apiKey && config.projectId !== 'mock-project') {
+                document.getElementById('firebase-custom-api-key').value = config.apiKey || "";
+                document.getElementById('firebase-custom-auth-domain').value = config.authDomain || "";
+                document.getElementById('firebase-custom-project-id').value = config.projectId || "";
+                document.getElementById('firebase-custom-app-id').value = config.appId || "";
+            }
+        }
+
+        window.saveCustomFirebaseConfig = function() {
+            const apiKey = document.getElementById('firebase-custom-api-key').value.trim();
+            const authDomain = document.getElementById('firebase-custom-auth-domain').value.trim();
+            const projectId = document.getElementById('firebase-custom-project-id').value.trim();
+            const appId = document.getElementById('firebase-custom-app-id').value.trim();
+
+            if (!apiKey || !projectId) {
+                showToast("Please enter at least API Key and Project ID to connect.", "error");
+                return;
+            }
+
+            const customConfig = {
+                apiKey: apiKey,
+                authDomain: authDomain,
+                projectId: projectId,
+                storageBucket: `${projectId}.appspot.com`,
+                messagingSenderId: "123456789",
+                appId: appId
+            };
+
+            localStorage.setItem('custom_firebase_config', JSON.stringify(customConfig));
+            showToast("Cloud configuration saved! Reloading application...");
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        };
+
+        window.resetToLocalSync = function() {
+            confirmAction(
+                "Disconnect Cloud Database",
+                "Are you sure you want to revert to secure Offline Sandbox Mode?",
+                () => {
+                    localStorage.removeItem('custom_firebase_config');
+                    showToast("Cloud disconnected. Reverting application...");
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
+            );
+        };
+
+
         // ================= SEARCH & FILTERS LOGIC =================
 
         window.filterInvoices = function() {
-            const searchField = document.getElementById('invoice-search');
-            const statusField = document.getElementById('invoice-filter-status');
-            const monthField = document.getElementById('invoice-filter-month');
-            
-            if (searchField) invoiceSearchQuery = searchField.value.toLowerCase();
-            if (statusField) invoiceStatusFilter = statusField.value;
-            if (monthField) invoiceMonthFilter = monthField.value;
-            
-            invoiceCurrentPage = 1; 
+            invoiceSearchQuery = document.getElementById('invoice-search').value.toLowerCase();
+            invoiceStatusFilter = document.getElementById('invoice-filter-status').value;
+            invoiceMonthFilter = document.getElementById('invoice-filter-month').value;
+            invoiceCurrentPage = 1; // reset page
             renderInvoicesList();
         };
 
@@ -2219,25 +2213,22 @@
 
         function renderInvoicesList() {
             const tbody = document.getElementById('invoices-tbody');
-            if (!tbody) return;
             tbody.innerHTML = "";
 
             const filtered = getFilteredInvoices();
             const totalCount = filtered.length;
             const maxPage = Math.ceil(totalCount / invoicesPerPage) || 1;
 
+            // Clamp current page index
             if (invoiceCurrentPage > maxPage) invoiceCurrentPage = maxPage;
 
             const startIdx = (invoiceCurrentPage - 1) * invoicesPerPage;
             const endIdx = Math.min(startIdx + invoicesPerPage, totalCount);
 
-            const pagInfo = document.getElementById('invoice-pagination-info');
-            if (pagInfo) pagInfo.textContent = `Showing ${totalCount > 0 ? startIdx + 1 : 0}-${endIdx} of ${totalCount}`;
-            
-            const prevBtn = document.getElementById('invoice-prev-btn');
-            const nextBtn = document.getElementById('invoice-next-btn');
-            if (prevBtn) prevBtn.disabled = invoiceCurrentPage === 1;
-            if (nextBtn) nextBtn.disabled = invoiceCurrentPage === maxPage;
+            // Set UI details
+            document.getElementById('invoice-pagination-info').textContent = `Showing ${totalCount > 0 ? startIdx + 1 : 0}-${endIdx} of ${totalCount}`;
+            document.getElementById('invoice-prev-btn').disabled = invoiceCurrentPage === 1;
+            document.getElementById('invoice-next-btn').disabled = invoiceCurrentPage === maxPage;
 
             if (filtered.length === 0) {
                 tbody.innerHTML = `
@@ -2253,6 +2244,8 @@
             const pageItems = filtered.slice(startIdx, endIdx);
             pageItems.forEach(inv => {
                 const client = state.clients.find(c => c.id === inv.clientId) || { name: "Unknown" };
+                
+                // Color Code Badges
                 const badgeColor = inv.status === 'Paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30' :
                                    inv.status === 'Partial' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/30' :
                                    'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/30';
@@ -2290,6 +2283,7 @@
             const textColor = isDark ? '#94a3b8' : '#64748b';
             const gridColor = isDark ? '#334155' : '#f1f5f9';
 
+            // Calculations data
             const monthsMap = {};
             const clientIncomeMap = {};
 
@@ -2306,6 +2300,7 @@
             const monthsLabels = Object.keys(monthsMap);
             const monthsValues = Object.values(monthsMap);
 
+            // Setup Dashboard Timeline Chart
             const ctxTimeline = document.getElementById('revenueTimelineChart');
             if (ctxTimeline) {
                 if (revenueChartInstance) revenueChartInstance.destroy();
@@ -2335,6 +2330,7 @@
                 });
             }
 
+            // Setup Dashboard Clients Breakdown Chart
             const ctxClients = document.getElementById('topClientsChart');
             if (ctxClients) {
                 if (clientsChartInstance) clientsChartInstance.destroy();
@@ -2358,6 +2354,7 @@
                 });
             }
 
+            // Setup Reports Monthly breakdown Trend Chart
             const ctxReportMonthly = document.getElementById('reportMonthlyChart');
             if (ctxReportMonthly) {
                 if (reportMonthlyChartInstance) reportMonthlyChartInstance.destroy();
@@ -2384,28 +2381,27 @@
                 });
             }
 
+            // Top Valued Clients Rankings inside Reports
             const sortedClients = Object.entries(clientIncomeMap)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 5);
 
             const rankContainer = document.getElementById('top-clients-ranking-list');
-            if (rankContainer) {
-                rankContainer.innerHTML = "";
-                if (sortedClients.length === 0) {
-                    rankContainer.innerHTML = `<p class="text-xs text-slate-400 py-6 text-center">Generate invoices to analyze top ranking client portfolios.</p>`;
-                } else {
-                    sortedClients.forEach(([name, amt], idx) => {
-                        const row = document.createElement('div');
-                        row.className = "flex items-center justify-between text-xs py-1.5 border-b border-slate-100 dark:border-slate-800";
-                        row.innerHTML = `
-                            <div class="flex items-center gap-2">
-                                <span class="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 font-bold flex items-center justify-center text-slate-500">${idx+1}</span>
-                                <span class="font-medium text-slate-800 dark:text-slate-200">${name}</span>
-                            </div>
-                            <span class="font-bold text-slate-900 dark:text-white">₹${amt.toFixed(2)}</span>`;
-                        rankContainer.appendChild(row);
-                    });
-                }
+            rankContainer.innerHTML = "";
+            if (sortedClients.length === 0) {
+                rankContainer.innerHTML = `<p class="text-xs text-slate-400 py-6 text-center">Generate invoices to analyze top ranking client portfolios.</p>`;
+            } else {
+                sortedClients.forEach(([name, amt], idx) => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center justify-between text-xs py-1.5 border-b border-slate-100 dark:border-slate-800";
+                    row.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 font-bold flex items-center justify-center text-slate-500">${idx+1}</span>
+                            <span class="font-medium text-slate-800 dark:text-slate-200">${name}</span>
+                        </div>
+                        <span class="font-bold text-slate-900 dark:text-white">₹${amt.toFixed(2)}</span>`;
+                    rankContainer.appendChild(row);
+                });
             }
         }
 
@@ -2414,7 +2410,6 @@
 
         function renderPaymentsLedger() {
             const tbody = document.getElementById('ledger-tbody');
-            if (!tbody) return;
             tbody.innerHTML = "";
 
             const txns = [];
@@ -2434,6 +2429,7 @@
                 }
             });
 
+            // Sort payments from latest to oldest
             txns.sort((a,b) => new Date(b.date) - new Date(a.date));
 
             if (txns.length === 0) {
@@ -2465,46 +2461,34 @@
         // ================= SETTINGS PANEL & OPERATIONS =================
 
         function loadSettingsFields() {
-            const nameField = document.getElementById('setting-name');
-            const gstField = document.getElementById('setting-gst');
-            const phoneField = document.getElementById('setting-phone');
-            const emailField = document.getElementById('setting-email');
-            const addressField = document.getElementById('setting-address');
-            const websiteField = document.getElementById('setting-website');
-            const upiField = document.getElementById('setting-upi');
-
-            if (nameField) nameField.value = state.settings.name || "";
-            if (gstField) gstField.value = state.settings.gst || "";
-            if (phoneField) phoneField.value = state.settings.phone || "";
-            if (emailField) emailField.value = state.settings.email || "";
-            if (addressField) addressField.value = state.settings.address || "";
-            if (websiteField) websiteField.value = state.settings.website || "";
-            if (upiField) upiField.value = state.settings.upi || "";
+            document.getElementById('setting-name').value = state.settings.name || "";
+            document.getElementById('setting-gst').value = state.settings.gst || "";
+            document.getElementById('setting-phone').value = state.settings.phone || "";
+            document.getElementById('setting-email').value = state.settings.email || "";
+            document.getElementById('setting-address').value = state.settings.address || "";
+            document.getElementById('setting-website').value = state.settings.website || "";
+            document.getElementById('setting-upi').value = state.settings.upi || "";
 
             const logoPreview = document.getElementById('logo-preview');
             const logoPlaceholder = document.getElementById('logo-preview-placeholder');
             if (state.settings.logo) {
-                if (logoPreview) {
-                    logoPreview.src = state.settings.logo;
-                    logoPreview.classList.remove('hidden');
-                }
-                if (logoPlaceholder) logoPlaceholder.classList.add('hidden');
+                logoPreview.src = state.settings.logo;
+                logoPreview.classList.remove('hidden');
+                logoPlaceholder.classList.add('hidden');
             } else {
-                if (logoPreview) logoPreview.classList.add('hidden');
-                if (logoPlaceholder) logoPlaceholder.classList.remove('hidden');
+                logoPreview.classList.add('hidden');
+                logoPlaceholder.classList.remove('hidden');
             }
 
             const sigPreview = document.getElementById('sig-preview');
             const sigPlaceholder = document.getElementById('sig-preview-placeholder');
             if (state.settings.signature) {
-                if (sigPreview) {
-                    sigPreview.src = state.settings.signature;
-                    sigPreview.classList.remove('hidden');
-                }
-                if (sigPlaceholder) sigPlaceholder.classList.add('hidden');
+                sigPreview.src = state.settings.signature;
+                sigPreview.classList.remove('hidden');
+                sigPlaceholder.classList.add('hidden');
             } else {
-                if (sigPreview) sigPreview.classList.add('hidden');
-                if (sigPlaceholder) sigPlaceholder.classList.remove('hidden');
+                sigPreview.classList.add('hidden');
+                sigPlaceholder.classList.remove('hidden');
             }
         }
 
@@ -2539,51 +2523,37 @@
             renderAllData();
         };
 
-        // Base64 logo and signature uploads logic (Safely attached)
-        const logoUploader = document.getElementById('logo-uploader');
-        if (logoUploader) {
-            logoUploader.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(evt) {
-                        state.settings.logo = evt.target.result;
-                        const logoPreview = document.getElementById('logo-preview');
-                        const logoPlaceholder = document.getElementById('logo-preview-placeholder');
-                        if (logoPreview) {
-                            logoPreview.src = evt.target.result;
-                            logoPreview.classList.remove('hidden');
-                        }
-                        if (logoPlaceholder) logoPlaceholder.classList.add('hidden');
-                        showToast("Brand logo uploaded successfully");
-                        updateBrandUI();
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
+        // Base64 logo and signature uploads logic
+        document.getElementById('logo-uploader').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    state.settings.logo = evt.target.result;
+                    document.getElementById('logo-preview').src = evt.target.result;
+                    document.getElementById('logo-preview').classList.remove('hidden');
+                    document.getElementById('logo-preview-placeholder').classList.add('hidden');
+                    showToast("Brand logo uploaded successfully");
+                    updateBrandUI();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
-        const sigUploader = document.getElementById('sig-uploader');
-        if (sigUploader) {
-            sigUploader.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(evt) {
-                        state.settings.signature = evt.target.result;
-                        const sigPreview = document.getElementById('sig-preview');
-                        const sigPlaceholder = document.getElementById('sig-preview-placeholder');
-                        if (sigPreview) {
-                            sigPreview.src = evt.target.result;
-                            sigPreview.classList.remove('hidden');
-                        }
-                        if (sigPlaceholder) sigPlaceholder.classList.add('hidden');
-                        showToast("Authorized signature loaded");
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
+        document.getElementById('sig-uploader').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    state.settings.signature = evt.target.result;
+                    document.getElementById('sig-preview').src = evt.target.result;
+                    document.getElementById('sig-preview').classList.remove('hidden');
+                    document.getElementById('sig-preview-placeholder').classList.add('hidden');
+                    showToast("Authorized signature loaded");
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
 
         // ================= EXCEL OPERATIONS (SheetJS INTEGRATION) =================
@@ -2592,6 +2562,7 @@
             try {
                 const wb = XLSX.utils.book_new();
 
+                // Format Clients Work Sheet
                 const clientsData = state.clients.map(c => ({
                     ID: c.id,
                     Name: c.name,
@@ -2605,6 +2576,7 @@
                 const wsClients = XLSX.utils.json_to_sheet(clientsData);
                 XLSX.utils.book_append_sheet(wb, wsClients, "Clients");
 
+                // Format Invoices Work Sheet
                 const invoicesData = state.invoices.map(inv => ({
                     InvoiceNumber: inv.invoiceNumber,
                     ClientID: inv.clientId,
@@ -2642,6 +2614,7 @@
                     let importedClientsCount = 0;
                     let importedInvoicesCount = 0;
 
+                    // Read clients sheet
                     if (workbook.SheetNames.includes("Clients")) {
                         const ws = workbook.Sheets["Clients"];
                         const rows = XLSX.utils.sheet_to_json(ws);
@@ -2666,6 +2639,7 @@
                         }
                     }
 
+                    // Read invoices sheet
                     if (workbook.SheetNames.includes("Invoices")) {
                         const ws = workbook.Sheets["Invoices"];
                         const rows = XLSX.utils.sheet_to_json(ws);
@@ -2710,6 +2684,7 @@
 
         // ================= RENDERING AND AGGREGATION SYSTEM =================
 
+        // Helper function to update Custom uploaded Logo on Header & Sidebar
         function updateBrandUI() {
             const sidebarIcon = document.getElementById('sidebar-brand-icon');
             const sidebarLogo = document.getElementById('sidebar-brand-logo');
@@ -2737,13 +2712,14 @@
 
                 if (userAvatar) {
                     userAvatar.classList.remove('hidden');
-                    userAvatar.textContent = (auth && auth.currentUser) ? auth.currentUser.email.slice(0, 2).toUpperCase() : "VE";
+                    userAvatar.textContent = (auth && auth.currentUser) ? auth.currentUser.uid.slice(0, 2).toUpperCase() : "VE";
                 }
                 if (userAvatarImg) userAvatarImg.classList.add('hidden');
             }
         }
 
         function renderAllData() {
+            // Stats Calculations
             const totalClients = state.clients.length;
             const totalInvoices = state.invoices.length;
             
@@ -2751,103 +2727,86 @@
             const pendingRevenue = state.invoices.reduce((sum, inv) => sum + (inv.remainingAmount || 0), 0);
             const paidInvoicesCount = state.invoices.filter(i => i.status === 'Paid').length;
 
-            const statTotalClients = document.getElementById('stat-total-clients');
-            const statTotalInvoices = document.getElementById('stat-total-invoices');
-            const statTotalRevenue = document.getElementById('stat-total-revenue');
-            const statPendingPayments = document.getElementById('stat-pending-payments');
-            const statPaidPayments = document.getElementById('stat-paid-payments');
+            // Load values to Stats Dashboard Elements
+            document.getElementById('stat-total-clients').textContent = totalClients;
+            document.getElementById('stat-total-invoices').textContent = totalInvoices;
+            document.getElementById('stat-total-revenue').textContent = `₹${totalRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+            document.getElementById('stat-pending-payments').textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+            document.getElementById('stat-paid-payments').textContent = paidInvoicesCount;
 
-            if (statTotalClients) statTotalClients.textContent = totalClients;
-            if (statTotalInvoices) statTotalInvoices.textContent = totalInvoices;
-            if (statTotalRevenue) statTotalRevenue.textContent = `₹${totalRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
-            if (statPendingPayments) statPendingPayments.textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
-            if (statPaidPayments) statPaidPayments.textContent = paidInvoicesCount;
-
+            // Load view-specific components
             renderClientsList();
             renderInvoicesList();
             renderPaymentsLedger();
             loadSettingsFields();
             updateBrandUI();
 
+            // Populate Months dropdown filters dynamically
             const monthSelector = document.getElementById('invoice-filter-month');
-            if (monthSelector) {
-                const uniqueMonths = new Set();
-                state.invoices.forEach(inv => {
-                    const [year, month] = inv.invoiceDate.split('-');
-                    uniqueMonths.add(`${year}-${month}`);
-                });
-                
-                const currentSelVal = monthSelector.value;
-                monthSelector.innerHTML = '<option value="All">All Months</option>';
-                Array.from(uniqueMonths).sort().forEach(m => {
-                    const date = new Date(m + "-01");
-                    const label = date.toLocaleString('default', { month: 'long', year: 'numeric' });
-                    monthSelector.innerHTML += `<option value="${m}">${label}</option>`;
-                });
-                monthSelector.value = currentSelVal;
-            }
-
-            const recentContainer = document.getElementById('recent-invoices-tbody');
-            if (recentContainer) {
-                recentContainer.innerHTML = "";
-                const sorted = [...state.invoices]
-                    .sort((a,b) => new Date(b.invoiceDate) - new Date(a.invoiceDate))
-                    .slice(0, 5);
-
-                if (sorted.length === 0) {
-                    recentContainer.innerHTML = `
-                        <tr>
-                            <td colspan="6" class="px-6 py-6 text-center text-slate-400 text-xs">No active transactions registered. Ready to create your first?</td>
-                        </tr>`;
-                } else {
-                    sorted.forEach(inv => {
-                        const client = state.clients.find(c => c.id === inv.clientId) || { name: "Unknown" };
-                        const badgeColor = inv.status === 'Paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30' :
-                                           inv.status === 'Partial' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/30' :
-                                           'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/30';
-
-                        const tr = document.createElement('tr');
-                        tr.className = "border-b border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors";
-                        tr.innerHTML = `
-                            <td class="px-6 py-3 font-semibold text-slate-900 dark:text-white cursor-pointer" onclick="viewInvoiceDetail('${inv.id}')">${inv.invoiceNumber}</td>
-                            <td class="px-6 py-3">${client.name}</td>
-                            <td class="px-6 py-3 text-xs">${inv.dueDate}</td>
-                            <td class="px-6 py-3 font-bold text-slate-900 dark:text-white">₹${inv.grandTotal.toFixed(2)}</td>
-                            <td class="px-6 py-3">
-                                <span class="px-2 py-0.5 rounded-full text-2xs font-semibold border ${badgeColor}">${inv.status}</span>
-                            </td>
-                            <td class="px-6 py-3 text-right">
-                                <button onclick="viewInvoiceDetail('${inv.id}')" class="p-1 px-2.5 bg-brand-50 hover:bg-brand-100 text-brand-600 dark:bg-brand-900/20 dark:text-brand-400 text-xs font-semibold rounded">Preview</button>
-                            </td>`;
-                        recentContainer.appendChild(tr);
-                    });
-                }
-            }
-
-            const paymentsOutstanding = document.getElementById('payments-outstanding');
-            const paymentsCleared = document.getElementById('payments-cleared');
-            const reportEarnings = document.getElementById('report-earnings');
-            const reportPending = document.getElementById('report-pending');
-            const reportClients = document.getElementById('report-clients');
-            const reportInvoices = document.getElementById('report-invoices');
-
-            if (paymentsOutstanding) paymentsOutstanding.textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
-            const clearedRevenue = state.invoices.reduce((sum, inv) => sum + (inv.amountReceived || 0), 0);
-            if (paymentsCleared) paymentsCleared.textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            const uniqueMonths = new Set();
+            state.invoices.forEach(inv => {
+                const [year, month] = inv.invoiceDate.split('-');
+                uniqueMonths.add(`${year}-${month}`);
+            });
             
-            if (reportEarnings) reportEarnings.textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
-            if (reportPending) reportPending.textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
-            if (reportClients) reportClients.textContent = totalClients;
-            if (reportInvoices) reportInvoices.textContent = totalInvoices;
+            const currentSelVal = monthSelector.value;
+            monthSelector.innerHTML = '<option value="All">All Months</option>';
+            Array.from(uniqueMonths).sort().forEach(m => {
+                const date = new Date(m + "-01");
+                const label = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                monthSelector.innerHTML += `<option value="${m}">${label}</option>`;
+            });
+            monthSelector.value = currentSelVal;
 
+            // Build dashboard recent list (Limit to latest 5 entries)
+            const recentContainer = document.getElementById('recent-invoices-tbody');
+            recentContainer.innerHTML = "";
+            const sorted = [...state.invoices]
+                .sort((a,b) => new Date(b.invoiceDate) - new Date(a.invoiceDate))
+                .slice(0, 5);
+
+            if (sorted.length === 0) {
+                recentContainer.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-6 text-center text-slate-400 text-xs">No active transactions registered. Ready to create your first?</td>
+                    </tr>`;
+            } else {
+                sorted.forEach(inv => {
+                    const client = state.clients.find(c => c.id === inv.clientId) || { name: "Unknown" };
+                    const badgeColor = inv.status === 'Paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30' :
+                                       inv.status === 'Partial' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/30' :
+                                       'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/30';
+
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors";
+                    tr.innerHTML = `
+                        <td class="px-6 py-3 font-semibold text-slate-900 dark:text-white cursor-pointer" onclick="viewInvoiceDetail('${inv.id}')">${inv.invoiceNumber}</td>
+                        <td class="px-6 py-3">${client.name}</td>
+                        <td class="px-6 py-3 text-xs">${inv.dueDate}</td>
+                        <td class="px-6 py-3 font-bold text-slate-900 dark:text-white">₹${inv.grandTotal.toFixed(2)}</td>
+                        <td class="px-6 py-3">
+                            <span class="px-2 py-0.5 rounded-full text-2xs font-semibold border ${badgeColor}">${inv.status}</span>
+                        </td>
+                        <td class="px-6 py-3 text-right">
+                            <button onclick="viewInvoiceDetail('${inv.id}')" class="p-1 px-2.5 bg-brand-50 hover:bg-brand-100 text-brand-600 dark:bg-brand-900/20 dark:text-brand-400 text-xs font-semibold rounded">Preview</button>
+                        </td>`;
+                    recentContainer.appendChild(tr);
+                });
+            }
+
+            // Fill Report and Payments calculations
+            document.getElementById('payments-outstanding').textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            const clearedRevenue = state.invoices.reduce((sum, inv) => sum + (inv.amountReceived || 0), 0);
+            document.getElementById('payments-cleared').textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            
+            document.getElementById('report-earnings').textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            document.getElementById('report-pending').textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            document.getElementById('report-clients').textContent = totalClients;
+            document.getElementById('report-invoices').textContent = totalInvoices;
+
+            // Re-render Analytics Charts with the loaded sets
             renderCharts();
         }
-
-        // Firebase Auth observer to fetch lists
-        window.addEventListener('DOMContentLoaded', async () => {
-            setupTheme(); // Initialize theme handlers exactly ONCE here
-            await initFirebase();
-        });
 
     </script>
 </body>
