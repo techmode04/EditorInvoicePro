@@ -68,21 +68,43 @@
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-neutral-950 dark:text-slate-200 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
 
+    <!-- ================= VIEW: SYSTEM SYNC LOADING OVERLAY ================= -->
+    <div id="cloud-sync-loader" class="fixed inset-0 z-[150] bg-slate-900/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
+        <div class="text-center space-y-6 max-w-sm w-full">
+            <div class="relative w-20 h-20 mx-auto">
+                <!-- Glowing effect -->
+                <div class="absolute inset-0 rounded-full bg-brand-500/20 blur-xl animate-pulse"></div>
+                <!-- Double rotating circular rings -->
+                <div class="w-full h-full rounded-full border-4 border-slate-800 border-t-brand-500 animate-spin"></div>
+                <div class="absolute inset-2 rounded-full border-4 border-slate-800 border-b-emerald-500 animate-spin" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-brand-500">
+                    <i class="fa-solid fa-cloud-arrow-down text-xl animate-bounce"></i>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-white font-bold text-lg tracking-tight">Syncing with Cloud...</h3>
+                <p class="text-slate-400 text-xs font-medium">Please wait while we secure your latest database terminal</p>
+            </div>
+            <div class="pt-4 border-t border-slate-800 flex items-center justify-center gap-2 text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-ping"></span>
+                <span>Establishing Secure Handshake</span>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= VIEW: ADMIN PIN LOGIN SCREEN (Screenshot 4 Reference) ================= -->
     <div id="login-overlay" class="fixed inset-0 z-[100] bg-slate-900/90 dark:bg-neutral-950/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-8 space-y-6 transform scale-100 transition-all">
             <!-- Logo Header -->
             <div class="text-center space-y-3">
-              <!--   <div class="w-16 h-16 rounded-2xl bg-brand-600 flex items-center justify-center text-white shadow-xl shadow-brand-500/20 mx-auto">
-                    <i class="fa-solid fa-clapperboard-play text-2xl"></i>
-                </div> -->
                 <div class="w-16 h-16 mx-auto">
-    <img
-        src="logo.png"
-        alt="Logo"
-        class="w-full h-full object-contain rounded-2xl"
-    >
-</div>
+                    <img
+                        src="logo.png"
+                        alt="Logo"
+                        onerror="this.src='https://cdn-icons-png.flaticon.com/512/3503/3503115.png'"
+                        class="w-full h-full object-contain rounded-2xl"
+                    >
+                </div>
             
                 <div>
                     <h1 id="login-brand-title" class="font-extrabold text-2xl tracking-tight text-slate-900 dark:text-white uppercase">CUTINVOICE</h1>
@@ -104,10 +126,6 @@
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
-
-          <!--    <div class="text-center pt-2">
-                <span class="text-3xs text-slate-400 dark:text-slate-500 uppercase tracking-widest font-bold">Default PIN: <span class="text-slate-600 dark:text-slate-300 font-extrabold"></span></span>
-            </div>  -->
         </div>
     </div>
 
@@ -1008,6 +1026,7 @@ function doPost(e) {
         let state = {
             clients: [],
             invoices: [],
+            lastUpdated: 0,
             settings: {
                 name: "sachindhisle04",
                 email: "studio@billing.com",
@@ -1021,7 +1040,7 @@ function doPost(e) {
             }
         };
 
-        // Standard Autocomplete items
+        // Standard Autocomplete templates
         const serviceTemplates = [
             "Real Estate Reel Editing", "Long Form Video Editing", "Thumbnail Design", 
             "Motion Graphics", "Color Grading", "Podcast Editing", "YouTube Shorts"
@@ -1087,97 +1106,22 @@ function doPost(e) {
         });
 
 
-        // ================= SYSTEM AUTH & PIN INITIALIZATION =================
+        // ================= LOADING STATE OVERLAYS =================
 
-        // Setup DOM state handlers
-        window.addEventListener('DOMContentLoaded', () => {
-            // Restore PIN from local storage or set default
-            if (!localStorage.getItem('cutinvoice_admin_pin')) {
-                localStorage.setItem('cutinvoice_admin_pin', '1234');
-            }
-
-            // Restore backups instantly
-            loadLocalStorageBackup();
-
-            // Validate login session
-            const isAuthorized = sessionStorage.getItem('cutinvoice_admin_logged_in') === 'true';
-            const overlay = document.getElementById('login-overlay');
-            if (isAuthorized) {
-                overlay.classList.add('hidden');
-            } else {
-                overlay.classList.remove('hidden');
-                document.getElementById('login-pin-input').focus();
-            }
-
-            // Bind Cloud settings values in settings view UI
-            document.getElementById('sync-webapp-url').value = localStorage.getItem('cutinvoice_webapp_url') || '';
-            document.getElementById('sync-auto-toggle').checked = localStorage.getItem('cutinvoice_autosync') === 'true';
-
-            // Custom Settings Inputs loaders
-            loadSettingsFields();
-            setupTheme();
-            renderAllData();
-            updateSyncBadgeStatus();
-        });
-
-        window.attemptAdminLogin = function() {
-            const pinVal = document.getElementById('login-pin-input').value.trim();
-            const correctPin = localStorage.getItem('cutinvoice_admin_pin') || '1234';
-
-            if (pinVal === correctPin) {
-                sessionStorage.setItem('cutinvoice_admin_logged_in', 'true');
-                document.getElementById('login-overlay').classList.add('hidden');
-                document.getElementById('login-pin-input').value = '';
-                showToast("Access Granted. Welcome back Admin!");
-                renderAllData();
-            } else {
-                showToast("Galat Security PIN entered. Please try again.", "error");
-                const pinField = document.getElementById('login-pin-input');
-                pinField.classList.add('ring-2', 'ring-rose-500');
-                setTimeout(() => pinField.classList.remove('ring-2', 'ring-rose-500'), 1000);
+        window.showCloudSyncLoader = function(message = "Syncing with Cloud...") {
+            const loader = document.getElementById('cloud-sync-loader');
+            if (loader) {
+                const title = loader.querySelector('h3');
+                if (title) title.textContent = message;
+                loader.classList.remove('hidden');
             }
         };
 
-        // Bind Enter key to authentication action
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const overlay = document.getElementById('login-overlay');
-                if (overlay && !overlay.classList.contains('hidden')) {
-                    attemptAdminLogin();
-                }
+        window.hideCloudSyncLoader = function() {
+            const loader = document.getElementById('cloud-sync-loader');
+            if (loader) {
+                loader.classList.add('hidden');
             }
-        });
-
-        window.updateAdminPIN = function() {
-            const currentPin = document.getElementById('admin-current-pin').value;
-            const newPin = document.getElementById('admin-new-pin').value;
-            const confirmPin = document.getElementById('admin-confirm-pin').value;
-            const correctPin = localStorage.getItem('cutinvoice_admin_pin') || '1234';
-
-            if (currentPin !== correctPin) {
-                showToast("Current PIN is incorrect.", "error");
-                return;
-            }
-            if (!newPin || newPin.length < 4) {
-                showToast("New PIN must be at least 4 characters long.", "error");
-                return;
-            }
-            if (newPin !== confirmPin) {
-                showToast("Confirm PIN matches option mismatch.", "error");
-                return;
-            }
-
-            localStorage.setItem('cutinvoice_admin_pin', newPin);
-            showToast("Security PIN updated successfully!");
-            document.getElementById('admin-current-pin').value = '';
-            document.getElementById('admin-new-pin').value = '';
-            document.getElementById('admin-confirm-pin').value = '';
-        };
-
-        window.lockSystem = function() {
-            sessionStorage.removeItem('cutinvoice_admin_logged_in');
-            document.getElementById('login-overlay').classList.remove('hidden');
-            showToast("System Locked.");
         };
 
 
@@ -1187,16 +1131,23 @@ function doPost(e) {
             const clientsLocal = localStorage.getItem('cutinvoice_clients');
             const invoicesLocal = localStorage.getItem('cutinvoice_invoices');
             const settingsLocal = localStorage.getItem('cutinvoice_settings');
+            const lastUpdatedLocal = localStorage.getItem('cutinvoice_last_updated');
 
             if (clientsLocal) state.clients = JSON.parse(clientsLocal);
             if (invoicesLocal) state.invoices = JSON.parse(invoicesLocal);
             if (settingsLocal) state.settings = JSON.parse(settingsLocal);
+            
+            state.lastUpdated = lastUpdatedLocal ? parseInt(lastUpdatedLocal, 10) : 0;
         }
 
         function saveLocalStorageBackup() {
+            if (!state.lastUpdated) {
+                state.lastUpdated = Date.now();
+            }
             localStorage.setItem('cutinvoice_clients', JSON.stringify(state.clients));
             localStorage.setItem('cutinvoice_invoices', JSON.stringify(state.invoices));
             localStorage.setItem('cutinvoice_settings', JSON.stringify(state.settings));
+            localStorage.setItem('cutinvoice_last_updated', state.lastUpdated.toString());
         }
 
 
@@ -1206,6 +1157,7 @@ function doPost(e) {
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url') || '';
             const sidebarBadge = document.getElementById('sync-badge-element');
             const settingsBadge = document.getElementById('sync-status-badge');
+            const isOnline = navigator.onLine;
 
             if (!webAppUrl) {
                 if (sidebarBadge) {
@@ -1216,6 +1168,16 @@ function doPost(e) {
                 if (settingsBadge) {
                     settingsBadge.textContent = "OFFLINE";
                     settingsBadge.className = "px-2 py-0.5 rounded text-3xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400";
+                }
+            } else if (!isOnline) {
+                if (sidebarBadge) {
+                    sidebarBadge.innerHTML = `
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                        Connection Offline`;
+                }
+                if (settingsBadge) {
+                    settingsBadge.textContent = "OFFLINE";
+                    settingsBadge.className = "px-2 py-0.5 rounded text-3xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/40 dark:text-rose-400";
                 }
             } else {
                 if (sidebarBadge) {
@@ -1242,22 +1204,81 @@ function doPost(e) {
             updateSyncBadgeStatus();
         });
 
+        // Pack comprehensive application state to push
+        function buildSyncPayload() {
+            return {
+                clients: state.clients,
+                invoices: state.invoices,
+                settings: state.settings,
+                adminPin: localStorage.getItem('cutinvoice_admin_pin') || '1234',
+                theme: localStorage.getItem('theme') || 'light',
+                autoSync: localStorage.getItem('cutinvoice_autosync') === 'true',
+                lastUpdated: state.lastUpdated || Date.now()
+            };
+        }
+
+        // Unpack payload from cloud safely & configure local storage properties
+        function unpackSyncPayload(cloudData) {
+            if (!cloudData) return false;
+            let dataUpdated = false;
+
+            if (Array.isArray(cloudData.clients)) {
+                state.clients = cloudData.clients;
+                dataUpdated = true;
+            }
+            if (Array.isArray(cloudData.invoices)) {
+                state.invoices = cloudData.invoices;
+                dataUpdated = true;
+            }
+            if (cloudData.settings && typeof cloudData.settings === 'object') {
+                state.settings = { ...state.settings, ...cloudData.settings };
+                dataUpdated = true;
+            }
+            if (cloudData.adminPin) {
+                localStorage.setItem('cutinvoice_admin_pin', cloudData.adminPin);
+            }
+            if (cloudData.theme) {
+                localStorage.setItem('theme', cloudData.theme);
+                // Apply theme setting immediately
+                if (cloudData.theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                }
+            }
+            if (cloudData.autoSync !== undefined) {
+                localStorage.setItem('cutinvoice_autosync', cloudData.autoSync ? 'true' : 'false');
+                const toggle = document.getElementById('sync-auto-toggle');
+                if (toggle) toggle.checked = !!cloudData.autoSync;
+            }
+            if (cloudData.lastUpdated) {
+                state.lastUpdated = parseInt(cloudData.lastUpdated, 10);
+            } else {
+                state.lastUpdated = Date.now();
+            }
+
+            saveLocalStorageBackup();
+            return dataUpdated;
+        }
+
         // Auto Sync Background Processor
         function autoSyncIfEnabled() {
+            state.lastUpdated = Date.now();
+            saveLocalStorageBackup();
+
             const isAuto = localStorage.getItem('cutinvoice_autosync') === 'true';
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
-            if (isAuto && webAppUrl) {
-                forcePushCloudSync(true); // Silent push without disturbing workflow
+            if (isAuto && webAppUrl && navigator.onLine) {
+                performCloudPush(buildSyncPayload(), true);
             }
         }
 
-        // Force Push Action
-        window.forcePushCloudSync = function(isSilent = false) {
+        // Robust Background Push Function with Retry Loop
+        async function performCloudPush(payloadData, isSilent = false) {
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
-            if (!webAppUrl) {
-                if (!isSilent) showToast("Google Apps Script URL set karna required hai.", "error");
-                return;
-            }
+            if (!webAppUrl) return false;
 
             const sidebarBadge = document.getElementById('sync-badge-element');
             if (sidebarBadge) {
@@ -1266,85 +1287,183 @@ function doPost(e) {
                     Syncing...`;
             }
 
-            fetch(webAppUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8'
-                },
-                body: JSON.stringify({
-                    action: 'push',
-                    data: {
-                        clients: state.clients,
-                        invoices: state.invoices,
-                        settings: state.settings
+            let retries = 3;
+            let success = false;
+            let lastError = null;
+
+            while (retries > 0 && !success) {
+                try {
+                    const response = await fetch(webAppUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        body: JSON.stringify({
+                            action: 'push',
+                            data: payloadData
+                        })
+                    });
+
+                    if (response.ok) {
+                        const res = await response.json();
+                        if (res && res.status === 'success') {
+                            success = true;
+                        } else {
+                            lastError = new Error(res.message || "Push rejected by Web App script parameters");
+                        }
+                    } else {
+                        lastError = new Error("HTTP Response Status: " + response.status);
                     }
-                })
-            })
-            .then(async (response) => {
-                if (response.ok) return response.json();
-                throw new Error("POST request failed");
-            })
-            .then((res) => {
-                if (res.status === 'success') {
-                    if (!isSilent) showToast("Data backed up to Google Sheets successfully!");
-                    updateSyncBadgeStatus();
-                } else {
-                    if (!isSilent) showToast("Sync issues detected: " + (res.message || "Error"), "error");
+                } catch (err) {
+                    lastError = err;
+                    retries--;
+                    if (retries > 0) {
+                        await new Promise(resolve => setTimeout(resolve, (3 - retries) * 1000));
+                    }
                 }
-            })
-            .catch((err) => {
-                console.error("Cloud push failed:", err);
-                // Due to standard CORS limits on custom macro redirects, we confirm success on typical trigger output
-                if (!isSilent) showToast("Cloud Sync status checked & processed!", "success");
+            }
+
+            if (success) {
+                if (!isSilent) showToast("Database backup updated on Google Sheets.");
                 updateSyncBadgeStatus();
-            });
+                return true;
+            } else {
+                console.error("Cloud push failed after retries:", lastError);
+                if (!isSilent) showToast("Offline Mode: Sync cached locally.", "info");
+                updateSyncBadgeStatus();
+                return false;
+            }
+        }
+
+        // Force Push Action
+        window.forcePushCloudSync = async function(isSilent = false) {
+            const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
+            if (!webAppUrl) {
+                if (!isSilent) showToast("Google Apps Script URL set karna required hai.", "error");
+                return;
+            }
+
+            state.lastUpdated = Date.now();
+            saveLocalStorageBackup();
+
+            if (!isSilent) showCloudSyncLoader("Pushing to Cloud...");
+            
+            const success = await performCloudPush(buildSyncPayload(), isSilent);
+
+            if (!isSilent) {
+                hideCloudSyncLoader();
+                if (success) {
+                    showToast("All data successfully backed up to Google Sheets!");
+                } else {
+                    showToast("Failed to complete backup push. Saved locally instead.", "error");
+                }
+            }
         };
 
         // Force Pull Action
-        window.forcePullCloudSync = function() {
+        window.forcePullCloudSync = async function() {
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
             if (!webAppUrl) {
                 showToast("Sync URL missing inside Settings.", "error");
                 return;
             }
 
-            const sidebarBadge = document.getElementById('sync-badge-element');
-            if (sidebarBadge) {
-                sidebarBadge.innerHTML = `
-                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-spin"></span>
-                    Pulling Backup...`;
-            }
+            showCloudSyncLoader("Pulling from Cloud...");
 
-            const pullUrl = webAppUrl + (webAppUrl.includes('?') ? '&' : '?') + 'action=pull&t=' + Date.now();
+            try {
+                const pullUrl = webAppUrl + (webAppUrl.includes('?') ? '&' : '?') + 'action=pull&t=' + Date.now();
+                const response = await fetch(pullUrl, { method: 'GET' });
+                
+                if (!response.ok) throw new Error("HTTP status: " + response.status);
+                const cloudResult = await response.json();
 
-            fetch(pullUrl, {
-                method: 'GET'
-            })
-            .then((response) => {
-                if (response.ok) return response.json();
-                throw new Error("Pull connection failed");
-            })
-            .then((res) => {
-                if (res && (res.clients || res.invoices || res.settings)) {
-                    if (res.clients) state.clients = res.clients;
-                    if (res.invoices) state.invoices = res.invoices;
-                    if (res.settings) state.settings = res.settings;
-
-                    saveLocalStorageBackup();
+                if (cloudResult && (cloudResult.clients || cloudResult.invoices || cloudResult.settings)) {
+                    unpackSyncPayload(cloudResult);
                     renderAllData();
                     showToast("Database successfully restored from Google Sheet sync backup.");
-                    updateSyncBadgeStatus();
                 } else {
                     showToast("No active database backup found on your script.", "error");
-                    updateSyncBadgeStatus();
                 }
-            })
-            .catch((err) => {
-                console.error("Sync pull failed:", err);
+            } catch (err) {
+                console.error("Manual sync pull failed:", err);
                 showToast("Connection failed. Apps Script URL correctly configure karein.", "error");
+            } finally {
+                hideCloudSyncLoader();
                 updateSyncBadgeStatus();
-            });
+            }
         };
+
+        // Automatic Start-Up Pull Engine Handler
+        async function runInitialCloudSync() {
+            const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
+            if (!webAppUrl) {
+                // No sync configuration present; keep local caching mode running instantly
+                updateSyncBadgeStatus();
+                return;
+            }
+
+            showCloudSyncLoader("Syncing with Cloud...");
+
+            try {
+                // Fetch latest cloud dataset with a quick safety connection abort controller timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+                const pullUrl = webAppUrl + (webAppUrl.includes('?') ? '&' : '?') + 'action=pull&t=' + Date.now();
+                const response = await fetch(pullUrl, {
+                    method: 'GET',
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) throw new Error("Server handshake issue status code " + response.status);
+                const cloudResult = await response.json();
+
+                const isCloudEmpty = !cloudResult || 
+                                     (Object.keys(cloudResult).length === 0) || 
+                                     (!cloudResult.clients && !cloudResult.invoices);
+
+                if (isCloudEmpty) {
+                    // Initialize cloud DB with standard local dataset baseline fallback
+                    const hasLocalData = state.clients.length > 0 || state.invoices.length > 0;
+                    if (hasLocalData) {
+                        showCloudSyncLoader("Initializing Cloud DB...");
+                        await performCloudPush(buildSyncPayload(), true);
+                    }
+                } else {
+                    const cloudLastUpdated = cloudResult.lastUpdated ? parseInt(cloudResult.lastUpdated, 10) : 0;
+                    const localLastUpdated = state.lastUpdated ? parseInt(state.lastUpdated, 10) : 0;
+
+                    if (cloudLastUpdated > localLastUpdated) {
+                        unpackSyncPayload(cloudResult);
+                        showToast("System restored latest data from Cloud sync server.", "success");
+                    } else if (localLastUpdated > cloudLastUpdated) {
+                        showCloudSyncLoader("Updating Cloud DB...");
+                        await performCloudPush(buildSyncPayload(), true);
+                    } else {
+                        unpackSyncPayload(cloudResult);
+                    }
+                }
+            } catch (err) {
+                console.error("Auto handshake pull failed:", err);
+                showToast("Offline Mode: Sync failed. Using local cache.", "error");
+            } finally {
+                hideCloudSyncLoader();
+                updateSyncBadgeStatus();
+                renderAllData();
+            }
+        }
+
+        // Monitor internet restoration
+        window.addEventListener('online', () => {
+            showToast("Connection Restored! Synced to cloud backup.", "success");
+            autoSyncIfEnabled();
+        });
+
+        window.addEventListener('offline', () => {
+            showToast("You are offline. Saving changes locally.", "error");
+            updateSyncBadgeStatus();
+        });
 
 
         // ================= NAV CONTROLS =================
@@ -1386,6 +1505,7 @@ function doPost(e) {
 
         function setupTheme() {
             const toggleBtn = document.getElementById('theme-toggle');
+            if (!toggleBtn) return;
             
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
@@ -1395,17 +1515,24 @@ function doPost(e) {
                 document.documentElement.classList.add('light');
             }
 
-            toggleBtn.addEventListener('click', () => {
+            toggleBtn.replaceWith(toggleBtn.cloneNode(true)); // prevent multiple redundant bindings
+            const newToggleBtn = document.getElementById('theme-toggle');
+            
+            newToggleBtn.addEventListener('click', () => {
+                let themeVal = 'light';
                 if (document.documentElement.classList.contains('dark')) {
                     document.documentElement.classList.remove('dark');
                     document.documentElement.classList.add('light');
-                    localStorage.setItem('theme', 'light');
+                    themeVal = 'light';
                 } else {
                     document.documentElement.classList.add('dark');
                     document.documentElement.classList.remove('light');
-                    localStorage.setItem('theme', 'dark');
+                    themeVal = 'dark';
                 }
+                localStorage.setItem('theme', themeVal);
                 setTimeout(() => renderCharts(), 100);
+                
+                autoSyncIfEnabled();
             });
         }
 
@@ -1506,6 +1633,7 @@ function doPost(e) {
 
         function renderClientsList() {
             const grid = document.getElementById('clients-grid');
+            if (!grid) return;
             grid.innerHTML = "";
 
             const filtered = state.clients.filter(c => {
@@ -1620,7 +1748,9 @@ function doPost(e) {
 
         window.calculateInvoiceTotals = function() {
             let subtotal = 0;
-            const rows = document.getElementById('invoice-items-container').children;
+            const container = document.getElementById('invoice-items-container');
+            if (!container) return;
+            const rows = container.children;
 
             for (let row of rows) {
                 const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
@@ -2239,6 +2369,7 @@ function doPost(e) {
 
         function renderInvoicesList() {
             const tbody = document.getElementById('invoices-tbody');
+            if (!tbody) return;
             tbody.innerHTML = "";
 
             const filtered = getFilteredInvoices();
@@ -2429,6 +2560,7 @@ function doPost(e) {
 
         function renderPaymentsLedger() {
             const tbody = document.getElementById('ledger-tbody');
+            if (!tbody) return;
             tbody.innerHTML = "";
 
             const txns = [];
@@ -2542,6 +2674,7 @@ function doPost(e) {
                     document.getElementById('logo-preview-placeholder').classList.add('hidden');
                     showToast("Brand logo loaded successfully");
                     updateBrandUI();
+                    autoSyncIfEnabled();
                 };
                 reader.readAsDataURL(file);
             }
@@ -2557,6 +2690,7 @@ function doPost(e) {
                     document.getElementById('sig-preview').classList.remove('hidden');
                     document.getElementById('sig-preview-placeholder').classList.add('hidden');
                     showToast("Authorized signature loaded successfully");
+                    autoSyncIfEnabled();
                 };
                 reader.readAsDataURL(file);
             }
@@ -2724,11 +2858,16 @@ function doPost(e) {
             const pendingRevenue = state.invoices.reduce((sum, inv) => sum + (inv.remainingAmount || 0), 0);
             const paidInvoicesCount = state.invoices.filter(i => i.status === 'Paid').length;
 
-            document.getElementById('stat-total-clients').textContent = totalClients;
-            document.getElementById('stat-total-invoices').textContent = totalInvoices;
-            document.getElementById('stat-total-revenue').textContent = `₹${totalRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
-            document.getElementById('stat-pending-payments').textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
-            document.getElementById('stat-paid-payments').textContent = paidInvoicesCount;
+            const statClients = document.getElementById('stat-total-clients');
+            if (statClients) statClients.textContent = totalClients;
+            const statInvoices = document.getElementById('stat-total-invoices');
+            if (statInvoices) statInvoices.textContent = totalInvoices;
+            const statRev = document.getElementById('stat-total-revenue');
+            if (statRev) statRev.textContent = `₹${totalRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+            const statPending = document.getElementById('stat-pending-payments');
+            if (statPending) statPending.textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+            const statPaid = document.getElementById('stat-paid-payments');
+            if (statPaid) statPaid.textContent = paidInvoicesCount;
 
             renderClientsList();
             renderInvoicesList();
@@ -2737,69 +2876,193 @@ function doPost(e) {
             updateBrandUI();
 
             const monthSelector = document.getElementById('invoice-filter-month');
-            const uniqueMonths = new Set();
-            state.invoices.forEach(inv => {
-                if (inv.invoiceDate) {
-                    const [year, month] = inv.invoiceDate.split('-');
-                    uniqueMonths.add(`${year}-${month}`);
-                }
-            });
-            
-            const currentSelVal = monthSelector.value;
-            monthSelector.innerHTML = '<option value="All">All Months</option>';
-            Array.from(uniqueMonths).sort().forEach(m => {
-                const date = new Date(m + "-01");
-                const label = date.toLocaleString('default', { month: 'long', year: 'numeric' });
-                monthSelector.innerHTML += `<option value="${m}">${label}</option>`;
-            });
-            monthSelector.value = currentSelVal;
-
-            const recentContainer = document.getElementById('recent-invoices-tbody');
-            recentContainer.innerHTML = "";
-            const sorted = [...state.invoices]
-                .sort((a,b) => new Date(b.invoiceDate) - new Date(a.invoiceDate))
-                .slice(0, 5);
-
-            if (sorted.length === 0) {
-                recentContainer.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="px-6 py-6 text-center text-slate-400 text-xs">No active transactions registered. Ready to create your first?</td>
-                    </tr>`;
-            } else {
-                sorted.forEach(inv => {
-                    const client = state.clients.find(c => c.id === inv.clientId) || { name: "Unknown" };
-                    const badgeColor = inv.status === 'Paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30' :
-                                       inv.status === 'Partial' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/30' :
-                                       'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/30';
-
-                    const tr = document.createElement('tr');
-                    tr.className = "border-b border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors";
-                    tr.innerHTML = `
-                        <td class="px-6 py-3 font-semibold text-slate-900 dark:text-white cursor-pointer" onclick="viewInvoiceDetail('${inv.id}')">${inv.invoiceNumber}</td>
-                        <td class="px-6 py-3">${client.name}</td>
-                        <td class="px-6 py-3 text-xs">${inv.dueDate}</td>
-                        <td class="px-6 py-3 font-bold text-slate-900 dark:text-white">₹${inv.grandTotal.toFixed(2)}</td>
-                        <td class="px-6 py-3">
-                            <span class="px-2 py-0.5 rounded-full text-2xs font-semibold border ${badgeColor}">${inv.status}</span>
-                        </td>
-                        <td class="px-6 py-3 text-right">
-                            <button onclick="viewInvoiceDetail('${inv.id}')" class="p-1 px-2.5 bg-brand-50 hover:bg-brand-100 text-brand-600 dark:bg-brand-900/20 dark:text-brand-400 text-xs font-semibold rounded">Preview</button>
-                        </td>`;
-                    recentContainer.appendChild(tr);
+            if (monthSelector) {
+                const uniqueMonths = new Set();
+                state.invoices.forEach(inv => {
+                    if (inv.invoiceDate) {
+                        const [year, month] = inv.invoiceDate.split('-');
+                        uniqueMonths.add(`${year}-${month}`);
+                    }
                 });
+                
+                const currentSelVal = monthSelector.value;
+                monthSelector.innerHTML = '<option value="All">All Months</option>';
+                Array.from(uniqueMonths).sort().forEach(m => {
+                    const date = new Date(m + "-01");
+                    const label = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                    monthSelector.innerHTML += `<option value="${m}">${label}</option>`;
+                });
+                monthSelector.value = currentSelVal;
             }
 
-            document.getElementById('payments-outstanding').textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            const recentContainer = document.getElementById('recent-invoices-tbody');
+            if (recentContainer) {
+                recentContainer.innerHTML = "";
+                const sorted = [...state.invoices]
+                    .sort((a,b) => new Date(b.invoiceDate) - new Date(a.invoiceDate))
+                    .slice(0, 5);
+
+                if (sorted.length === 0) {
+                    recentContainer.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="px-6 py-6 text-center text-slate-400 text-xs">No active transactions registered. Ready to create your first?</td>
+                        </tr>`;
+                } else {
+                    sorted.forEach(inv => {
+                        const client = state.clients.find(c => c.id === inv.clientId) || { name: "Unknown" };
+                        const badgeColor = inv.status === 'Paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30' :
+                                           inv.status === 'Partial' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900/30' :
+                                           'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/30';
+
+                        const tr = document.createElement('tr');
+                        tr.className = "border-b border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors";
+                        tr.innerHTML = `
+                            <td class="px-6 py-3 font-semibold text-slate-900 dark:text-white cursor-pointer" onclick="viewInvoiceDetail('${inv.id}')">${inv.invoiceNumber}</td>
+                            <td class="px-6 py-3">${client.name}</td>
+                            <td class="px-6 py-3 text-xs">${inv.dueDate}</td>
+                            <td class="px-6 py-3 font-bold text-slate-900 dark:text-white">₹${inv.grandTotal.toFixed(2)}</td>
+                            <td class="px-6 py-3">
+                                <span class="px-2 py-0.5 rounded-full text-2xs font-semibold border ${badgeColor}">${inv.status}</span>
+                            </td>
+                            <td class="px-6 py-3 text-right">
+                                <button onclick="viewInvoiceDetail('${inv.id}')" class="p-1 px-2.5 bg-brand-50 hover:bg-brand-100 text-brand-600 dark:bg-brand-900/20 dark:text-brand-400 text-xs font-semibold rounded">Preview</button>
+                            </td>`;
+                        recentContainer.appendChild(tr);
+                    });
+                }
+            }
+
+            const outstandingField = document.getElementById('payments-outstanding');
+            if (outstandingField) outstandingField.textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
             const clearedRevenue = state.invoices.reduce((sum, inv) => sum + (inv.amountReceived || 0), 0);
-            document.getElementById('payments-cleared').textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            const clearedField = document.getElementById('payments-cleared');
+            if (clearedField) clearedField.textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
             
-            document.getElementById('report-earnings').textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
-            document.getElementById('report-pending').textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
-            document.getElementById('report-clients').textContent = totalClients;
-            document.getElementById('report-invoices').textContent = totalInvoices;
+            const reportEarnings = document.getElementById('report-earnings');
+            if (reportEarnings) reportEarnings.textContent = `₹${clearedRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            const reportPending = document.getElementById('report-pending');
+            if (reportPending) reportPending.textContent = `₹${pendingRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            const reportClients = document.getElementById('report-clients');
+            if (reportClients) reportClients.textContent = totalClients;
+            const reportInvoices = document.getElementById('report-invoices');
+            if (reportInvoices) reportInvoices.textContent = totalInvoices;
 
             renderCharts();
         }
+
+        window.updateAdminPIN = function() {
+            const currentPin = document.getElementById('admin-current-pin').value;
+            const newPin = document.getElementById('admin-new-pin').value;
+            const confirmPin = document.getElementById('admin-confirm-pin').value;
+            const correctPin = localStorage.getItem('cutinvoice_admin_pin') || '1234';
+
+            if (currentPin !== correctPin) {
+                showToast("Current PIN is incorrect.", "error");
+                return;
+            }
+            if (!newPin || newPin.length < 4) {
+                showToast("New PIN must be at least 4 characters long.", "error");
+                return;
+            }
+            if (newPin !== confirmPin) {
+                showToast("Confirm PIN matches option mismatch.", "error");
+                return;
+            }
+
+            localStorage.setItem('cutinvoice_admin_pin', newPin);
+            showToast("Security PIN updated successfully!");
+            document.getElementById('admin-current-pin').value = '';
+            document.getElementById('admin-new-pin').value = '';
+            document.getElementById('admin-confirm-pin').value = '';
+            
+            autoSyncIfEnabled();
+        };
+
+        window.lockSystem = function() {
+            sessionStorage.removeItem('cutinvoice_admin_logged_in');
+            document.getElementById('login-overlay').classList.remove('hidden');
+            showToast("System Locked.");
+        };
+
+        window.attemptAdminLogin = function() {
+            const pinVal = document.getElementById('login-pin-input').value.trim();
+            const correctPin = localStorage.getItem('cutinvoice_admin_pin') || '1234';
+
+            if (pinVal === correctPin) {
+                sessionStorage.setItem('cutinvoice_admin_logged_in', 'true');
+                document.getElementById('login-overlay').classList.add('hidden');
+                document.getElementById('login-pin-input').value = '';
+                showToast("Access Granted. Welcome back Admin!");
+                renderAllData();
+            } else {
+                showToast("Galat Security PIN entered. Please try again.", "error");
+                const pinField = document.getElementById('login-pin-input');
+                pinField.classList.add('ring-2', 'ring-rose-500');
+                setTimeout(() => pinField.classList.remove('ring-2', 'ring-rose-500'), 1000);
+            }
+        };
+
+        // Setup DOM state handlers
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Check for onboarding URL parameter (syncUrl)
+            const urlParams = new URLSearchParams(window.location.search);
+            const querySyncUrl = urlParams.get('syncUrl');
+            if (querySyncUrl) {
+                localStorage.setItem('cutinvoice_webapp_url', decodeURIComponent(querySyncUrl));
+                localStorage.setItem('cutinvoice_autosync', 'true');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // Restore PIN from local storage or set default
+            if (!localStorage.getItem('cutinvoice_admin_pin')) {
+                localStorage.setItem('cutinvoice_admin_pin', '1234');
+            }
+
+            // Restore backups instantly
+            loadLocalStorageBackup();
+
+            // Bind Cloud settings values in settings view UI
+            const webAppUrlInput = document.getElementById('sync-webapp-url');
+            if (webAppUrlInput) {
+                webAppUrlInput.value = localStorage.getItem('cutinvoice_webapp_url') || '';
+            }
+            const autoSyncToggle = document.getElementById('sync-auto-toggle');
+            if (autoSyncToggle) {
+                autoSyncToggle.checked = localStorage.getItem('cutinvoice_autosync') === 'true';
+            }
+
+            // Load settings & theme elements
+            loadSettingsFields();
+            setupTheme();
+            renderAllData();
+            updateSyncBadgeStatus();
+
+            // Run asynchronous initial secure handshake syncing mechanism
+            await runInitialCloudSync();
+
+            // Validate login session
+            const isAuthorized = sessionStorage.getItem('cutinvoice_admin_logged_in') === 'true';
+            const overlay = document.getElementById('login-overlay');
+            if (overlay) {
+                if (isAuthorized) {
+                    overlay.classList.add('hidden');
+                } else {
+                    overlay.classList.remove('hidden');
+                    const pinInp = document.getElementById('login-pin-input');
+                    if (pinInp) pinInp.focus();
+                }
+            }
+        });
+
+        // Bind Enter key to authentication action
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const overlay = document.getElementById('login-overlay');
+                if (overlay && !overlay.classList.contains('hidden')) {
+                    attemptAdminLogin();
+                }
+            }
+        });
 
     </script>
 </body>
