@@ -73,9 +73,7 @@
     <div id="cloud-sync-loader" class="fixed inset-0 z-[150] bg-slate-900/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
         <div class="text-center space-y-6 max-w-sm w-full">
             <div class="relative w-20 h-20 mx-auto">
-                <!-- Glowing effect -->
                 <div class="absolute inset-0 rounded-full bg-brand-500/20 blur-xl animate-pulse"></div>
-                <!-- Double rotating circular rings -->
                 <div class="w-full h-full rounded-full border-4 border-slate-800 border-t-brand-500 animate-spin"></div>
                 <div class="absolute inset-2 rounded-full border-4 border-slate-800 border-b-emerald-500 animate-spin" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
                 <div class="absolute inset-0 flex items-center justify-center text-brand-500">
@@ -93,7 +91,7 @@
         </div>
     </div>
 
-    <!-- ================= VIEW: ADMIN PIN LOGIN SCREEN (Screenshot 4 Reference) ================= -->
+    <!-- ================= VIEW: ADMIN PIN LOGIN SCREEN ================= -->
     <div id="login-overlay" class="fixed inset-0 z-[100] bg-slate-900/90 dark:bg-neutral-950/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-8 space-y-6 transform scale-100 transition-all">
             <!-- Logo Header -->
@@ -199,7 +197,6 @@
         </div>
     </aside>
 
-    <!-- Overlay for Mobile Sidebar -->
     <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden md:hidden"></div>
 
     <!-- Main Content Area -->
@@ -214,7 +211,6 @@
                 <h2 id="view-title" class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Dashboard Overview</h2>
             </div>
             
-            <!-- Quick Actions Header Menu -->
             <div class="flex items-center space-x-3">
                 <button onclick="openNewInvoiceModal()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs rounded-lg shadow-sm shadow-brand-500/10 transition-colors">
                     <i class="fa-solid fa-plus text-2xs"></i>
@@ -346,7 +342,6 @@
                         </select>
                         <select id="invoice-filter-month" onchange="filterInvoices()" class="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded-lg focus:ring-2 focus:ring-brand-500">
                             <option value="All">All Months</option>
-                            <!-- Programmatically loaded -->
                         </select>
                     </div>
                     <div class="flex items-center gap-2">
@@ -450,7 +445,7 @@
                                 </tr>
                             </thead>
                             <tbody id="ledger-tbody">
-                                <!-- Populated dynamically from state invoices metadata payments lists -->
+                                <!-- Populated dynamically -->
                             </tbody>
                         </table>
                     </div>
@@ -499,7 +494,6 @@
             <!-- ================= VIEW: SETTINGS ================= -->
             <div id="view-settings" class="space-y-6 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- General Business form layout panel -->
                     <form id="settings-form" onsubmit="saveSettings(event)" class="lg:col-span-2 space-y-6">
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                             <h3 class="text-lg font-bold text-slate-900 dark:text-white">Business Profile & Payment Configuration</h3>
@@ -547,7 +541,7 @@
                     <!-- Sidebar Configuration Panels -->
                     <div class="space-y-6">
                         
-                        <!-- ================= GOOGLE CLOUD DEVICE SYNC PANEL (Screenshot 3 Reference) ================= -->
+                        <!-- ================= GOOGLE CLOUD DEVICE SYNC PANEL ================= -->
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2 text-brand-600 dark:text-brand-400">
@@ -556,10 +550,9 @@
                                 </div>
                                 <span id="sync-status-badge" class="px-2 py-0.5 rounded text-3xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">OFFLINE</span>
                             </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">Google Apps Script Web App Deployment ke jariye mobile aur desktop browser me realtime sync enabled karein. Ye continuous sync background update loop handle karega.</p>
+                            <p class="text-xs text-slate-400 leading-relaxed">Google Apps Script Web App Deployment ke jariye mobile aur desktop browser me realtime sync enabled karein.</p>
                             
-                            <!-- Toggle layout -->
-                            <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-lg flex items-center justify-between border border-slate-100 dark:border-slate-800">
+                            <div class="bg-slate-50 dark:bg-slate-808/40 p-3 rounded-lg flex items-center justify-between border border-slate-100 dark:border-slate-800">
                                 <div>
                                     <p class="text-xs font-bold text-slate-800 dark:text-slate-200">Cloud Auto-Sync</p>
                                     <p class="text-3xs text-slate-400 mt-0.5">Har save aur click ke baad database automatic save & sync karein.</p>
@@ -570,13 +563,11 @@
                                 </label>
                             </div>
 
-                            <!-- Web App URL input -->
                             <div class="space-y-1.5">
                                 <label class="block text-3xs font-bold uppercase tracking-wider text-slate-500">Google Apps Script Web App URL</label>
                                 <input type="url" id="sync-webapp-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border-0 rounded text-xs font-mono">
                             </div>
 
-                            <!-- Push/Pull Actions -->
                             <div class="grid grid-cols-2 gap-2 pt-1">
                                 <button type="button" onclick="forcePushCloudSync()" class="py-2 px-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-lg flex items-center justify-center gap-1.5 shadow-sm transition-colors">
                                     <i class="fa-solid fa-cloud-arrow-up"></i> Force Push
@@ -586,7 +577,6 @@
                                 </button>
                             </div>
 
-                            <!-- Help Guide details -->
                             <details class="group border border-slate-100 dark:border-slate-800 rounded-lg overflow-hidden">
                                 <summary class="list-none flex justify-between items-center p-3 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40">
                                     <span>▶ Show Google Apps Script Setup Guide</span>
@@ -806,7 +796,6 @@ function doPost(e) {
 
                 <!-- Financial Calculations Bottom Layout -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100 dark:border-slate-800">
-                    <!-- Payments tracking details inside form -->
                     <div class="space-y-4">
                         <span class="text-xs font-bold uppercase text-slate-400">Payment Settlements & Methods</span>
                         
@@ -888,109 +877,114 @@ function doPost(e) {
                 </div>
             </div>
 
-            <!-- Zoho Classic Black and White Layout Panel Container -->
-            <div class="p-8 overflow-y-auto flex-1 bg-white " id="print-area">
-                <div class="max-w-3xl mx-auto border border-slate-200 dark:border-slate-800 p-8 rounded-xl bg-white text-slate-900 space-y-8" id="invoice-sheet">                    <!-- Heading -->
+            <!-- Zoho / Stripe Classic Professional Layout Panel Container -->
+            <!-- CRITICAL FIX: Removed all leakage classes (like dark:text-slate-200, etc.) from inside '#invoice-sheet' so texts remain dark and perfectly readable even when system is in Dark Mode -->
+            <div class="p-8 overflow-y-auto flex-1 bg-slate-100" id="print-area">
+                <div class="max-w-3xl mx-auto border-t-8 border-brand-600 border-x border-b border-slate-200 p-8 rounded-xl bg-white shadow-lg text-slate-800 space-y-8" id="invoice-sheet" style="font-family: 'Inter', sans-serif;">
+                    
+                    <!-- Heading: Brand and Invoice Identifier -->
                     <div class="flex justify-between items-start">
-                        <div class="space-y-2">
-                            <!-- Logo Preview Placeholder in PDF Layout -->
+                        <div class="space-y-3">
                             <div class="h-12 flex items-center">
                                 <img id="view-brand-logo" class="max-h-12 object-contain hidden" alt="Brand Logo">
-                                <span id="view-brand-title" class="text-xl font-extrabold tracking-tight text-slate-950 dark:text-white uppercase">CUTINVOICE</span>
+                                <span id="view-brand-title" class="text-2xl font-extrabold tracking-tight text-slate-900 uppercase">CUTINVOICE</span>
                             </div>
-                            <div class="text-xs text-slate-800 space-y-0.5">
-                                <p id="view-sender-name" class="font-semibold text-slate-800 dark:text-slate-200"></p>
-                                <p id="view-sender-address"></p>
-                                <p>Phone: <span id="view-sender-phone"></span></p>
-                                <p>Email: <span id="view-sender-email"></span></p>
-                                <p id="view-sender-gst-container" class="hidden">GST: <span id="view-sender-gst"></span></p>
+                            <div class="text-xs text-slate-600 space-y-1">
+                                <p id="view-sender-name" class="font-bold text-slate-900 text-sm"></p>
+                                <p id="view-sender-address" class="whitespace-pre-line leading-relaxed"></p>
+                                <p class="font-medium">Phone: <span id="view-sender-phone" class="text-slate-900"></span></p>
+                                <p class="font-medium">Email: <span id="view-sender-email" class="text-slate-900"></span></p>
+                                <p id="view-sender-gst-container" class="hidden font-medium">GST: <span id="view-sender-gst" class="text-slate-900 font-bold"></span></p>
                             </div>
                         </div>
-                        <div class="text-right space-y-1">
-                            <h2 class="text-2xl font-light tracking-wide text-slate-400">INVOICE</h2>
-                            <p class="text-base font-bold" id="view-invoice-id"></p>
-                            <div class="text-xs text-slate-800 pt-2 space-y-0.5">
-                                <p>Date: <span id="view-invoice-date" class="font-medium text-slate-700 dark:text-slate-300"></span></p>
-                                <p>Due Date: <span id="view-invoice-due" class="font-medium text-slate-700 dark:text-slate-300"></span></p>
+                        <div class="text-right space-y-1.5">
+                            <span class="inline-block bg-slate-100 text-slate-800 text-2xs font-bold tracking-widest uppercase px-2.5 py-1 rounded">Tax Invoice</span>
+                            <h2 class="text-3xl font-light tracking-wide text-slate-400">INVOICE</h2>
+                            <p class="text-lg font-extrabold text-slate-900" id="view-invoice-id">INV-0000</p>
+                            <div class="text-xs text-slate-600 pt-2 space-y-1">
+                                <p>Date: <span id="view-invoice-date" class="font-bold text-slate-900"></span></p>
+                                <p>Due Date: <span id="view-invoice-due" class="font-bold text-slate-900"></span></p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Client Details & Metas -->
-                    <div class="border-t border-slate-200 dark:border-slate-800 pt-6 grid grid-cols-2 gap-4">
-                        <div class="space-y-1 text-xs text-slate-500">
+                    <div class="border-t border-slate-200 pt-6 grid grid-cols-2 gap-4">
+                        <div class="space-y-1.5 text-xs text-slate-600">
                             <span class="block font-bold uppercase tracking-wider text-2xs text-slate-400">Bill To:</span>
-                            <p id="view-client-name" class="font-bold text-slate-800 dark:text-slate-200 text-sm"></p>
-                            <p id="view-client-company" class="font-medium text-slate-700 dark:text-slate-300"></p>
-                            <p id="view-client-address" class="whitespace-pre-line"></p>
-                            <p>Phone: <span id="view-client-phone"></span></p>
-                            <p>Email: <span id="view-client-email"></span></p>
-                            <p id="view-client-gst-container" class="hidden">GST: <span id="view-client-gst"></span></p>
+                            <p id="view-client-name" class="font-extrabold text-slate-900 text-sm"></p>
+                            <p id="view-client-company" class="font-semibold text-slate-700"></p>
+                            <p id="view-client-address" class="whitespace-pre-line leading-relaxed text-slate-600"></p>
+                            <p class="font-medium">Phone: <span id="view-client-phone" class="text-slate-900"></span></p>
+                            <p class="font-medium">Email: <span id="view-client-email" class="text-slate-900"></span></p>
+                            <p id="view-client-gst-container" class="hidden font-medium">GST: <span id="view-client-gst" class="text-slate-900 font-bold"></span></p>
                         </div>
                         <div class="flex flex-col items-end justify-between">
-                            <div class="text-right text-xs">
-                                <span class="block font-bold uppercase tracking-wider text-2xs text-slate-400">Outstanding Balance</span>
-                                <p id="view-outstanding-balance" class="text-lg font-bold text-amber-600">₹0.00</p>
+                            <div class="text-right text-xs space-y-1 bg-amber-50 border border-amber-200 p-3 rounded-lg w-full max-w-[200px]">
+                                <span class="block font-bold uppercase tracking-wider text-2xs text-amber-800">Outstanding Balance</span>
+                                <p id="view-outstanding-balance" class="text-xl font-black text-amber-700">₹0.00</p>
                             </div>
                             <!-- UPI Payment Quick QR code -->
-                            <div id="upi-qrcode-container" class="flex flex-col items-center border border-slate-100 p-2 rounded bg-slate-50 dark:bg-slate-800 dark:border-slate-700">
-                                <div id="invoice-upi-qrcode" class="w-20 h-20 bg-white text-slate-900"></div>
-                                <span class="text-3xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Scan to pay (UPI)</span>
+                            <div id="upi-qrcode-container" class="flex flex-col items-center border border-slate-200 p-2 rounded-lg bg-slate-50 w-full max-w-[200px] mt-2">
+                                <div id="invoice-upi-qrcode" class="w-20 h-20 bg-white text-slate-900 flex items-center justify-center"></div>
+                                <span class="text-[9px] text-slate-500 mt-1 uppercase tracking-widest font-bold">SCAN TO PAY (UPI)</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Services Table -->
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead>
-                            <tr class="border-b border-slate-300 dark:border-slate-700 font-bold uppercase text-slate-500">
-                                <th class="py-2.5">Service / Item</th>
-                                <th class="py-2.5 text-center">Qty</th>
-                                <th class="py-2.5 text-right">Rate</th>
-                                <th class="py-2.5 text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody id="view-services-tbody">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b-2 border-slate-300 font-extrabold uppercase text-slate-700 text-[10px] tracking-wider">
+                                    <th class="py-3 pr-4">Service / Item Description</th>
+                                    <th class="py-3 text-center w-16">Qty</th>
+                                    <th class="py-3 text-right w-28">Rate</th>
+                                    <th class="py-3 text-right w-28">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="view-services-tbody">
+                                <!-- Populated dynamically (All dark classes stripped during render) -->
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- Totals and Fineprint Details -->
-                    <div class="border-t border-slate-200 dark:border-slate-800 pt-6 grid grid-cols-2 gap-4">
-                        <div class="text-xs text-slate-500 space-y-1">
-                            <p class="font-bold text-slate-700 dark:text-slate-300">Notes & Terms</p>
-                            <p>All items listed are due as per agreement standard. Please clear dues timely to prevent penalty indices.</p>
-                            <div class="pt-4">
-                                <p class="font-bold text-slate-700 dark:text-slate-300">UPI ID for transfers:</p>
-                                <p class="font-mono text-xs text-slate-800 dark:text-slate-200" id="view-upi-display"></p>
+                    <div class="border-t border-slate-200 pt-6 grid grid-cols-2 gap-4">
+                        <div class="text-xs text-slate-600 space-y-2">
+                            <p class="font-bold text-slate-900 uppercase tracking-wider text-2xs">Notes & Terms</p>
+                            <p class="leading-relaxed text-slate-500">All items listed are due as per agreement standard. Please clear dues timely to prevent penalty indices.</p>
+                            <div class="pt-2 bg-slate-50 p-2.5 rounded border border-slate-100">
+                                <p class="font-bold text-slate-800 text-[10px] uppercase tracking-wider">UPI ID for Bank transfers:</p>
+                                <p class="font-mono text-xs font-bold text-slate-900 mt-0.5" id="view-upi-display"></p>
                             </div>
                         </div>
-                        <div class="text-right text-xs space-y-1.5 max-w-xs ml-auto w-full">
-                            <div class="flex justify-between text-slate-500">
-                                <span>Subtotal:</span>
-                                <span id="view-subtotal">₹0.00</span>
+                        <div class="text-right text-xs space-y-2 max-w-xs ml-auto w-full">
+                            <div class="flex justify-between text-slate-600">
+                                <span class="font-medium">Subtotal:</span>
+                                <span id="view-subtotal" class="font-semibold text-slate-900">₹0.00</span>
                             </div>
-                            <div class="flex justify-between text-slate-500">
-                                <span>Discount:</span>
-                                <span id="view-discount">0%</span>
+                            <div class="flex justify-between text-slate-600">
+                                <span class="font-medium">Discount:</span>
+                                <span id="view-discount" class="font-semibold text-slate-900">0%</span>
                             </div>
-                            <div class="flex justify-between text-slate-500">
-                                <span>GST:</span>
-                                <span id="view-gst">18%</span>
+                            <div class="flex justify-between text-slate-600">
+                                <span class="font-medium">GST:</span>
+                                <span id="view-gst" class="font-semibold text-slate-900">18%</span>
                             </div>
-                            <div class="border-t border-dashed border-slate-200 dark:border-slate-800 my-1"></div>
-                            <div class="flex justify-between text-sm font-extrabold text-slate-900 dark:text-white">
+                            <div class="border-t border-dashed border-slate-300 my-2"></div>
+                            <div class="flex justify-between text-sm font-black text-slate-900">
                                 <span>Grand Total:</span>
                                 <span id="view-grand-total">₹0.00</span>
                             </div>
-                            <div class="flex justify-between text-emerald-600 font-semibold">
+                            <div class="flex justify-between text-emerald-700 font-bold bg-emerald-50 px-2 py-1 rounded">
                                 <span>Amount Cleared:</span>
                                 <span id="view-amount-cleared">₹0.00</span>
                             </div>
 
                             <!-- Signature Area inside preview layout -->
                             <div id="view-signature-container" class="pt-6 hidden flex flex-col items-end">
-                                <span class="text-2xs text-slate-400 block mb-1">Authorized Signature</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Authorized Signature</span>
                                 <img id="view-signature-img" class="max-h-12 object-contain" alt="Signature">
                             </div>
                         </div>
@@ -1040,13 +1034,11 @@ function doPost(e) {
             }
         };
 
-        // Standard Autocomplete templates
         const serviceTemplates = [
             "Real Estate Reel Editing", "Long Form Video Editing", "Thumbnail Design", 
             "Motion Graphics", "Color Grading", "Podcast Editing", "YouTube Shorts"
         ];
 
-        // Active filters and views
         let activeView = 'dashboard';
         let invoiceCurrentPage = 1;
         const invoicesPerPage = 10;
@@ -1055,12 +1047,10 @@ function doPost(e) {
         let invoiceMonthFilter = "All";
         let clientSearchQuery = "";
 
-        // Chart instances
         let revenueChartInstance = null;
         let clientsChartInstance = null;
         let reportMonthlyChartInstance = null;
 
-        // Custom Confirmation storage
         let onConfirmCallback = null;
 
         // ================= TOASTS & UTILS =================
@@ -1105,7 +1095,6 @@ function doPost(e) {
             onConfirmCallback = null;
         });
 
-
         // ================= LOADING STATE OVERLAYS =================
 
         window.showCloudSyncLoader = function(message = "Syncing with Cloud...") {
@@ -1123,7 +1112,6 @@ function doPost(e) {
                 loader.classList.add('hidden');
             }
         };
-
 
         // ================= LOCAL STORAGE BACKUPS =================
 
@@ -1150,8 +1138,7 @@ function doPost(e) {
             localStorage.setItem('cutinvoice_last_updated', state.lastUpdated.toString());
         }
 
-
-        // ================= GOOGLE CLOUD SYNC SYSTEM (Screenshot 3 Reference) =================
+        // ================= GOOGLE CLOUD SYNC SYSTEM =================
 
         window.updateSyncBadgeStatus = function() {
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url') || '';
@@ -1198,13 +1185,11 @@ function doPost(e) {
             autoSyncIfEnabled();
         };
 
-        // Live input updates logic
         document.getElementById('sync-webapp-url').addEventListener('input', (e) => {
             localStorage.setItem('cutinvoice_webapp_url', e.target.value.trim());
             updateSyncBadgeStatus();
         });
 
-        // Pack comprehensive application state to push
         function buildSyncPayload() {
             return {
                 clients: state.clients,
@@ -1217,7 +1202,6 @@ function doPost(e) {
             };
         }
 
-        // Unpack payload from cloud safely & configure local storage properties
         function unpackSyncPayload(cloudData) {
             if (!cloudData) return false;
             let dataUpdated = false;
@@ -1239,7 +1223,6 @@ function doPost(e) {
             }
             if (cloudData.theme) {
                 localStorage.setItem('theme', cloudData.theme);
-                // Apply theme setting immediately
                 if (cloudData.theme === 'dark') {
                     document.documentElement.classList.add('dark');
                     document.documentElement.classList.remove('light');
@@ -1263,7 +1246,6 @@ function doPost(e) {
             return dataUpdated;
         }
 
-        // Auto Sync Background Processor with safety Debounce to prevent rapid parallel queries
         let autoSyncTimeout = null;
         function autoSyncIfEnabled() {
             state.lastUpdated = Date.now();
@@ -1276,11 +1258,10 @@ function doPost(e) {
                 
                 autoSyncTimeout = setTimeout(() => {
                     performCloudPush(buildSyncPayload(), true);
-                }, 1200); // 1.2s delay to batch up quick edits/clicks
+                }, 1200);
             }
         }
 
-        // Robust Background Push Function with Retry Loop
         async function performCloudPush(payloadData, isSilent = false) {
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
             if (!webAppUrl) return false;
@@ -1314,10 +1295,10 @@ function doPost(e) {
                         if (res && res.status === 'success') {
                             success = true;
                         } else {
-                            lastError = new Error(res.message || "Push rejected by Web App script parameters");
+                            lastError = new Error(res.message || "Push rejected by Web App parameters");
                         }
                     } else {
-                        lastError = new Error("HTTP Response Status: " + response.status);
+                        lastError = new Error("HTTP Status: " + response.status);
                     }
                 } catch (err) {
                     lastError = err;
@@ -1333,18 +1314,17 @@ function doPost(e) {
                 updateSyncBadgeStatus();
                 return true;
             } else {
-                console.error("Cloud push failed after retries:", lastError);
+                console.error("Cloud push failed:", lastError);
                 if (!isSilent) showToast("Offline Mode: Sync cached locally.", "info");
                 updateSyncBadgeStatus();
                 return false;
             }
         }
 
-        // Force Push Action
         window.forcePushCloudSync = async function(isSilent = false) {
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
             if (!webAppUrl) {
-                if (!isSilent) showToast("Google Apps Script URL set karna required hai.", "error");
+                if (!isSilent) showToast("Google Apps Script URL required.", "error");
                 return;
             }
 
@@ -1352,7 +1332,6 @@ function doPost(e) {
             saveLocalStorageBackup();
 
             if (!isSilent) showCloudSyncLoader("Pushing to Cloud...");
-            
             const success = await performCloudPush(buildSyncPayload(), isSilent);
 
             if (!isSilent) {
@@ -1365,11 +1344,10 @@ function doPost(e) {
             }
         };
 
-        // Force Pull Action
         window.forcePullCloudSync = async function() {
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
             if (!webAppUrl) {
-                showToast("Sync URL missing inside Settings.", "error");
+                showToast("Sync URL missing in Settings.", "error");
                 return;
             }
 
@@ -1387,22 +1365,20 @@ function doPost(e) {
                     renderAllData();
                     showToast("Database successfully restored from Google Sheet sync backup.");
                 } else {
-                    showToast("No active database backup found on your script.", "error");
+                    showToast("No active database backup found.", "error");
                 }
             } catch (err) {
                 console.error("Manual sync pull failed:", err);
-                showToast("Connection failed. Apps Script URL correctly configure karein.", "error");
+                showToast("Connection failed. Check Apps Script URL configuration.", "error");
             } finally {
                 hideCloudSyncLoader();
                 updateSyncBadgeStatus();
             }
         };
 
-        // Automatic Start-Up Pull Engine Handler
         async function runInitialCloudSync() {
             const webAppUrl = localStorage.getItem('cutinvoice_webapp_url');
             if (!webAppUrl) {
-                // No sync configuration present; keep local caching mode running instantly
                 updateSyncBadgeStatus();
                 return;
             }
@@ -1410,7 +1386,6 @@ function doPost(e) {
             showCloudSyncLoader("Syncing with Cloud...");
 
             try {
-                // Fetch latest cloud dataset with a quick safety connection abort controller timeout
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 8000);
 
@@ -1421,7 +1396,7 @@ function doPost(e) {
                 });
                 clearTimeout(timeoutId);
 
-                if (!response.ok) throw new Error("Server handshake issue status code " + response.status);
+                if (!response.ok) throw new Error("Server handshake issue status " + response.status);
                 const cloudResult = await response.json();
 
                 const isCloudEmpty = !cloudResult || 
@@ -1429,7 +1404,6 @@ function doPost(e) {
                                      (!cloudResult.clients && !cloudResult.invoices);
 
                 if (isCloudEmpty) {
-                    // Initialize cloud DB with standard local dataset baseline fallback
                     const hasLocalData = state.clients.length > 0 || state.invoices.length > 0;
                     if (hasLocalData) {
                         showCloudSyncLoader("Initializing Cloud DB...");
@@ -1459,7 +1433,6 @@ function doPost(e) {
             }
         }
 
-        // Monitor internet restoration
         window.addEventListener('online', () => {
             showToast("Connection Restored! Synced to cloud backup.", "success");
             autoSyncIfEnabled();
@@ -1469,7 +1442,6 @@ function doPost(e) {
             showToast("You are offline. Saving changes locally.", "error");
             updateSyncBadgeStatus();
         });
-
 
         // ================= NAV CONTROLS =================
 
@@ -1520,7 +1492,7 @@ function doPost(e) {
                 document.documentElement.classList.add('light');
             }
 
-            toggleBtn.replaceWith(toggleBtn.cloneNode(true)); // prevent multiple redundant bindings
+            toggleBtn.replaceWith(toggleBtn.cloneNode(true));
             const newToggleBtn = document.getElementById('theme-toggle');
             
             newToggleBtn.addEventListener('click', () => {
@@ -1536,7 +1508,6 @@ function doPost(e) {
                 }
                 localStorage.setItem('theme', themeVal);
                 setTimeout(() => renderCharts(), 100);
-                
                 autoSyncIfEnabled();
             });
         }
@@ -1552,7 +1523,6 @@ function doPost(e) {
                 overlay.classList.add('hidden');
             }
         };
-
 
         // ================= CLIENT MANAGEMENT LOGIC =================
 
@@ -1689,7 +1659,6 @@ function doPost(e) {
                 grid.appendChild(card);
             });
         }
-
 
         // ================= INVOICE SYSTEM LOGIC =================
 
@@ -2005,7 +1974,6 @@ function doPost(e) {
             }
         };
 
-
         // ================= INVOICE VIEWER LOGIC (ZOHO STYLING) =================
 
         let activeViewingInvoice = null;
@@ -2019,10 +1987,10 @@ function doPost(e) {
 
             const badge = document.getElementById('view-status-badge');
             badge.textContent = inv.status;
-            badge.className = `px-2 py-0.5 text-2xs rounded-full font-bold ${
-                inv.status === 'Paid' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400' :
-                inv.status === 'Partial' ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400' :
-                'bg-rose-100 text-rose-800 dark:bg-rose-950/40 dark:text-rose-400'
+            badge.className = `px-2.5 py-1 text-2xs rounded-full font-bold uppercase tracking-wider ${
+                inv.status === 'Paid' ? 'bg-emerald-100 text-emerald-800' :
+                inv.status === 'Partial' ? 'bg-amber-100 text-amber-800' :
+                'bg-rose-100 text-rose-800'
             }`;
 
             if (state.settings.logo) {
@@ -2066,16 +2034,17 @@ function doPost(e) {
 
             document.getElementById('view-outstanding-balance').textContent = `₹${(inv.remainingAmount || 0).toFixed(2)}`;
 
+            // CRITICAL CONTRAST FIX: Ensuring table line items renders dark colors exclusively
             const tbody = document.getElementById('view-services-tbody');
             tbody.innerHTML = "";
             inv.items.forEach(item => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b border-slate-100 dark:border-slate-800 text-xs";
+                tr.className = "border-b border-slate-200 text-xs";
                 tr.innerHTML = `
-                    <td class="py-3 font-semibold text-slate-800 dark:text-slate-200">${item.serviceName}</td>
-                    <td class="py-3 text-center">${item.qty}</td>
-                    <td class="py-3 text-right">₹${item.rate.toFixed(2)}</td>
-                    <td class="py-3 text-right font-semibold">₹${(item.qty * item.rate).toFixed(2)}</td>`;
+                    <td class="py-3.5 pr-4 font-bold text-slate-900">${item.serviceName}</td>
+                    <td class="py-3.5 text-center text-slate-800 font-medium">${item.qty}</td>
+                    <td class="py-3.5 text-right text-slate-800 font-medium">₹${item.rate.toFixed(2)}</td>
+                    <td class="py-3.5 text-right font-bold text-slate-900">₹${(item.qty * item.rate).toFixed(2)}</td>`;
                 tbody.appendChild(tr);
             });
 
@@ -2102,7 +2071,7 @@ function doPost(e) {
                     text: upiString,
                     width: 80,
                     height: 80,
-                    colorDark : "#000000",
+                    colorDark : "#0f172a",
                     colorLight : "#ffffff",
                     correctLevel : QRCode.CorrectLevel.H
                 });
@@ -2119,45 +2088,35 @@ function doPost(e) {
             activeViewingInvoice = null;
         };
 
-    window.triggerPDFDownload = async function () {
+        window.triggerPDFDownload = async function () {
+            if (!activeViewingInvoice) return;
 
-    if (!activeViewingInvoice) return;
+            const { jsPDF } = window.jspdf;
+            const invoiceSheet = document.getElementById("invoice-sheet");
 
-    const { jsPDF } = window.jspdf;
+            // Temporary elegant border styling correction during PDF printing compile
+            const canvas = await html2canvas(invoiceSheet, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#ffffff"
+            });
 
-    const invoiceSheet = document.getElementById("invoice-sheet");
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4"
+            });
 
-    const canvas = await html2canvas(invoiceSheet, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#ffffff"
-    });
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-    const imgData = canvas.toDataURL("image/png");
+            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`Invoice_${activeViewingInvoice.invoiceNumber}.pdf`);
 
-    const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4"
-    });
-
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        0,
-        pdfWidth,
-        pdfHeight
-    );
-
-    pdf.save(`Invoice_${activeViewingInvoice.invoiceNumber}.pdf`);
-
-    showToast("Invoice downloaded successfully!");
-};
+            showToast("Invoice downloaded successfully!");
+        };
 
         // ================= SEARCH & FILTERS LOGIC =================
 
@@ -2263,7 +2222,6 @@ function doPost(e) {
                 tbody.appendChild(tr);
             });
         }
-
 
         // ================= REPORTING & CHARTS SYSTEM =================
 
@@ -2391,7 +2349,6 @@ function doPost(e) {
             }
         }
 
-
         // ================= PAYMENTS REGISTRY LOGS LEDGER =================
 
         function renderPaymentsLedger() {
@@ -2442,7 +2399,6 @@ function doPost(e) {
                 tbody.appendChild(tr);
             });
         }
-
 
         // ================= SETTINGS PROFILE PANEL =================
 
@@ -2499,7 +2455,6 @@ function doPost(e) {
             autoSyncIfEnabled();
         };
 
-        // Helper function to dynamically resize & compress base64 images to make cloud syncing incredibly fast
         function compressImage(base64Str, maxWidth, maxHeight, callback) {
             if (!base64Str || !base64Str.startsWith('data:image')) {
                 callback(base64Str);
@@ -2527,7 +2482,6 @@ function doPost(e) {
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
                 
-                // Compress as JPEG format with 0.75 quality to save maximum bandwidth
                 const compressedBase64 = canvas.toDataURL('image/png');
                 callback(compressedBase64);
             };
@@ -2572,7 +2526,6 @@ function doPost(e) {
                 reader.readAsDataURL(file);
             }
         });
-
 
         // ================= EXCEL OPERATIONS (SheetJS INTEGRATION) =================
 
@@ -2685,7 +2638,6 @@ function doPost(e) {
             };
             reader.readAsArrayBuffer(file);
         };
-
 
         // ================= RENDERING AND AGGREGATION SYSTEM =================
 
@@ -2879,9 +2831,7 @@ function doPost(e) {
             }
         };
 
-        // Setup DOM state handlers
         window.addEventListener('DOMContentLoaded', async () => {
-            // Check for onboarding URL parameter (syncUrl)
             const urlParams = new URLSearchParams(window.location.search);
             const querySyncUrl = urlParams.get('syncUrl');
             if (querySyncUrl) {
@@ -2890,28 +2840,23 @@ function doPost(e) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            // If no App Script Web App URL is configured yet, set the user's provided secure URL as default
             let savedUrl = localStorage.getItem('cutinvoice_webapp_url');
             if (!savedUrl) {
                 savedUrl = "https://script.google.com/macros/s/AKfycbyho9ICf96bPVh0AkdwQbZpr6CoqfTMpf9Fd-8j1vwo_eI-5r-VhVIHEM25_ttTqjI2Aw/exec";
                 localStorage.setItem('cutinvoice_webapp_url', savedUrl);
             }
 
-            // Enable Auto-sync by default if it's not set
             let savedAutoSync = localStorage.getItem('cutinvoice_autosync');
             if (savedAutoSync === null) {
                 localStorage.setItem('cutinvoice_autosync', 'true');
             }
 
-            // Restore PIN from local storage or set default
             if (!localStorage.getItem('cutinvoice_admin_pin')) {
                 localStorage.setItem('cutinvoice_admin_pin', '1234');
             }
 
-            // Restore backups instantly
             loadLocalStorageBackup();
 
-            // Bind Cloud settings values in settings view UI
             const webAppUrlInput = document.getElementById('sync-webapp-url');
             if (webAppUrlInput) {
                 webAppUrlInput.value = localStorage.getItem('cutinvoice_webapp_url') || '';
@@ -2921,16 +2866,13 @@ function doPost(e) {
                 autoSyncToggle.checked = localStorage.getItem('cutinvoice_autosync') === 'true';
             }
 
-            // Load settings & theme elements
             loadSettingsFields();
             setupTheme();
             renderAllData();
             updateSyncBadgeStatus();
 
-            // Run asynchronous initial secure handshake syncing mechanism
             await runInitialCloudSync();
 
-            // Validate login session
             const isAuthorized = sessionStorage.getItem('cutinvoice_admin_logged_in') === 'true';
             const overlay = document.getElementById('login-overlay');
             if (overlay) {
@@ -2944,7 +2886,6 @@ function doPost(e) {
             }
         });
 
-        // Bind Enter key to authentication action
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const overlay = document.getElementById('login-overlay');
@@ -2953,7 +2894,6 @@ function doPost(e) {
                 }
             }
         });
-
     </script>
 </body>
 </html>
