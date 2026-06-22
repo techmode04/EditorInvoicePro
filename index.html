@@ -76,7 +76,7 @@
                 <div id="sidebar-brand-icon" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 shrink-0">
                     <i class="fa-solid fa-clapperboard-play text-lg"></i>
                 </div>
-                <img id="sidebar-brand-logo" class="w-10 h-10 rounded-xl object-cover hidden shrink-0">
+                <img id="sidebar-brand-logo" class="w-10 h-10 rounded-xl object-cover hidden shrink-0" alt="Brand Logo">
                 <div>
                     <h1 id="sidebar-brand-name" class="font-bold text-lg leading-tight dark:text-white">CutInvoice</h1>
                     <span class="text-xs text-slate-400 dark:text-slate-500">Video Editor Hub</span>
@@ -1024,7 +1024,19 @@
                     Cloud Database Connected`;
                 
             } catch (error) {
-                console.error("Firebase Connection Error, falling back to fully functional Local State Storage Engine:", error);
+                console.error("Firebase Connection Error:", error);
+                
+                // Show detailed helper to developer
+                let errMsg = error.message || "";
+                let helpText = "Firebase Connection Error. Reverting to Offline Sandbox Mode.";
+                if (errMsg.includes("auth/operation-not-allowed")) {
+                    helpText = "Firebase Setup Issue: Please enable 'Anonymous Sign-In' inside Firebase Auth Console!";
+                } else if (errMsg.includes("API key")) {
+                    helpText = "Firebase API Key is invalid or empty. Check settings.";
+                } else if (errMsg.includes("permission-denied")) {
+                    helpText = "Firestore Database permissions denied. Set Rules to public/test mode.";
+                }
+                showToast(helpText, "error");
                 activateOfflineFallbackMode();
             }
         }
@@ -1037,13 +1049,13 @@
                 </span>
                 <i class="fa-solid fa-cloud-arrow-down text-amber-500"></i>`;
             loadLocalStorageBackup();
-            setupTheme();
             renderAllData();
         }
 
         // Firebase Auth observer to fetch lists
         window.addEventListener('DOMContentLoaded', async () => {
             loadCustomConfigFieldsUI();
+            setupTheme(); // Initialize theme handlers exactly ONCE here
             await initFirebase();
             if (auth) {
                 onAuthStateChanged(auth, (authUser) => {
@@ -1056,7 +1068,6 @@
                     }
                 });
             }
-            setupTheme();
         });
 
         // Offline storage loaders
@@ -1093,7 +1104,7 @@
                 renderAllData();
             }, (error) => {
                 console.error("Clients sync error:", error);
-                showToast("Failed to sync clients from server", "error");
+                showToast("Failed to sync clients from server. Ensure Firestore database is created.", "error");
             });
 
             // Listening to invoices database
@@ -1163,23 +1174,27 @@
             }
         };
 
-        // Theme switching engine
+        // Theme switching engine (Attached exactly once on setup)
         function setupTheme() {
             const toggleBtn = document.getElementById('theme-toggle');
             
-            // Check storage preference
+            // Check storage preference or system config
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
             } else {
                 document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
             }
 
             toggleBtn.addEventListener('click', () => {
                 if (document.documentElement.classList.contains('dark')) {
                     document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
                     localStorage.setItem('theme', 'light');
                 } else {
                     document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
                     localStorage.setItem('theme', 'dark');
                 }
                 setTimeout(() => renderCharts(), 100);
