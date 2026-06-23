@@ -839,7 +839,7 @@ function doPost(e) {
                         </div>
                         <div class="flex justify-between items-center gap-2">
                             <span>GST (%):</span>
-                            <input type="number" id="invoice-gst" oninput="calculateInvoiceTotals()" value="0" min="0" max="100" class="w-16 px-2 py-0.5 text-center bg-white dark:bg-slate-800 border-0 rounded text-xs text-slate-900 dark:text-white">
+                            <input type="number" id="invoice-gst" oninput="calculateInvoiceTotals()" value="18" min="0" max="100" class="w-16 px-2 py-0.5 text-center bg-white dark:bg-slate-800 border-0 rounded text-xs text-slate-900 dark:text-white">
                         </div>
                         <div class="border-t border-dashed border-slate-200 dark:border-slate-700 my-2"></div>
                         <div class="flex justify-between text-base font-extrabold text-slate-900 dark:text-white">
@@ -941,6 +941,7 @@ function doPost(e) {
                             <thead>
                                 <tr class="border-b-2 border-slate-300 font-extrabold uppercase text-slate-700 text-[10px] tracking-wider">
                                     <th class="py-3 pr-4">Service / Item Description</th>
+                                    <th class="py-3 text-center w-24">Video Length</th>
                                     <th class="py-3 text-center w-16">Qty</th>
                                     <th class="py-3 text-right w-28">Rate</th>
                                     <th class="py-3 text-right w-28">Amount</th>
@@ -1665,7 +1666,7 @@ function doPost(e) {
 
         // ================= INVOICE SYSTEM LOGIC =================
 
-        window.addInvoiceItem = function(item = { serviceName: "", qty: 1, rate: 0 }) {
+        window.addInvoiceItem = function(item = { serviceName: "", videoLength: "", qty: 1, rate: 0 }) {
             const container = document.getElementById('invoice-items-container');
             const rowId = "item_row_" + Date.now() + Math.random().toString(36).substr(2, 5);
 
@@ -1675,19 +1676,23 @@ function doPost(e) {
             
             row.innerHTML = `
                 <div class="flex-1 w-full relative">
-                    <input type="text" placeholder="Service Name (e.g. Color Grading)" value="${item.serviceName}" class="item-name w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-sm text-slate-900 dark:text-white" required>
+                    <input type="text" placeholder="Service Name (e.g. Color Grading)" value="${item.serviceName || ''}" class="item-name w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-sm text-slate-900 dark:text-white" required>
                     <div class="hidden absolute left-0 right-0 top-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl rounded z-50 max-h-32 overflow-y-auto mt-1 custom-selector-dropdown">
                         ${serviceTemplates.map(s => `
                             <button type="button" onclick="selectServiceTemplate('${rowId}', '${s}')" class="w-full text-left px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 font-medium">${s}</button>
                         `).join('')}
                     </div>
                 </div>
+                <!-- Video Length option/field added here -->
+                <div class="w-full sm:w-28 shrink-0">
+                    <input type="text" placeholder="Length (e.g. 5m)" value="${item.videoLength || ''}" class="item-length w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-sm text-slate-900 dark:text-white">
+                </div>
                 <div class="flex items-center gap-2 w-full sm:w-auto">
                     <div class="w-1/2 sm:w-20">
-                        <input type="number" placeholder="Qty" oninput="calculateInvoiceTotals()" value="${item.qty}" min="1" step="any" class="item-qty w-full px-2 py-2 bg-white dark:bg-slate-800 border-0 rounded text-center text-sm font-semibold" required>
+                        <input type="number" placeholder="Qty" oninput="calculateInvoiceTotals()" value="${item.qty !== undefined ? item.qty : 1}" min="1" step="any" class="item-qty w-full px-2 py-2 bg-white dark:bg-slate-800 border-0 rounded text-center text-sm font-semibold" required>
                     </div>
                     <div class="w-1/2 sm:w-32">
-                        <input type="number" placeholder="Rate (₹)" oninput="calculateInvoiceTotals()" value="${item.rate}" min="0" step="any" class="item-rate w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-right text-sm font-semibold text-emerald-600" required>
+                        <input type="number" placeholder="Rate (₹)" oninput="calculateInvoiceTotals()" value="${item.rate !== undefined ? item.rate : 0}" min="0" step="any" class="item-rate w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-right text-sm font-semibold text-emerald-600" required>
                     </div>
                     <div class="w-24 text-right font-bold text-sm text-slate-900 dark:text-white item-amount shrink-0">
                         ₹0.00
@@ -1814,6 +1819,7 @@ function doPost(e) {
             for (let row of rows) {
                 items.push({
                     serviceName: row.querySelector('.item-name').value,
+                    videoLength: row.querySelector('.item-length') ? row.querySelector('.item-length').value : "",
                     qty: parseFloat(row.querySelector('.item-qty').value) || 1,
                     rate: parseFloat(row.querySelector('.item-rate').value) || 0
                 });
@@ -2045,6 +2051,7 @@ function doPost(e) {
                 tr.className = "border-b border-slate-200 text-xs";
                 tr.innerHTML = `
                     <td class="py-3.5 pr-4 font-bold text-slate-900">${item.serviceName}</td>
+                    <td class="py-3.5 text-center text-slate-800 font-medium">${item.videoLength || '-'}</td>
                     <td class="py-3.5 text-center text-slate-800 font-medium">${item.qty}</td>
                     <td class="py-3.5 text-right text-slate-800 font-medium">₹${item.rate.toFixed(2)}</td>
                     <td class="py-3.5 text-right font-bold text-slate-900">₹${(item.qty * item.rate).toFixed(2)}</td>`;
@@ -2615,7 +2622,7 @@ function doPost(e) {
                                 clientId: row.ClientID || "",
                                 invoiceDate: row.Date || new Date().toISOString().split('T')[0],
                                 dueDate: row.DueDate || new Date().toISOString().split('T')[0],
-                                items: [{ serviceName: "Imported Service Package", qty: 1, rate: parseFloat(row.Subtotal) || 0 }],
+                                items: [{ serviceName: "Imported Service Package", videoLength: "", qty: 1, rate: parseFloat(row.Subtotal) || 0 }],
                                 discount: parseFloat(row.DiscountPercent) || 0,
                                 gst: parseFloat(row.GSTPercent) || 0,
                                 subtotal: parseFloat(row.Subtotal) || 0,
