@@ -1,90 +1,95 @@
 <div align="center">
 
-# 💼 InvoicePro
+# 🎬 EditorInvoice Pro
 
-### Modern Invoice & Client Management Dashboard
+### Professional Invoice & Client Management System for Video Editors
 
-Create professional invoices, manage clients, track payments, monitor revenue, and generate business reports — all in one lightweight web application.
+Create beautiful invoices, manage editing clients, track payments, and monitor your freelance business from one modern dashboard.
 
 
-![HTML](https://img.shields.io/badge/HTML-5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS-3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Responsive](https://img.shields.io/badge/Responsive-Mobile-success?style=for-the-badge)
+![Google Sheets](https://img.shields.io/badge/Google_Sheets-Cloud_DB-34A853?style=for-the-badge&logo=googlesheets)
 ![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=for-the-badge)
 
 </div>
 
 ---
 
-# 📖 About
+# 🎥 About
 
-InvoicePro is a modern business dashboard designed for freelancers, agencies, small businesses, and professionals.
+EditorInvoice Pro is a modern invoicing solution built specifically for **Video Editors, Motion Designers, Thumbnail Designers, Freelancers, and Creative Agencies.**
 
-Manage your clients, generate invoices, record payments, monitor revenue, and analyze business performance—all from one clean and responsive interface.
-
-No spreadsheets.
-
-No manual calculations.
-
-Everything stays organized.
+Instead of creating invoices manually in Word or Excel, editors can generate professional invoices in seconds while managing clients, payments, revenue, and editing services from a single dashboard.
 
 ---
 
 # ✨ Features
 
-## 📄 Invoice Management
+## 📄 Professional Invoice Generator
 
-- Create Professional Invoices
+- Auto Invoice Number
 - Invoice Preview
 - Edit Invoice
 - Delete Invoice
-- Invoice Number Generator
-- Due Date Management
+- Due Date Tracking
+- GST Support
+- Discount Support
+- Outstanding Balance
 - Payment Status
-- Pending & Paid Tracking
 
 ---
 
-## 👥 Client Management
+## 🎬 Built for Video Editors
 
-- Add Unlimited Clients
-- Edit Client Information
-- Contact Details
+Pre-built editing services like:
+
+- Reel Editing
+- Long Form Editing
+- YouTube Video Editing
+- Podcast Editing
+- Motion Graphics
+- Thumbnail Design
+- Color Grading
+- Wedding Editing
+- Documentary Editing
+- Corporate Editing
+- Social Media Content
+- Custom Services
+
+---
+
+## 👤 Client Management
+
+- Add Clients
+- Company Details
 - Client History
-- Revenue by Client
+- Payment Records
+- Revenue Per Client
 
 ---
 
-## 💰 Payment Tracking
+## 💳 Payment Tracking
 
-- Record Payments
+- UPI
+- Bank Transfer
+- Cash
 - Pending Payments
 - Paid Invoices
-- Outstanding Balance
-- Payment Timeline
+- Outstanding Amount
 
 ---
 
 ## 📊 Business Dashboard
 
-- Total Clients
 - Total Revenue
 - Pending Revenue
 - Paid Revenue
 - Revenue Timeline
 - Monthly Analytics
-- Client Contribution Chart
-
----
-
-## 📈 Reports
-
-- Revenue Reports
-- Invoice Reports
-- Payment Reports
-- Client Reports
-- Monthly Summary
+- Top Clients
+- Invoice Statistics
 
 ---
 
@@ -92,8 +97,8 @@ Everything stays organized.
 
 - Google Apps Script
 - Google Sheets Database
-- Real-Time Sync
 - Automatic Backup
+- Real-Time Synchronization
 
 ---
 
@@ -102,7 +107,7 @@ Everything stays organized.
 - Desktop
 - Tablet
 - Mobile
-- Progressive Web App Ready
+- Progressive Web App
 
 ---
 
@@ -117,18 +122,49 @@ Everything stays organized.
 
 ---
 
-# 📸 Screenshots
-
-## Dashboard
+# 📸 Preview
 
 <img src="preview.png">
+
+---
+
+# 💼 Perfect For
+
+✅ Video Editors
+
+✅ Freelance Editors
+
+✅ Motion Designers
+
+✅ Thumbnail Designers
+
+✅ Wedding Editors
+
+✅ YouTube Editors
+
+✅ Content Creators
+
+✅ Creative Agencies
+
+---
+
+# ⭐ Dashboard Features
+
+- Client Database
+- Revenue Dashboard
+- Invoice Generator
+- Payment Tracker
+- Business Reports
+- Analytics Charts
+- Professional UI
+- Cloud Sync
 
 ---
 
 # 📂 Project Structure
 
 ```
-InvoicePro/
+EditorInvoice-Pro/
 │
 ├── index.html
 ├── style.css
@@ -141,82 +177,26 @@ InvoicePro/
 
 ---
 
-# ⭐ Dashboard Includes
+# 🚀 Upcoming Features
 
-✅ Total Clients
-
-✅ Revenue Overview
-
-✅ Pending Payments
-
-✅ Paid Invoices
-
-✅ Revenue Timeline
-
-✅ Client Analytics
-
-✅ Invoice Preview
-
-✅ Reports
-
----
-
-# 🔒 Key Features
-
-✔ Google Cloud Sync
-
-✔ Invoice Generator
-
-✔ Client Database
-
-✔ Payment Management
-
-✔ Business Analytics
-
-✔ Responsive Dashboard
-
-✔ Modern Dark UI
-
-✔ Fast Performance
-
-✔ Offline Support
-
----
-
-# 🎯 Future Updates
-
-- GST Invoice Support
-- PDF Invoice Export
-- QR Code Payments
-- Razorpay Integration
-- UPI Payments
-- Expense Tracking
-- Tax Reports
-- AI Revenue Forecast
-- Multi Business Support
-- Team Accounts
-- Email Invoice
+- PDF Export
 - WhatsApp Invoice Sharing
+- Email Invoice
+- Razorpay Payments
+- UPI QR Code
+- Multi Currency
+- Client Portal
+- Recurring Invoices
+- Expense Tracker
+- Profit Dashboard
 
 ---
 
-# 💼 Perfect For
+# ❤️ Why EditorInvoice Pro?
 
-- Freelancers
-- Video Editors
-- Designers
-- Developers
-- Agencies
-- Consultants
-- Small Businesses
-- Startups
-- Digital Creators
+Most invoice software is overloaded with unnecessary business features.
 
----
-
-# ❤️ Why InvoicePro?
-
-InvoicePro helps freelancers and businesses manage invoices, payments, and clients with a beautiful modern dashboard while keeping everything synchronized securely in the cloud.
+EditorInvoice Pro focuses on the workflow of **video editors and creative freelancers**, making invoice generation, payment tracking, and client management simple, fast, and professional.
 
 ---
 
@@ -230,7 +210,7 @@ Designed & Developed with ❤️ using HTML, CSS & JavaScript.
 
 <div align="center">
 
-## ⭐ Star this Repository if you like the project ⭐
+### ⭐ If this project helped you, give it a Star ⭐
 
 Made with ❤️ in India 🇮🇳
 
