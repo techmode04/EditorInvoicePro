@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Video Editor Billing & CRM Hub</title> 
+    <title>EditorInvoicePro - Video Editor Billing & CRM Hub</title> 
     <!-- Browser Tab Logo -->
-    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3039/3039401.png">
     
     <!-- PWA iOS Meta Tags and Standalone Experience -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CutInvoice">
+    <meta name="apple-mobile-web-app-title" content="EditorInvoicePro">
     <meta name="theme-color" content="#3b82f6">
 
     <!-- Tailwind CSS CDN -->
@@ -112,17 +112,12 @@
         <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-8 space-y-6 transform scale-100 transition-all">
             <!-- Logo Header -->
             <div class="text-center space-y-3">
-                <div class="w-16 h-16 mx-auto">
-                    <img
-                        src="logo.png"
-                        alt="Logo"
-                        onerror="this.src='https://cdn-icons-png.flaticon.com/512/3503/3503115.png'"
-                        class="w-full h-full object-contain rounded-2xl"
-                    >
+                <div class="w-16 h-16 mx-auto bg-brand-50 dark:bg-brand-900/30 rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-clapperboard text-4xl text-brand-500"></i>
                 </div>
             
                 <div>
-                    <h1 id="login-brand-title" class="font-extrabold text-2xl tracking-tight text-slate-900 dark:text-white uppercase">CUTINVOICE</h1>
+                    <h1 id="login-brand-title" class="font-extrabold text-2xl tracking-tight text-slate-900 dark:text-white uppercase">EDITORINVOICEPRO</h1>
                     <p class="text-xs text-slate-400 dark:text-slate-500">Secure Admin Dashboard Terminal</p>
                 </div>
             </div>
@@ -154,7 +149,7 @@
                 </div>
                 <img id="sidebar-brand-logo" class="w-10 h-10 rounded-xl object-cover hidden shrink-0" alt="Brand Logo">
                 <div>
-                    <h1 id="sidebar-brand-name" class="font-bold text-lg leading-tight dark:text-white">CutInvoice</h1>
+                    <h1 id="sidebar-brand-name" class="font-bold text-base leading-tight dark:text-white">EditorInvoicePro</h1>
                     <span class="text-xs text-slate-400 dark:text-slate-500">Video Editor Hub</span>
                 </div>
             </div>
@@ -216,6 +211,11 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Developer Credits in Sidebar -->
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+                <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Made with ❤️ by <span class="font-bold text-slate-700 dark:text-slate-300">Sachindhisle</span></p>
+            </div>
         </div>
     </aside>
 
@@ -261,7 +261,7 @@
                         <i class="fa-solid fa-clapperboard-play text-md"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">CutInvoice</h3>
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">EditorInvoicePro</h3>
                         <span class="text-xs text-slate-400 dark:text-slate-500">Video Editor Workspace</span>
                     </div>
                 </div>
@@ -663,49 +663,27 @@
 
                     <!-- Sidebar Configuration Panels -->
                     <div class="space-y-6">
-                        
-                        <!-- ================= VIEW: PWA PHONE APPLICATION CONTROL CENTER ================= -->
-                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                            <div class="flex items-center space-x-2 text-brand-600 dark:text-brand-400">
-                                <i class="fa-solid fa-mobile-screen-button text-lg animate-bounce"></i>
-                                <h4 class="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-xs">PWA Web App Installation</h4>
-                            </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">Apne phone par screen triggers ya local assets create karke app store ki tarah is CutInvoice hub ko deploy aur install karein.</p>
-                            
-                            <!-- Trigger standard browser install prompt -->
-                            <button id="pwa-install-btn-settings" onclick="triggerPWAInstall()" class="hidden w-full py-2.5 bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 hover:from-brand-700 hover:to-indigo-700 shadow-md">
-                                <i class="fa-solid fa-cloud-arrow-down"></i> Install Mobile App
-                            </button>
 
-                            <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-100 dark:border-slate-800 space-y-2">
-                                <p class="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Manual Instructions</p>
-                                <div class="text-3xs text-slate-500 space-y-1">
-                                    <p class="font-medium text-slate-600 dark:text-slate-400"><b class="text-slate-700 dark:text-slate-300">Android/Chrome:</b> Browser ke Top Right corner menu (three dots) par tap karein aur <b class="text-brand-500">"Add to Home Screen"</b> ya <b class="text-brand-500">"Install App"</b> select karein.</p>
-                                    <p class="font-medium text-slate-600 dark:text-slate-400 pt-1"><b class="text-slate-700 dark:text-slate-300">iOS/Safari:</b> Safari browser me niche diye gaye <b class="text-indigo-500">"Share"</b> option par tap karein aur list se <b class="text-indigo-500">"Add to Home Screen"</b> par click karein.</p>
+                        <!-- ================= VIEW: DEVELOPER SPOTLIGHT BADGE ================= -->
+                        <div class="bg-gradient-to-br from-slate-900 to-brand-950 p-6 rounded-2xl border border-brand-500/20 shadow-xl space-y-4 text-white">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-brand-500 flex items-center justify-center text-white shadow-lg">
+                                    <i class="fa-solid fa-code-branch text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm tracking-tight text-white uppercase">Developer Profile</h4>
+                                    <span class="text-xs text-brand-300">Sachin Dhisle</span>
                                 </div>
                             </div>
-
-                            <!-- PWA asset builder -->
-                            <details class="group border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden">
-                                <summary class="list-none flex justify-between items-center p-3 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                                    <span>▶ Download PWA Server Setup Package</span>
-                                </summary>
-                                <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/20 text-3xs text-slate-500 space-y-3 font-sans leading-relaxed">
-                                    <p class="font-semibold text-slate-700 dark:text-slate-300">Agar aap is single file ko apni hosting domain (cPanel, Hostinger etc.) me install karna chahte hain, toh ye backup files download karein:</p>
-                                    
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <button type="button" onclick="downloadManifestFile()" class="py-2 px-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-slate-800 dark:text-slate-200 font-bold text-[10px] rounded-lg">
-                                            <i class="fa-solid fa-file-code"></i> Download Manifest
-                                        </button>
-                                        <button type="button" onclick="downloadServiceWorkerFile()" class="py-2 px-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-slate-800 dark:text-slate-200 font-bold text-[10px] rounded-lg">
-                                            <i class="fa-solid fa-gears"></i> Download sw.js
-                                        </button>
-                                    </div>
-                                    <p class="text-[9px] text-slate-400">Download karke in files ko cPanel ya host directory ke standard public root folder me save karein.</p>
-                                </div>
-                            </details>
+                            <p class="text-xs text-slate-300 leading-relaxed font-normal">
+                                Designed and engineered by <span class="text-brand-400 font-semibold">Sachin Dhisle</span>. An advanced portal configured to manage video production client databases, dynamic tax invoicing records, and seamless cloud sync automation.
+                            </p>
+                            <div class="flex items-center space-x-2.5 pt-1 text-xs">
+                                <span class="px-2.5 py-1 bg-brand-500/20 text-brand-300 border border-brand-500/30 rounded-lg font-semibold">Lead Architect</span>
+                                <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg font-semibold">Active Engine</span>
+                            </div>
                         </div>
-
+                        
                         <!-- ================= GOOGLE CLOUD DEVICE SYNC PANEL ================= -->
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                             <div class="flex items-center justify-between">
@@ -1052,7 +1030,7 @@ function doPost(e) {
                         <div class="space-y-3">
                             <div class="h-12 flex items-center">
                                 <img id="view-brand-logo" class="max-h-12 object-contain hidden" alt="Brand Logo">
-                                <span id="view-brand-title" class="text-2xl font-extrabold tracking-tight text-slate-900 uppercase">CUTINVOICE</span>
+                                <span id="view-brand-title" class="text-2xl font-extrabold tracking-tight text-slate-900 uppercase">EDITORINVOICEPRO</span>
                             </div>
                             <div class="text-xs text-slate-600 space-y-1">
                                 <p id="view-sender-name" class="font-bold text-slate-900 text-sm"></p>
@@ -1188,7 +1166,7 @@ function doPost(e) {
             invoices: [],
             lastUpdated: 0,
             settings: {
-                name: "sachindhisle04",
+                name: "Sachin Dhisle",
                 email: "studio@billing.com",
                 phone: "+91 98765 43210",
                 address: "Flat 101, Creative Enclave, Sector 5\nMumbai, Maharashtra - 400001",
@@ -2766,7 +2744,7 @@ function doPost(e) {
                 const wsInvoices = XLSX.utils.json_to_sheet(invoicesData);
                 XLSX.utils.book_append_sheet(wb, wsInvoices, "Invoices");
 
-                XLSX.writeFile(wb, `CutInvoice_Financial_Backup_${new Date().toISOString().split('T')[0]}.xlsx`);
+                XLSX.writeFile(wb, `EditorInvoicePro_Financial_Backup_${new Date().toISOString().split('T')[0]}.xlsx`);
                 showToast("Excel ledger exported successfully!");
             } catch (err) {
                 console.error(err);
@@ -2854,7 +2832,7 @@ function doPost(e) {
 
             const logoHeaderTitle = document.getElementById('login-brand-title');
             if (logoHeaderTitle) {
-                logoHeaderTitle.textContent = state.settings.name ? state.settings.name.toUpperCase() : "CUTINVOICE";
+                logoHeaderTitle.textContent = state.settings.name ? state.settings.name.toUpperCase() : "EDITORINVOICEPRO";
             }
 
             if (state.settings.logo) {
@@ -2873,7 +2851,7 @@ function doPost(e) {
             } else {
                 if (sidebarIcon) sidebarIcon.classList.remove('hidden');
                 if (sidebarLogo) sidebarLogo.classList.add('hidden');
-                if (sidebarName) sidebarName.textContent = "CutInvoice";
+                if (sidebarName) sidebarName.textContent = "EditorInvoicePro";
 
                 if (userAvatar) {
                     userAvatar.classList.remove('hidden');
@@ -3040,8 +3018,8 @@ function doPost(e) {
         // Helper to construct manifest dynamically
         function generateManifestObject() {
             return {
-                "name": "CutInvoice - Video Editor Billing & CRM Hub",
-                "short_name": "CutInvoice",
+                "name": "EditorInvoicePro - Video Editor Billing & CRM Hub",
+                "short_name": "EditorInvoicePro",
                 "description": "Secure billing, CRM, invoice management and reports for professional video editors.",
                 "start_url": ".",
                 "display": "standalone",
@@ -3049,13 +3027,13 @@ function doPost(e) {
                 "theme_color": "#3b82f6",
                 "icons": [
                     {
-                        "src": "https://cdn-icons-png.flaticon.com/512/3503/3503115.png",
+                        "src": "https://cdn-icons-png.flaticon.com/512/3039/3039401.png",
                         "sizes": "192x192",
                         "type": "image/png",
                         "purpose": "any maskable"
                     },
                     {
-                        "src": "https://cdn-icons-png.flaticon.com/512/3503/3503115.png",
+                        "src": "https://cdn-icons-png.flaticon.com/512/3039/3039401.png",
                         "sizes": "512x512",
                         "type": "image/png",
                         "purpose": "any"
@@ -3066,7 +3044,7 @@ function doPost(e) {
 
         // Helper to construct Service Worker code dynamically
         function generateServiceWorkerCode() {
-            return `const CACHE_NAME = 'cutinvoice-cache-v1';
+            return `const CACHE_NAME = 'editorinvoicepro-cache-v1';
 const ASSETS = [
   './',
   './index.html',
@@ -3129,11 +3107,9 @@ self.addEventListener('fetch', e => {
 
                 // Make the installation buttons visible
                 const sidebarInstallBtn = document.getElementById('pwa-install-btn-sidebar');
-                const settingsInstallBtn = document.getElementById('pwa-install-btn-settings');
                 const mobileInstallBtn = document.getElementById('pwa-install-btn-mobile');
 
                 if (sidebarInstallBtn) sidebarInstallBtn.classList.remove('hidden');
-                if (settingsInstallBtn) settingsInstallBtn.classList.remove('hidden');
                 if (mobileInstallBtn) mobileInstallBtn.classList.remove('hidden');
             });
         }
