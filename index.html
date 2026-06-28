@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EditorInvoicePro - Video Editor Billing & CRM Hub</title> 
     <!-- Browser Tab Logo -->
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3039/3039401.png">
+    <link rel="icon" type="image/png" href="logo.png" onerror="this.src='https://img.icons8.com/fluency/512/clapperboard.png'">
     
     <!-- PWA iOS Meta Tags and Standalone Experience -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -112,8 +112,8 @@
         <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-8 space-y-6 transform scale-100 transition-all">
             <!-- Logo Header -->
             <div class="text-center space-y-3">
-                <div class="w-16 h-16 mx-auto bg-brand-50 dark:bg-brand-900/30 rounded-2xl flex items-center justify-center">
-                    <i class="fa-solid fa-clapperboard text-4xl text-brand-500"></i>
+                <div class="w-16 h-16 mx-auto bg-brand-50 dark:bg-brand-900/30 rounded-2xl flex items-center justify-center overflow-hidden">
+                    <img src="logo.png" alt="Logo" onerror="this.src='https://img.icons8.com/fluency/512/clapperboard.png'" class="w-full h-full object-cover">
                 </div>
             
                 <div>
@@ -144,8 +144,9 @@
         <div class="p-6">
             <!-- Brand Logo Header -->
             <div class="flex items-center space-x-3 mb-8">
-                <div id="sidebar-brand-icon" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 shrink-0">
-                    <i class="fa-solid fa-clapperboard-play text-lg"></i>
+                <div id="sidebar-brand-icon" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 shrink-0 overflow-hidden">
+                    <img src="logo.png" onerror="this.classList.add('hidden'); document.getElementById('sidebar-icon-fallback').classList.remove('hidden');" class="w-full h-full object-cover" alt="Brand Logo">
+                    <i id="sidebar-icon-fallback" class="fa-solid fa-clapperboard-play text-lg hidden"></i>
                 </div>
                 <img id="sidebar-brand-logo" class="w-10 h-10 rounded-xl object-cover hidden shrink-0" alt="Brand Logo">
                 <div>
@@ -214,7 +215,7 @@
 
             <!-- Developer Credits in Sidebar -->
             <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
-                <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Made with ❤️ by <span class="font-bold text-slate-700 dark:text-slate-300">Sachindhisle</span></p>
+                <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Made with ❤️ by <span class="font-bold text-slate-700 dark:text-slate-300">Sachin Dhisle</span></p>
             </div>
         </div>
     </aside>
@@ -257,8 +258,9 @@
             <!-- Drawer Brand Info -->
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-                        <i class="fa-solid fa-clapperboard-play text-md"></i>
+                    <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 overflow-hidden">
+                        <img src="logo.png" onerror="this.classList.add('hidden'); document.getElementById('drawer-icon-fallback').classList.remove('hidden');" class="w-full h-full object-cover" alt="Logo">
+                        <i id="drawer-icon-fallback" class="fa-solid fa-clapperboard-play text-md hidden"></i>
                     </div>
                     <div>
                         <h3 class="font-bold text-slate-900 dark:text-white leading-tight">EditorInvoicePro</h3>
@@ -667,8 +669,8 @@
                         <!-- ================= VIEW: DEVELOPER SPOTLIGHT BADGE ================= -->
                         <div class="bg-gradient-to-br from-slate-900 to-brand-950 p-6 rounded-2xl border border-brand-500/20 shadow-xl space-y-4 text-white">
                             <div class="flex items-center space-x-3">
-                                <div class="w-12 h-12 rounded-xl bg-brand-500 flex items-center justify-center text-white shadow-lg">
-                                    <i class="fa-solid fa-code-branch text-xl"></i>
+                                <div class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden shadow-lg shrink-0">
+                                    <img src="logo.png" onerror="this.src='https://img.icons8.com/fluency/512/clapperboard.png'" class="w-full h-full object-cover" alt="Developer Brand Logo">
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-sm tracking-tight text-white uppercase">Developer Profile</h4>
@@ -1021,7 +1023,6 @@ function doPost(e) {
             </div>
 
             <!-- Zoho / Stripe Classic Professional Layout Panel Container -->
-            <!-- CRITICAL FIX: All leakage classes (like dark:text-slate-200, etc.) removed from inside '#invoice-sheet' so texts remain dark and perfectly readable even when system is in Dark Mode -->
             <div class="p-8 overflow-y-auto flex-1 bg-slate-100" id="print-area">
                 <div class="max-w-3xl mx-auto border-t-8 border-brand-600 border-x border-b border-slate-200 p-8 rounded-xl bg-white shadow-lg text-slate-800 space-y-8" id="invoice-sheet" style="font-family: 'Inter', sans-serif;">
                     
@@ -1088,7 +1089,7 @@ function doPost(e) {
                                 </tr>
                             </thead>
                             <tbody id="view-services-tbody">
-                                <!-- Populated dynamically (All dark classes stripped during render) -->
+                                <!-- Populated dynamically -->
                             </tbody>
                         </table>
                     </div>
@@ -1160,7 +1161,6 @@ function doPost(e) {
 
     <!-- ================= APPLICATION SCRIPT ENGINE ================= -->
     <script>
-        // Global State
         let state = {
             clients: [],
             invoices: [],
@@ -2215,7 +2215,6 @@ function doPost(e) {
 
             document.getElementById('view-outstanding-balance').textContent = `₹${(inv.remainingAmount || 0).toFixed(2)}`;
 
-            // CRITICAL CONTRAST FIX: Ensuring table line items renders dark colors exclusively
             const tbody = document.getElementById('view-services-tbody');
             tbody.innerHTML = "";
             inv.items.forEach(item => {
@@ -2276,7 +2275,6 @@ function doPost(e) {
             const { jsPDF } = window.jspdf;
             const invoiceSheet = document.getElementById("invoice-sheet");
 
-            // Temporary elegant border styling correction during PDF printing compile
             const canvas = await html2canvas(invoiceSheet, {
                 scale: 2,
                 useCORS: true,
@@ -3015,7 +3013,7 @@ function doPost(e) {
 
         // ================= PROGRESSIVE WEB APP (PWA) LOGIC ENGINE =================
 
-        // Helper to construct manifest dynamically
+        // Dynamic Manifest Object generation mapping to local brand icons
         function generateManifestObject() {
             return {
                 "name": "EditorInvoicePro - Video Editor Billing & CRM Hub",
@@ -3027,16 +3025,14 @@ function doPost(e) {
                 "theme_color": "#3b82f6",
                 "icons": [
                     {
-                        "src": "https://cdn-icons-png.flaticon.com/512/3039/3039401.png",
+                        "src": "logo.png",
                         "sizes": "192x192",
-                        "type": "image/png",
-                        "purpose": "any maskable"
+                        "type": "image/png"
                     },
                     {
-                        "src": "https://cdn-icons-png.flaticon.com/512/3039/3039401.png",
+                        "src": "logo.png",
                         "sizes": "512x512",
-                        "type": "image/png",
-                        "purpose": "any"
+                        "type": "image/png"
                     }
                 ]
             };
@@ -3048,6 +3044,7 @@ function doPost(e) {
 const ASSETS = [
   './',
   './index.html',
+  './logo.png',
   'https://cdn.tailwindcss.com',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap',
@@ -3055,7 +3052,8 @@ const ASSETS = [
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
   'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'
+  'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
+  'https://img.icons8.com/fluency/512/clapperboard.png'
 ];
 
 self.addEventListener('install', e => {
@@ -3093,8 +3091,6 @@ self.addEventListener('fetch', e => {
 
             // 2. Register Service Worker dynamically if hosted with sw.js locally
             if ('serviceWorker' in navigator) {
-                // We attempt to register local `./sw.js` root file.
-                // Standard browsers block registering SW from dynamic Blob URL directly due to origin checks.
                 navigator.serviceWorker.register('./sw.js')
                 .then(reg => console.log('Service worker registered successfully', reg))
                 .catch(err => console.log('Sandbox mode local preview: serviceWorker registration bypassed'));
