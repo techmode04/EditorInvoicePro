@@ -86,7 +86,7 @@
 <body class="bg-slate-50 text-slate-800 dark:bg-neutral-950 dark:text-slate-200 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
 
     <!-- ================= VIEW: SYSTEM SYNC LOADING OVERLAY ================= -->
-    <div id="cloud-sync-loader" class="fixed inset-0 z-[150] bg-slate-900/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
+    <div id="cloud-sync-loader" class="fixed inset-0 z-[150] bg-slate-900/95 backdrop-blur-md flex flex-col items-center justify-center p-4 hidden">
         <div class="text-center space-y-6 max-w-sm w-full">
             <div class="relative w-20 h-20 mx-auto">
                 <div class="absolute inset-0 rounded-full bg-brand-500/20 blur-xl animate-pulse"></div>
@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    <!-- Sidebar Navigation (Hidden on Mobile screens, visible on md+) -->
+    <!-- Sidebar Navigation -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between">
         <div class="p-6">
             <!-- Brand Logo Header -->
@@ -213,7 +213,6 @@
                 </div>
             </div>
 
-            <!-- Developer Credits in Sidebar -->
             <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
                 <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Made with ❤️ by <span class="font-bold text-slate-700 dark:text-slate-300">Sachindhisle</span></p>
             </div>
@@ -224,9 +223,9 @@
 
     <!-- ================= VIEW: MOBILE STICKY BOTTOM TAB NAVIGATION ================= -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 h-16 flex justify-around items-center px-2 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-        <button onclick="switchView('dashboard')" id="mobile-nav-dashboard" class="mobile-nav-btn flex flex-col items-center justify-center text-brand-600 dark:text-brand-400 w-12 py-1 transition-all">
+        <button onclick="switchView('dashboard')" id="mobile-nav-dashboard" class="mobile-nav-btn flex flex-col items-center justify-center text-brand-600 dark:text-brand-400 w-12 py-1 transition-all font-semibold">
             <i class="fa-solid fa-chart-pie text-lg"></i>
-            <span class="text-[10px] font-semibold mt-0.5">Home</span>
+            <span class="text-[10px] mt-0.5">Home</span>
         </button>
         <button onclick="switchView('invoices')" id="mobile-nav-invoices" class="mobile-nav-btn flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 w-12 py-1 transition-all">
             <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
@@ -255,7 +254,6 @@
                 <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
             </div>
             
-            <!-- Drawer Brand Info -->
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 overflow-hidden">
@@ -272,7 +270,6 @@
                 </button>
             </div>
 
-            <!-- Main Drawer Navigation Options -->
             <div class="grid grid-cols-2 gap-3">
                 <button onclick="switchView('reports'); toggleMobileDrawer()" class="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-700/60 rounded-2xl flex flex-col items-center text-center gap-2 transition-all">
                     <div class="p-2.5 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 rounded-xl">
@@ -288,7 +285,6 @@
                 </button>
             </div>
 
-            <!-- Quick settings & Utility blocks inside Mobile Menu -->
             <div class="space-y-3">
                 <span class="block text-2xs font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500">Fast Operations</span>
                 
@@ -303,19 +299,16 @@
                     </button>
                 </div>
 
-                <!-- Sync trigger -->
                 <button onclick="forcePushCloudSync(false); toggleMobileDrawer()" class="w-full p-3 bg-brand-50 hover:bg-brand-100 dark:bg-brand-950/20 dark:hover:bg-brand-950/40 text-brand-600 dark:text-brand-400 font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors">
                     <i class="fa-solid fa-cloud-arrow-up"></i>
                     <span>Push Cloud Backup</span>
                 </button>
 
-                <!-- PWA Install prompt on mobile list -->
                 <button id="pwa-install-btn-mobile" onclick="triggerPWAInstall(); toggleMobileDrawer()" class="hidden w-full p-3 bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg animate-pulse">
                     <i class="fa-solid fa-circle-down"></i>
                     <span>Install App on Phone</span>
                 </button>
 
-                <!-- System lock -->
                 <button onclick="lockSystem(); toggleMobileDrawer()" class="w-full p-3 bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 font-bold text-xs rounded-xl flex items-center justify-center gap-2 active:scale-98 transition-all">
                     <i class="fa-solid fa-power-off"></i>
                     <span>Lock Workspace Terminal</span>
@@ -327,7 +320,6 @@
     <!-- Main Content Area -->
     <main class="flex-1 md:ml-64 flex flex-col min-h-screen">
         
-        <!-- Header Panel -->
         <header class="h-16 px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between sticky top-0 z-20">
             <div class="flex items-center space-x-4">
                 <button onclick="toggleSidebar()" class="p-2 -ml-2 rounded-lg text-slate-600 dark:text-slate-300 md:hidden hover:bg-slate-100 dark:hover:bg-slate-800">
@@ -351,7 +343,6 @@
             </div>
         </header>
 
-        <!-- View Content Containers (Added mobile padding helper layout) -->
         <div id="content-container" class="flex-1 p-6 md:p-8 space-y-6 mobile-padding-bottom">
             
             <!-- ================= VIEW: DASHBOARD ================= -->
@@ -405,7 +396,6 @@
                     </div>
                 </div>
 
-                <!-- Live Charts & Insights Section -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm lg:col-span-2">
                         <div class="flex items-center justify-between mb-4">
@@ -424,7 +414,6 @@
                     </div>
                 </div>
 
-                <!-- Recent Invoices & Quick Actions List -->
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                     <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                         <h4 class="font-bold text-slate-900 dark:text-white">Recent Invoices</h4>
@@ -452,7 +441,6 @@
 
             <!-- ================= VIEW: INVOICES ================= -->
             <div id="view-invoices" class="space-y-6 hidden">
-                <!-- Toolbar Area -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
                     <div class="flex flex-wrap items-center gap-3">
                         <div class="relative min-w-[200px] flex-1">
@@ -476,7 +464,6 @@
                     </div>
                 </div>
 
-                <!-- Invoice Grid/List Wrapper -->
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-sm">
@@ -497,7 +484,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Pagination bar -->
                     <div class="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                         <span id="invoice-pagination-info" class="text-xs text-slate-500">Showing 1-10 of 100</span>
                         <div class="flex items-center gap-2">
@@ -524,7 +510,6 @@
                     </button>
                 </div>
 
-                <!-- Client List Grid -->
                 <div id="clients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Populated dynamically -->
                 </div>
@@ -533,7 +518,6 @@
             <!-- ================= VIEW: PAYMENTS ================= -->
             <div id="view-payments" class="space-y-6 hidden">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Revenue Stats Panel -->
                     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                         <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Total Outstanding Amount</h4>
                         <p id="payments-outstanding" class="text-3xl font-extrabold text-amber-600 dark:text-amber-400">₹0</p>
@@ -552,7 +536,6 @@
                     </div>
                 </div>
 
-                <!-- Live Ledger Panel -->
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                     <div class="p-5 border-b border-slate-100 dark:border-slate-800">
                         <h4 class="font-bold text-slate-900 dark:text-white">Payments Registry Log</h4>
@@ -663,10 +646,7 @@
                         </div>
                     </form>
 
-                    <!-- Sidebar Configuration Panels -->
                     <div class="space-y-6">
-
-                        <!-- ================= VIEW: DEVELOPER SPOTLIGHT BADGE ================= -->
                         <div class="bg-gradient-to-br from-slate-900 to-brand-950 p-6 rounded-2xl border border-brand-500/20 shadow-xl space-y-4 text-white">
                             <div class="flex items-center space-x-3">
                                 <div class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden shadow-lg shrink-0">
@@ -686,7 +666,6 @@
                             </div>
                         </div>
                         
-                        <!-- ================= GOOGLE CLOUD DEVICE SYNC PANEL ================= -->
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2 text-brand-600 dark:text-brand-400">
@@ -721,59 +700,13 @@
                                     <i class="fa-solid fa-cloud-arrow-down"></i> Force Pull
                                 </button>
                             </div>
-
-                            <details class="group border border-slate-100 dark:border-slate-800 rounded-lg overflow-hidden">
-                                <summary class="list-none flex justify-between items-center p-3 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                                    <span>▶ Show Google Apps Script Setup Guide</span>
-                                </summary>
-                                <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/20 text-3xs text-slate-500 space-y-3 font-sans leading-relaxed">
-                                    <p class="font-semibold text-slate-700 dark:text-slate-300">Apne data ko Google Sheet me backup karne ke liye ye steps follow karein:</p>
-                                    <ol class="list-decimal pl-4 space-y-2">
-                                        <li>Ek naya <span class="font-bold text-emerald-600">Google Sheet</span> banayein.</li>
-                                        <li>Menu bar me <span class="font-bold">Extensions > Apps Script</span> par click karein.</li>
-                                        <li>Pehle se likha hua code delete karein aur neeche aur copyable code block paste karein.</li>
-                                        <li>App script me <span class="font-bold">Deploy > New Deployment</span> par click karein.</li>
-                                        <li>Select type me <span class="font-bold">Web app</span> select karein.</li>
-                                        <li>"Execute as" me <span class="font-bold">Me (Your email)</span> aur "Who has access" me <span class="font-bold">Anyone</span> karke deploy karein.</li>
-                                        <li>Mili hui URL ko upar diye gaye input box me paste karein.</li>
-                                    </ol>
-                                    <div class="relative pt-2">
-                                        <span class="block text-2xs font-bold uppercase text-slate-400 mb-1">Google Apps Script Code:</span>
-                                        <textarea readonly onclick="this.select()" class="w-full h-36 p-2 font-mono text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded cursor-pointer leading-tight">
-function doGet(e) {
-  var action = e.parameter.action;
-  if (action === 'pull') {
-    var data = PropertiesService.getScriptProperties().getProperty('cutinvoice_data') || '{}';
-    return ContentService.createTextOutput(data).setMimeType(ContentService.MimeType.JSON);
-  }
-  return ContentService.createTextOutput(JSON.stringify({status: "error", message: "Invalid action"})).setMimeType(ContentService.MimeType.JSON);
-}
-
-function doPost(e) {
-  try {
-    var postData = JSON.parse(e.postData.contents);
-    if (postData.action === 'push') {
-      PropertiesService.getScriptProperties().setProperty('cutinvoice_data', JSON.stringify(postData.data));
-      return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
-    }
-  } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({status: "error", message: err.message})).setMimeType(ContentService.MimeType.JSON);
-  }
-}
-                                        </textarea>
-                                        <span class="text-[9px] text-slate-400">Click and Copy completely.</span>
-                                    </div>
-                                </div>
-                            </details>
                         </div>
 
-                        <!-- ================= VIEW: ADMIN SECURITY PIN CONFIGURATION ================= -->
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                             <div class="flex items-center space-x-2 text-brand-600 dark:text-brand-400">
                                 <i class="fa-solid fa-lock text-lg"></i>
                                 <h4 class="font-bold text-slate-900 dark:text-white">Admin Security PIN</h4>
                             </div>
-                            <p class="text-xs text-slate-400 leading-relaxed">System ko unauthorized access se secure rakhne ke liye master login PIN yahan se update karein.</p>
                             
                             <div class="space-y-3 pt-2">
                                 <div>
@@ -795,23 +728,22 @@ function doPost(e) {
                             </div>
                         </div>
 
-                        <!-- Branding Logistics Assets -->
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                             <h4 class="font-bold text-slate-900 dark:text-white">Business Logo & Signature</h4>
                             
                             <div>
-                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Logo Upload (Base64 URL)</label>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Logo Upload</label>
                                 <input type="file" id="logo-uploader" accept="image/*" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 dark:file:bg-brand-900/30 file:text-brand-700 dark:file:text-brand-300 hover:file:bg-brand-100 transition-colors">
                                 <div class="mt-2 flex items-center justify-center p-4 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg">
                                     <img id="logo-preview" class="max-h-16 object-contain hidden" alt="Logo preview">
-                                    <span id="logo-preview-placeholder" class="text-2xs text-slate-400">No logo uploaded. Standard styling text fallback used.</span>
+                                    <span id="logo-preview-placeholder" class="text-2xs text-slate-400">No logo uploaded.</span>
                                 </div>
                             </div>
 
                             <hr class="border-slate-100 dark:border-slate-800">
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Signature Upload (Base64 URL)</label>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">Signature Upload</label>
                                 <input type="file" id="sig-uploader" accept="image/*" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 dark:file:bg-brand-900/30 file:text-brand-700 dark:file:text-brand-300 hover:file:bg-brand-100 transition-colors">
                                 <div class="mt-2 flex items-center justify-center p-4 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg">
                                     <img id="sig-preview" class="max-h-16 object-contain hidden" alt="Signature preview">
@@ -820,10 +752,8 @@ function doPost(e) {
                             </div>
                         </div>
 
-                        <!-- Data Imports & Exports Configuration -->
                         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                             <h4 class="font-bold text-slate-900 dark:text-white">Excel Operations / Backup Data</h4>
-                            <p class="text-xs text-slate-400">Export or upload fully standardized Excel books containing client databases, invoice details and dynamic listings.</p>
                             
                             <div class="grid grid-cols-2 gap-3">
                                 <button type="button" onclick="exportDataToExcel()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors">
@@ -849,7 +779,7 @@ function doPost(e) {
                 <h3 id="client-modal-title" class="font-bold text-slate-900 dark:text-white">Add New Client</h3>
                 <button onclick="closeClientModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form id="client-form" onsubmit="submitClientForm(event)" class="p-6 space-y-4">
+            <form id="client-form" onsubmit="submitClientForm(event)" class="p-6 space-y-4 max-h-[85vh] overflow-y-auto">
                 <input type="hidden" id="client-edit-id">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -883,6 +813,30 @@ function doPost(e) {
                         <input type="text" id="client-notes" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500">
                     </div>
                 </div>
+
+                <!-- SMART PRICING: Default Pricing Section added -->
+                <div class="col-span-2 pt-3 border-t border-slate-100 dark:border-slate-800 mt-2">
+                    <h4 class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-tags mr-1.5"></i> Default Pricing Profile</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-2xs font-semibold text-slate-500 uppercase mb-1">Pricing Mode</label>
+                            <select id="client-pricing-mode" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500">
+                                <option value="Manual">Manual (Flat Rate)</option>
+                                <option value="Per Second">Per Second</option>
+                                <option value="Per Minute">Per Minute</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-2xs font-semibold text-slate-500 uppercase mb-1">Rate Per Sec (₹)</label>
+                            <input type="number" id="client-rate-sec" min="0" step="any" placeholder="e.g. 20" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-2xs font-semibold text-slate-500 uppercase mb-1">Rate Per Min (₹)</label>
+                            <input type="number" id="client-rate-min" min="0" step="any" placeholder="e.g. 600" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800">
                     <button type="button" onclick="closeClientModal()" class="px-4 py-2 text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300">Cancel</button>
                     <button type="submit" class="px-5 py-2 text-sm font-semibold bg-brand-600 hover:bg-brand-700 text-white rounded-lg shadow-sm">Save Client</button>
@@ -891,7 +845,7 @@ function doPost(e) {
         </div>
     </div>
 
-    <!-- ================= MODAL: INVOICE GENERATOR (ADD/EDIT) ================= -->
+    <!-- ================= MODAL: INVOICE GENERATOR ================= -->
     <div id="invoice-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto hidden">
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-4xl w-full my-8 flex flex-col max-h-[90vh]">
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
@@ -902,7 +856,6 @@ function doPost(e) {
             <form id="invoice-form" onsubmit="submitInvoiceForm(event)" class="p-6 overflow-y-auto flex-1 space-y-6">
                 <input type="hidden" id="invoice-edit-id">
                 
-                <!-- Setup Grid: Meta Details -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                     <div>
                         <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Invoice Number</label>
@@ -918,16 +871,16 @@ function doPost(e) {
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Client Select</label>
+                        <!-- Added event listener here to pull smart rates -->
                         <select id="invoice-client" required class="w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded-lg text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500">
                             <!-- Populated dynamically -->
                         </select>
                     </div>
                 </div>
 
-                <!-- Live Dynamic Items & Services Configuration -->
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase text-slate-400">Services & Line Items</span>
+                        <span class="text-xs font-bold uppercase text-slate-400">Services & Dynamic Line Items</span>
                         <button type="button" onclick="addInvoiceItem()" class="px-2.5 py-1 text-2xs font-semibold bg-brand-50 hover:bg-brand-100 text-brand-700 rounded dark:bg-brand-900/30 dark:text-brand-300 transition-colors">
                             <i class="fa-solid fa-plus"></i> Add Line Item
                         </button>
@@ -935,11 +888,10 @@ function doPost(e) {
 
                     <!-- Line Items Layout -->
                     <div class="space-y-2" id="invoice-items-container">
-                        <!-- Items rendered here -->
+                        <!-- Items rendered dynamically here with pricing modes -->
                     </div>
                 </div>
 
-                <!-- Financial Calculations Bottom Layout -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100 dark:border-slate-800">
                     <div class="space-y-4">
                         <span class="text-xs font-bold uppercase text-slate-400">Payment Settlements & Methods</span>
@@ -969,7 +921,6 @@ function doPost(e) {
                         </div>
                     </div>
 
-                    <!-- Live Breakdown Summary -->
                     <div class="bg-slate-50 dark:bg-slate-800/30 p-4 rounded-xl space-y-2 text-sm text-slate-600 dark:text-slate-400">
                         <div class="flex justify-between">
                             <span>Subtotal:</span>
@@ -1006,7 +957,6 @@ function doPost(e) {
     <!-- ================= MODAL: INVOICE VIEWER (PRINT/PREVIEW) ================= -->
     <div id="invoice-view-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto hidden">
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-4xl w-full my-8 flex flex-col max-h-[90vh]">
-            <!-- Header Operations Area -->
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shrink-0">
                 <div class="flex items-center space-x-2">
                     <h3 class="font-bold text-slate-900 dark:text-white text-base">Invoice Ledger Preview</h3>
@@ -1022,11 +972,9 @@ function doPost(e) {
                 </div>
             </div>
 
-            <!-- Zoho / Stripe Classic Professional Layout Panel Container -->
             <div class="p-8 overflow-y-auto flex-1 bg-slate-100" id="print-area">
                 <div class="max-w-3xl mx-auto border-t-8 border-brand-600 border-x border-b border-slate-200 p-8 rounded-xl bg-white shadow-lg text-slate-800 space-y-8" id="invoice-sheet" style="font-family: 'Inter', sans-serif;">
                     
-                    <!-- Heading: Brand and Invoice Identifier -->
                     <div class="flex justify-between items-start">
                         <div class="space-y-3">
                             <div class="h-12 flex items-center">
@@ -1052,7 +1000,6 @@ function doPost(e) {
                         </div>
                     </div>
 
-                    <!-- Client Details & Metas -->
                     <div class="border-t border-slate-200 pt-6 grid grid-cols-2 gap-4">
                         <div class="space-y-1.5 text-xs text-slate-600">
                             <span class="block font-bold uppercase tracking-wider text-2xs text-slate-400">Bill To:</span>
@@ -1068,7 +1015,6 @@ function doPost(e) {
                                 <span class="block font-bold uppercase tracking-wider text-2xs text-amber-800">Outstanding Balance</span>
                                 <p id="view-outstanding-balance" class="text-xl font-black text-amber-700">₹0.00</p>
                             </div>
-                            <!-- UPI Payment Quick QR code -->
                             <div id="upi-qrcode-container" class="flex flex-col items-center border border-slate-200 p-2 rounded-lg bg-slate-50 w-full max-w-[200px] mt-2">
                                 <div id="invoice-upi-qrcode" class="w-20 h-20 bg-white text-slate-900 flex items-center justify-center"></div>
                                 <span class="text-[9px] text-slate-500 mt-1 uppercase tracking-widest font-bold">SCAN TO PAY (UPI)</span>
@@ -1076,13 +1022,12 @@ function doPost(e) {
                         </div>
                     </div>
 
-                    <!-- Services Table -->
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs border-collapse">
                             <thead>
                                 <tr class="border-b-2 border-slate-300 font-extrabold uppercase text-slate-700 text-[10px] tracking-wider">
                                     <th class="py-3 pr-4">Service / Item Description</th>
-                                    <th class="py-3 text-center w-24">Video Length</th>
+                                    <th class="py-3 text-center w-24">Length</th>
                                     <th class="py-3 text-center w-16">Qty</th>
                                     <th class="py-3 text-right w-28">Rate</th>
                                     <th class="py-3 text-right w-28">Amount</th>
@@ -1094,7 +1039,6 @@ function doPost(e) {
                         </table>
                     </div>
 
-                    <!-- Totals and Fineprint Details -->
                     <div class="border-t border-slate-200 pt-6 grid grid-cols-2 gap-4">
                         <div class="text-xs text-slate-600 space-y-2">
                             <p class="font-bold text-slate-900 uppercase tracking-wider text-2xs">Notes & Terms</p>
@@ -1127,7 +1071,6 @@ function doPost(e) {
                                 <span id="view-amount-cleared">₹0.00</span>
                             </div>
 
-                            <!-- Signature Area inside preview layout -->
                             <div id="view-signature-container" class="pt-6 hidden flex flex-col items-end">
                                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Authorized Signature</span>
                                 <img id="view-signature-img" class="max-h-12 object-contain" alt="Signature">
@@ -1142,8 +1085,8 @@ function doPost(e) {
     <!-- ================= TOAST NOTIFICATIONS ================= -->
     <div id="toast-container" class="fixed bottom-20 md:bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- ================= CUSTOM CONFIRMATION POPUP ================= -->
-    <div id="confirm-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <!-- ================= CUSTOM CONFIRMATION POPUPS ================= -->
+    <div id="confirm-modal" class="fixed inset-0 z-[60] bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-sm w-full p-6 text-center space-y-4">
             <div class="w-12 h-12 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 flex items-center justify-center mx-auto text-xl">
                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -1155,6 +1098,27 @@ function doPost(e) {
             <div class="flex justify-center space-x-3 pt-2">
                 <button id="confirm-cancel" class="px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 rounded-lg">Cancel</button>
                 <button id="confirm-action" class="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-lg">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smart Pricing Save Modal -->
+    <div id="rate-update-modal" class="fixed inset-0 z-[60] bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-sm w-full p-6 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-brand-50 dark:bg-brand-950/40 text-brand-600 flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-tags"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-base">Update Default Pricing?</h4>
+                <p class="text-xs text-slate-500 mt-2">You used a new custom rate for <span id="rate-update-client-name" class="font-bold text-slate-700 dark:text-slate-300"></span>.</p>
+                <div class="bg-slate-50 dark:bg-slate-800 p-2 rounded-lg mt-2 inline-block">
+                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200" id="rate-update-new-rate"></span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">Update this client's profile memory for future invoices?</p>
+            </div>
+            <div class="flex flex-col space-y-2 pt-2">
+                <button id="rate-update-yes" class="w-full py-2.5 text-xs font-semibold bg-brand-600 hover:bg-brand-700 text-white rounded-lg transition-colors">Yes, Update Profile & Save</button>
+                <button id="rate-update-no" class="w-full py-2.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 rounded-lg transition-colors">No, Just Save Invoice</button>
             </div>
         </div>
     </div>
@@ -1196,7 +1160,7 @@ function doPost(e) {
         let reportMonthlyChartInstance = null;
 
         let onConfirmCallback = null;
-        let deferredPrompt = null; // Stash beforeinstallprompt event for PWA Installer
+        let deferredPrompt = null; 
 
         // ================= TOASTS & UTILS =================
 
@@ -1607,7 +1571,6 @@ function doPost(e) {
                 };
                 document.getElementById('view-title').textContent = titles[viewId] || "Dashboard Overview";
 
-                // Update standard desktop sidebar items style
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     btn.className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all";
                 });
@@ -1616,7 +1579,6 @@ function doPost(e) {
                     activeBtn.className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-brand-600 bg-brand-50 dark:bg-brand-900/20 dark:text-brand-400";
                 }
 
-                // Update mobile bottom tab-bar items style
                 document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
                     btn.className = "mobile-nav-btn flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 w-12 py-1 transition-all";
                 });
@@ -1630,7 +1592,6 @@ function doPost(e) {
                 }
 
                 if (window.innerWidth < 768) {
-                    // Auto-close sidebar overlay if visible
                     const sidebar = document.getElementById('sidebar');
                     if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
                         toggleSidebar();
@@ -1684,7 +1645,6 @@ function doPost(e) {
             }
         };
 
-        // Mobile drawer slide handler
         window.toggleMobileDrawer = function() {
             const drawer = document.getElementById('mobile-drawer');
             const body = document.getElementById('mobile-drawer-body');
@@ -1724,7 +1684,15 @@ function doPost(e) {
                     document.getElementById('client-address').value = client.address || "";
                     document.getElementById('client-gst').value = client.gst || "";
                     document.getElementById('client-notes').value = client.notes || "";
+                    
+                    document.getElementById('client-pricing-mode').value = client.pricingMode || "Manual";
+                    document.getElementById('client-rate-sec').value = client.ratePerSecond !== undefined ? client.ratePerSecond : "";
+                    document.getElementById('client-rate-min').value = client.ratePerMinute !== undefined ? client.ratePerMinute : "";
                 }
+            } else {
+                document.getElementById('client-pricing-mode').value = "Manual";
+                document.getElementById('client-rate-sec').value = "";
+                document.getElementById('client-rate-min').value = "";
             }
             modal.classList.remove('hidden');
         };
@@ -1743,7 +1711,11 @@ function doPost(e) {
                 phone: document.getElementById('client-phone').value,
                 address: document.getElementById('client-address').value,
                 gst: document.getElementById('client-gst').value,
-                notes: document.getElementById('client-notes').value
+                notes: document.getElementById('client-notes').value,
+                
+                pricingMode: document.getElementById('client-pricing-mode').value,
+                ratePerSecond: parseFloat(document.getElementById('client-rate-sec').value) || 0,
+                ratePerMinute: parseFloat(document.getElementById('client-rate-min').value) || 0
             };
 
             if (editId) {
@@ -1751,11 +1723,11 @@ function doPost(e) {
                 if (index !== -1) {
                     state.clients[index] = { id: editId, ...clientData };
                 }
-                showToast("Client details updated successfully");
+                showToast("Client details & default pricing updated successfully");
             } else {
                 clientData.id = "c_" + Date.now();
                 state.clients.push(clientData);
-                showToast("Client added to database");
+                showToast("Client profile added to database");
             }
 
             saveLocalStorageBackup();
@@ -1809,6 +1781,12 @@ function doPost(e) {
                     .filter(inv => inv.clientId === c.id)
                     .reduce((sum, inv) => sum + (parseFloat(inv.grandTotal) || 0), 0);
 
+                let badgeHtml = "";
+                if (c.pricingMode && c.pricingMode !== 'Manual') {
+                    const priceDisp = c.pricingMode === 'Per Second' ? `₹${c.ratePerSecond}/sec` : `₹${c.ratePerMinute}/min`;
+                    badgeHtml = `<span class="inline-block mt-2 text-3xs font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40 px-2 py-0.5 rounded uppercase tracking-wider">${c.pricingMode}: ${priceDisp}</span>`;
+                }
+
                 const card = document.createElement('div');
                 card.className = "bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 hover:border-brand-500/30 transition-all flex flex-col justify-between";
                 card.innerHTML = `
@@ -1817,10 +1795,11 @@ function doPost(e) {
                             <div>
                                 <h4 class="font-bold text-slate-900 dark:text-white leading-snug">${c.name}</h4>
                                 <p class="text-xs text-slate-500">${c.company || 'Individual Freelancer'}</p>
+                                ${badgeHtml}
                             </div>
-                            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 px-2 py-1 rounded">₹${totalBilled.toLocaleString('en-IN')}</span>
+                            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 px-2 py-1 rounded shadow-sm">₹${totalBilled.toLocaleString('en-IN')}</span>
                         </div>
-                        <div class="space-y-1 text-xs text-slate-500">
+                        <div class="space-y-1 text-xs text-slate-500 pt-1">
                             <p><i class="fa-solid fa-envelope mr-1.5 text-slate-400"></i> ${c.email}</p>
                             ${c.phone ? `<p><i class="fa-solid fa-phone mr-1.5 text-slate-400"></i> ${c.phone}</p>` : ''}
                             ${c.address ? `<p class="truncate"><i class="fa-solid fa-location-dot mr-1.5 text-slate-400"></i> ${c.address}</p>` : ''}
@@ -1837,42 +1816,76 @@ function doPost(e) {
             });
         }
 
-        // ================= INVOICE SYSTEM LOGIC =================
+        // ================= INVOICE DYNAMIC PRICING LOGIC =================
 
-        window.addInvoiceItem = function(item = { serviceName: "", videoLength: "", qty: 1, rate: 0 }) {
+        window.addInvoiceItem = function(item = {}) {
             const container = document.getElementById('invoice-items-container');
             const rowId = "item_row_" + Date.now() + Math.random().toString(36).substr(2, 5);
 
+            // Apply Smart Defaults for completely new added items based on current Client
+            if (!item.serviceName) {
+                const clientId = document.getElementById('invoice-client').value;
+                const client = state.clients.find(c => c.id === clientId);
+                if (client && client.pricingMode && client.pricingMode !== 'Manual') {
+                    item.pricingMode = client.pricingMode;
+                    if (item.pricingMode === 'Per Second') item.rate = client.ratePerSecond || 0;
+                    if (item.pricingMode === 'Per Minute') item.rate = client.ratePerMinute || 0;
+                } else {
+                    item.pricingMode = 'Manual';
+                    item.rate = 0;
+                }
+                item.qty = 1;
+            }
+
             const row = document.createElement('div');
             row.id = rowId;
-            row.className = "flex flex-col sm:flex-row items-center gap-3 bg-slate-50 dark:bg-slate-800/20 p-3 rounded-lg border border-slate-100 dark:border-slate-800 relative group";
+            row.className = "flex flex-col gap-3 bg-slate-50 dark:bg-slate-800/20 p-3 rounded-lg border border-slate-100 dark:border-slate-800 relative group transition-all";
             
             row.innerHTML = `
-                <div class="flex-1 w-full relative">
-                    <input type="text" placeholder="Service Name (e.g. Color Grading)" value="${item.serviceName || ''}" class="item-name w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-sm text-slate-900 dark:text-white" required>
-                    <div class="hidden absolute left-0 right-0 top-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl rounded z-50 max-h-32 overflow-y-auto mt-1 custom-selector-dropdown">
-                        ${serviceTemplates.map(s => `
-                            <button type="button" onclick="selectServiceTemplate('${rowId}', '${s}')" class="w-full text-left px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 font-medium">${s}</button>
-                        `).join('')}
+                <div class="flex flex-col sm:flex-row gap-3 z-10">
+                    <div class="flex-1 relative">
+                        <input type="text" placeholder="Service Name (e.g. Color Grading)" value="${item.serviceName || ''}" class="item-name w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-sm text-slate-900 dark:text-white" required>
+                        <div class="hidden absolute left-0 right-0 top-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl rounded z-50 max-h-32 overflow-y-auto mt-1 custom-selector-dropdown">
+                            ${serviceTemplates.map(s => `
+                                <button type="button" onclick="selectServiceTemplate('${rowId}', '${s}')" class="w-full text-left px-3 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 font-medium">${s}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="w-full sm:w-40 shrink-0">
+                        <select class="item-pricing-mode w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-sm text-slate-900 dark:text-white shadow-sm" onchange="handlePricingModeChange(this)">
+                            <option value="Manual" ${item.pricingMode === 'Manual' || !item.pricingMode ? 'selected' : ''}>Manual (Flat)</option>
+                            <option value="Per Second" ${item.pricingMode === 'Per Second' ? 'selected' : ''}>Per Second</option>
+                            <option value="Per Minute" ${item.pricingMode === 'Per Minute' ? 'selected' : ''}>Per Minute</option>
+                        </select>
                     </div>
                 </div>
-                <div class="w-full sm:w-28 shrink-0">
-                    <input type="text" placeholder="Length (e.g. 5m)" value="${item.videoLength || ''}" class="item-length w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-sm text-slate-900 dark:text-white">
-                </div>
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <div class="w-1/2 sm:w-20">
-                        <input type="number" placeholder="Qty" oninput="calculateInvoiceTotals()" value="${item.qty !== undefined ? item.qty : 1}" min="1" step="any" class="item-qty w-full px-2 py-2 bg-white dark:bg-slate-800 border-0 rounded text-center text-sm font-semibold" required>
+                <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+                    <div class="flex items-center gap-1 bg-white dark:bg-slate-800 px-2 py-1 rounded border-0 shadow-sm shrink-0">
+                        <input type="number" placeholder="0" class="item-mins w-12 bg-transparent border-0 text-center text-sm p-1 focus:ring-0 text-slate-900 dark:text-white" oninput="calculateInvoiceTotals()" value="${item.durationMins !== undefined ? item.durationMins : ''}">
+                        <span class="text-xs text-slate-400 font-semibold mr-1">m</span>
+                        <input type="number" placeholder="0" class="item-secs w-12 bg-transparent border-0 text-center text-sm p-1 focus:ring-0 text-slate-900 dark:text-white" oninput="calculateInvoiceTotals()" value="${item.durationSecs !== undefined ? item.durationSecs : ''}">
+                        <span class="text-xs text-slate-400 font-semibold">s</span>
                     </div>
-                    <div class="w-1/2 sm:w-32">
-                        <input type="number" placeholder="Rate (₹)" oninput="calculateInvoiceTotals()" value="${item.rate !== undefined ? item.rate : 0}" min="0" step="any" class="item-rate w-full px-3 py-2 bg-white dark:bg-slate-800 border-0 rounded text-right text-sm font-semibold text-emerald-600" required>
+                    
+                    <div class="w-16 shrink-0">
+                        <input type="number" placeholder="Qty" oninput="calculateInvoiceTotals()" value="${item.qty !== undefined ? item.qty : 1}" min="1" step="any" class="item-qty w-full px-2 py-1.5 bg-white dark:bg-slate-800 border-0 rounded shadow-sm text-center text-sm font-semibold text-slate-900 dark:text-white" required>
                     </div>
+                    
+                    <div class="flex-1 min-w-[100px]">
+                        <input type="number" placeholder="Rate (₹)" oninput="calculateInvoiceTotals()" value="${item.rate !== undefined ? item.rate : 0}" min="0" step="any" class="item-rate w-full px-3 py-1.5 bg-white dark:bg-slate-800 border-0 rounded shadow-sm text-right text-sm font-semibold text-emerald-600" required>
+                    </div>
+                    
                     <div class="w-24 text-right font-bold text-sm text-slate-900 dark:text-white item-amount shrink-0">
                         ₹0.00
                     </div>
-                    <button type="button" onclick="deleteInvoiceItemRow('${rowId}')" class="p-2 text-slate-400 hover:text-rose-600 rounded transition-colors">
+                    
+                    <button type="button" onclick="deleteInvoiceItemRow('${rowId}')" class="p-2 text-slate-400 hover:text-rose-600 rounded transition-colors shrink-0">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>
-                </div>`;
+                </div>
+                <!-- Support rendering legacy string values silently -->
+                ${item.videoLength && !item.pricingMode ? `<input type="hidden" class="item-legacy-length" value="${item.videoLength}">` : ''}
+            `;
             
             container.appendChild(row);
 
@@ -1900,6 +1913,20 @@ function doPost(e) {
             }
         };
 
+        // Instantly switch specific rates based on chosen dynamic mode
+        window.handlePricingModeChange = function(selectElem) {
+            const row = selectElem.closest('.group');
+            const clientId = document.getElementById('invoice-client').value;
+            const client = state.clients.find(c => c.id === clientId);
+            const rateInput = row.querySelector('.item-rate');
+            
+            if (client) {
+                if (selectElem.value === 'Per Second' && client.ratePerSecond) rateInput.value = client.ratePerSecond;
+                else if (selectElem.value === 'Per Minute' && client.ratePerMinute) rateInput.value = client.ratePerMinute;
+            }
+            calculateInvoiceTotals();
+        };
+
         window.calculateInvoiceTotals = function() {
             let subtotal = 0;
             const container = document.getElementById('invoice-items-container');
@@ -1907,9 +1934,24 @@ function doPost(e) {
             const rows = container.children;
 
             for (let row of rows) {
-                const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+                const mode = row.querySelector('.item-pricing-mode').value;
+                const mins = parseFloat(row.querySelector('.item-mins').value) || 0;
+                const secs = parseFloat(row.querySelector('.item-secs').value) || 0;
+                const qty = parseFloat(row.querySelector('.item-qty').value) || 1;
                 const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
-                const amount = qty * rate;
+
+                let amount = 0;
+                if (mode === 'Per Second') {
+                    const totalSeconds = (mins * 60) + secs;
+                    amount = totalSeconds * rate * qty;
+                } else if (mode === 'Per Minute') {
+                    const totalMinutes = mins + (secs / 60);
+                    amount = totalMinutes * rate * qty;
+                } else {
+                    // Manual mode
+                    amount = rate * qty;
+                }
+
                 row.querySelector('.item-amount').textContent = `₹${amount.toFixed(2)}`;
                 subtotal += amount;
             }
@@ -1939,6 +1981,24 @@ function doPost(e) {
                 statusDropdown.value = "Pending";
             }
         };
+
+        // When switching Invoice Clients, populate their specific dynamic pricing seamlessly
+        document.getElementById('invoice-client').addEventListener('change', function(e) {
+            const client = state.clients.find(c => c.id === e.target.value);
+            if (client && client.pricingMode && client.pricingMode !== 'Manual') {
+                const rows = document.getElementById('invoice-items-container').children;
+                for (let row of rows) {
+                    const modeSelect = row.querySelector('.item-pricing-mode');
+                    const rateInput = row.querySelector('.item-rate');
+                    
+                    modeSelect.value = client.pricingMode;
+                    if (client.pricingMode === 'Per Second') rateInput.value = client.ratePerSecond || 0;
+                    else if (client.pricingMode === 'Per Minute') rateInput.value = client.ratePerMinute || 0;
+                }
+                calculateInvoiceTotals();
+                showToast(`Applied ${client.name}'s default pricing profile`, "info");
+            }
+        });
 
         function generateInvoiceNumber() {
             const runningCount = state.invoices.length + 1;
@@ -1985,27 +2045,39 @@ function doPost(e) {
             event.preventDefault();
             const editId = document.getElementById('invoice-edit-id').value;
             const invoiceNo = document.getElementById('invoice-id-field').value;
+            const clientId = document.getElementById('invoice-client').value;
 
             const items = [];
             const rows = document.getElementById('invoice-items-container').children;
             for (let row of rows) {
+                const legacyLengthInput = row.querySelector('.item-legacy-length');
                 items.push({
                     serviceName: row.querySelector('.item-name').value,
-                    videoLength: row.querySelector('.item-length') ? row.querySelector('.item-length').value : "",
+                    pricingMode: row.querySelector('.item-pricing-mode').value,
+                    durationMins: parseFloat(row.querySelector('.item-mins').value) || 0,
+                    durationSecs: parseFloat(row.querySelector('.item-secs').value) || 0,
                     qty: parseFloat(row.querySelector('.item-qty').value) || 1,
-                    rate: parseFloat(row.querySelector('.item-rate').value) || 0
+                    rate: parseFloat(row.querySelector('.item-rate').value) || 0,
+                    videoLength: legacyLengthInput ? legacyLengthInput.value : "" // Safe persistence
                 });
             }
 
+            const subtotal = items.reduce((sum, i) => {
+                if (i.pricingMode === 'Per Second') {
+                    return sum + (((i.durationMins || 0) * 60 + (i.durationSecs || 0)) * i.rate * i.qty);
+                } else if (i.pricingMode === 'Per Minute') {
+                    return sum + (((i.durationMins || 0) + ((i.durationSecs || 0) / 60)) * i.rate * i.qty);
+                }
+                return sum + (i.qty * i.rate);
+            }, 0);
+
             const discountPct = parseFloat(document.getElementById('invoice-discount').value) || 0;
             const gstPct = parseFloat(document.getElementById('invoice-gst').value) || 0;
-            const subtotal = items.reduce((sum, i) => sum + (i.qty * i.rate), 0);
             const discountedAmount = subtotal * (1 - (discountPct / 100));
             const taxAmount = discountedAmount * (gstPct / 100);
             const grandTotal = discountedAmount + taxAmount;
             const received = parseFloat(document.getElementById('invoice-received').value) || 0;
             const remaining = Math.max(0, grandTotal - received);
-
             const paymentStatus = document.getElementById('invoice-status').value;
 
             const payments = [];
@@ -2020,7 +2092,7 @@ function doPost(e) {
 
             const invoiceData = {
                 invoiceNumber: invoiceNo,
-                clientId: document.getElementById('invoice-client').value,
+                clientId: clientId,
                 invoiceDate: document.getElementById('invoice-date').value,
                 dueDate: document.getElementById('invoice-due').value,
                 items: items,
@@ -2034,22 +2106,68 @@ function doPost(e) {
                 paymentHistory: payments
             };
 
-            if (editId) {
-                const idx = state.invoices.findIndex(inv => inv.id === editId);
-                if (idx !== -1) {
-                    state.invoices[idx] = { id: editId, ...invoiceData };
+            // Smart Client Memory Checkout - Determines if rate was changed 
+            const clientObj = state.clients.find(c => c.id === clientId);
+            let rateChanged = false;
+            let suggestedMode = 'Manual';
+            let suggestedRate = 0;
+
+            if (clientObj) {
+                for (let item of items) {
+                    if (item.pricingMode === 'Per Second' && item.rate !== clientObj.ratePerSecond && item.rate > 0) {
+                        rateChanged = true;
+                        suggestedMode = 'Per Second';
+                        suggestedRate = item.rate;
+                    } else if (item.pricingMode === 'Per Minute' && item.rate !== clientObj.ratePerMinute && item.rate > 0) {
+                        rateChanged = true;
+                        suggestedMode = 'Per Minute';
+                        suggestedRate = item.rate;
+                    }
                 }
-                showToast("Invoice updated successfully");
-            } else {
-                invoiceData.id = "i_" + Date.now();
-                state.invoices.push(invoiceData);
-                showToast("Invoice processed and published");
             }
 
-            saveLocalStorageBackup();
-            renderAllData();
-            closeInvoiceModal();
-            autoSyncIfEnabled();
+            const finalizeInvoice = (updateClient = false) => {
+                if (updateClient && clientObj) {
+                    clientObj.pricingMode = suggestedMode;
+                    if (suggestedMode === 'Per Second') clientObj.ratePerSecond = suggestedRate;
+                    if (suggestedMode === 'Per Minute') clientObj.ratePerMinute = suggestedRate;
+                }
+
+                if (editId) {
+                    const idx = state.invoices.findIndex(inv => inv.id === editId);
+                    if (idx !== -1) {
+                        state.invoices[idx] = { id: editId, ...invoiceData };
+                    }
+                    showToast("Invoice updated successfully");
+                } else {
+                    invoiceData.id = "i_" + Date.now();
+                    state.invoices.push(invoiceData);
+                    showToast("Invoice processed and published");
+                }
+
+                saveLocalStorageBackup();
+                renderAllData();
+                closeInvoiceModal();
+                autoSyncIfEnabled();
+            };
+
+            // Trigger Smart Prompt UI if they changed the client pricing
+            if (rateChanged) {
+                const rateModal = document.getElementById('rate-update-modal');
+                document.getElementById('rate-update-client-name').textContent = clientObj.name;
+                document.getElementById('rate-update-new-rate').textContent = `₹${suggestedRate}/${suggestedMode === 'Per Second' ? 'sec' : 'min'}`;
+
+                const btnYes = document.getElementById('rate-update-yes');
+                const btnNo = document.getElementById('rate-update-no');
+
+                const cleanup = () => { rateModal.classList.add('hidden'); btnYes.onclick = null; btnNo.onclick = null; };
+                btnYes.onclick = () => { cleanup(); finalizeInvoice(true); };
+                btnNo.onclick = () => { cleanup(); finalizeInvoice(false); };
+                
+                rateModal.classList.remove('hidden');
+            } else {
+                finalizeInvoice(false);
+            }
         };
 
         window.openEditInvoice = function(invoiceId) {
@@ -2155,7 +2273,7 @@ function doPost(e) {
             }
         };
 
-        // ================= INVOICE VIEWER LOGIC (ZOHO STYLING) =================
+        // ================= INVOICE VIEWER LOGIC =================
 
         let activeViewingInvoice = null;
 
@@ -2218,14 +2336,33 @@ function doPost(e) {
             const tbody = document.getElementById('view-services-tbody');
             tbody.innerHTML = "";
             inv.items.forEach(item => {
+                // Ensure Dynamic Pricing Mode is Formatted Clearly
+                let lengthLabel = "-";
+                if (item.pricingMode && item.pricingMode !== 'Manual') {
+                    lengthLabel = `${item.durationMins || 0}m ${item.durationSecs || 0}s`;
+                } else if (item.videoLength) {
+                    lengthLabel = item.videoLength; // Legacy fallback parsing
+                }
+
+                let rateLabel = `₹${item.rate.toFixed(2)}`;
+                if (item.pricingMode === 'Per Second') rateLabel += `<span class="text-[9px] text-slate-400 font-medium ml-0.5">/sec</span>`;
+                if (item.pricingMode === 'Per Minute') rateLabel += `<span class="text-[9px] text-slate-400 font-medium ml-0.5">/min</span>`;
+
+                let itemTotal = item.qty * item.rate;
+                if (item.pricingMode === 'Per Second') {
+                    itemTotal = ((item.durationMins || 0) * 60 + (item.durationSecs || 0)) * item.rate * item.qty;
+                } else if (item.pricingMode === 'Per Minute') {
+                    itemTotal = ((item.durationMins || 0) + ((item.durationSecs || 0) / 60)) * item.rate * item.qty;
+                }
+
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-slate-200 text-xs";
                 tr.innerHTML = `
                     <td class="py-3.5 pr-4 font-bold text-slate-900">${item.serviceName}</td>
-                    <td class="py-3.5 text-center text-slate-800 font-medium">${item.videoLength || '-'}</td>
+                    <td class="py-3.5 text-center text-slate-800 font-medium whitespace-nowrap">${lengthLabel}</td>
                     <td class="py-3.5 text-center text-slate-800 font-medium">${item.qty}</td>
-                    <td class="py-3.5 text-right text-slate-800 font-medium">₹${item.rate.toFixed(2)}</td>
-                    <td class="py-3.5 text-right font-bold text-slate-900">₹${(item.qty * item.rate).toFixed(2)}</td>`;
+                    <td class="py-3.5 text-right text-slate-800 font-medium">${rateLabel}</td>
+                    <td class="py-3.5 text-right font-bold text-slate-900">₹${itemTotal.toFixed(2)}</td>`;
                 tbody.appendChild(tr);
             });
 
@@ -2707,7 +2844,7 @@ function doPost(e) {
             }
         });
 
-        // ================= EXCEL OPERATIONS (SheetJS INTEGRATION) =================
+        // ================= EXCEL OPERATIONS =================
 
         window.exportDataToExcel = function() {
             try {
@@ -2721,6 +2858,9 @@ function doPost(e) {
                     Phone: c.phone,
                     Address: c.address,
                     GST: c.gst,
+                    PricingMode: c.pricingMode || "Manual",
+                    RatePerSec: c.ratePerSecond || 0,
+                    RatePerMin: c.ratePerMinute || 0,
                     Notes: c.notes
                 }));
                 const wsClients = XLSX.utils.json_to_sheet(clientsData);
@@ -2775,6 +2915,9 @@ function doPost(e) {
                                 phone: row.Phone || "",
                                 address: row.Address || "",
                                 gst: row.GST || "",
+                                pricingMode: row.PricingMode || "Manual",
+                                ratePerSecond: parseFloat(row.RatePerSec) || 0,
+                                ratePerMinute: parseFloat(row.RatePerMin) || 0,
                                 notes: row.Notes || ""
                             };
                             state.clients.push(payload);
@@ -2792,7 +2935,7 @@ function doPost(e) {
                                 clientId: row.ClientID || "",
                                 invoiceDate: row.Date || new Date().toISOString().split('T')[0],
                                 dueDate: row.DueDate || new Date().toISOString().split('T')[0],
-                                items: [{ serviceName: "Imported Service Package", videoLength: "", qty: 1, rate: parseFloat(row.Subtotal) || 0 }],
+                                items: [{ serviceName: "Imported Service Package", pricingMode: "Manual", durationMins: 0, durationSecs: 0, qty: 1, rate: parseFloat(row.Subtotal) || 0 }],
                                 discount: parseFloat(row.DiscountPercent) || 0,
                                 gst: parseFloat(row.GSTPercent) || 0,
                                 subtotal: parseFloat(row.Subtotal) || 0,
@@ -3013,7 +3156,6 @@ function doPost(e) {
 
         // ================= PROGRESSIVE WEB APP (PWA) LOGIC ENGINE =================
 
-        // Dynamic Manifest Object generation mapping to local brand icons
         function generateManifestObject() {
             return {
                 "name": "EditorInvoicePro - Video Editor Billing & CRM Hub",
@@ -3038,50 +3180,7 @@ function doPost(e) {
             };
         }
 
-        // Helper to construct Service Worker code dynamically
-        function generateServiceWorkerCode() {
-            return `const CACHE_NAME = 'editorinvoicepro-cache-v1';
-const ASSETS = [
-  './',
-  './index.html',
-  './logo1.png',
-  'https://cdn.tailwindcss.com',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap',
-  'https://cdn.jsdelivr.net/npm/chart.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
-  'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
-  'https://img.icons8.com/fluency/512/clapperboard.png'
-];
-
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
-  );
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.map(k => k !== CACHE_NAME ? caches.delete(k) : null)
-    ))
-  );
-  self.clients.claim();
-});
-
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(response => response || fetch(e.request))
-  );
-});`;
-        }
-
-        // Inline installer builder
         function setupDynamicPWAElements() {
-            // 1. Inject Manifest dynamically using standard Data URIs
             const manifestObj = generateManifestObject();
             const manifestStr = encodeURIComponent(JSON.stringify(manifestObj));
             const link = document.createElement('link');
@@ -3089,19 +3188,16 @@ self.addEventListener('fetch', e => {
             link.href = 'data:application/manifest+json,' + manifestStr;
             document.head.appendChild(link);
 
-            // 2. Register Service Worker dynamically if hosted with sw.js locally
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
                 .then(reg => console.log('Service worker registered successfully', reg))
                 .catch(err => console.log('Sandbox mode local preview: serviceWorker registration bypassed'));
             }
 
-            // 3. Setup Install Prompts trigger listener
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
-                deferredPrompt = e; // Stash prompt event
+                deferredPrompt = e; 
 
-                // Make the installation buttons visible
                 const sidebarInstallBtn = document.getElementById('pwa-install-btn-sidebar');
                 const mobileInstallBtn = document.getElementById('pwa-install-btn-mobile');
 
@@ -3122,25 +3218,6 @@ self.addEventListener('fetch', e => {
                 }
                 deferredPrompt = null;
             });
-        };
-
-        // Utility to export assets
-        window.downloadManifestFile = function() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(generateManifestObject(), null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", "manifest.json");
-            dlAnchor.click();
-            showToast("manifest.json downloaded!");
-        };
-
-        window.downloadServiceWorkerFile = function() {
-            const dataStr = "data:text/javascript;charset=utf-8," + encodeURIComponent(generateServiceWorkerCode());
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", "sw.js");
-            dlAnchor.click();
-            showToast("sw.js downloaded!");
         };
 
         // ================= RUNTIME CONTEXT ENGINE INIT =================
@@ -3182,7 +3259,7 @@ self.addEventListener('fetch', e => {
 
             loadSettingsFields();
             setupTheme();
-            setupDynamicPWAElements(); // Run dynamic web-app installer configurations
+            setupDynamicPWAElements(); 
             renderAllData();
             updateSyncBadgeStatus();
 
